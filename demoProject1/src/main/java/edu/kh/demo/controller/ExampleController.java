@@ -1,6 +1,7 @@
 package edu.kh.demo.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 // instance : 개발자가 만들고 관리하는 객체
@@ -37,5 +38,6 @@ public class ExampleController {
 		//"classpath:/templates/html파일명.html";
 		return "example";
 	}
+	
 	
 }

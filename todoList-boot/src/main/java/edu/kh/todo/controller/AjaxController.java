@@ -1,10 +1,13 @@
 package edu.kh.todo.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import edu.kh.todo.model.dto.Todo;
 import edu.kh.todo.model.service.TodoService;
 import lombok.extern.slf4j.Slf4j;
-import oracle.jdbc.proxy.annotation.Post;
 
 
 /* @ResponseBody
@@ -114,6 +116,59 @@ public class AjaxController {
 		int result = service.addTodo(todo.getTodoTitle(), todo.getTodoContent());
 		
 		return result; //  result가 0 /  1로 나옴
+	}
+	
+	@ResponseBody
+	@GetMapping("selectList")
+	public List<Todo> selectList() {
+		// String 과 boolean은 모든 언어가 똑같이 가지고 있음
+		// List를 json으로 변환 시켜 사용 - 모양 (JS의 문자열 모양) "{K: V}"
+		
+		// List 타입은 Java의 타입으로 
+		// JS에서 사용 불가능
+		// -> JSON 변환 (GSON 라이브러리 이용)
+		List<Todo> todoList = service.selectList();
+		
+		log.debug(todoList.toString());
+		
+	
+		
+		return todoList;
+		// List(Java 전용 타입) 를 반환
+		// -> JS 가 인식할 수 없기 때문에
+		//  HttpMessageConverter가 
+		// JSON 형태 [{}, {}, {}] 로 변환
+		//                 (JSONArray) 
+	}
+	
+	// 할 일 상세 조회
+	@ResponseBody // 요청한 곳으로 데이터 돌려보냄
+	@GetMapping("detail")
+	public Todo selectTodo(
+			@RequestParam("todoNo") int todoNo) {
+		// return 자료형 : Todo
+		// -> HttpMessageConverter 가 String(JSON) 형태로 변환해서 반환
+		return service.todoDetail(todoNo);
+	}
+	
+	// Delete 방식 요청 처리 (비동기 요청만 가능!!)
+	@ResponseBody
+	@DeleteMapping("delete")
+	public int todoDelete(@RequestBody int todoNo) {
+		return service.todoDelete(todoNo);
+	}
+	
+	// 완료 여부 변경
+		@ResponseBody
+		@PutMapping("changeComplete")
+		public int changeComplete(@RequestBody Todo todo ) {
+			return service.changeComplete(todo);
+		}
+		
+	@ResponseBody
+	@PutMapping("update")
+	public int todoUpdate(@RequestBody Todo todo) {
+		return service.todoUpdate(todo);
 	}
 	
 }

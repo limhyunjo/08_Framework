@@ -9,7 +9,7 @@ const getCookie= key =>{
 
 
 
-    // cookies 문자열을 매열 형태로 변환
+    // cookies 문자열을 배열 형태로 변환
     const cookieList = cookies.split(";") // ["K=V", "K=V"] 배열 모양으로 쪼개짐
                              // .map(el => {return el.split}) // ["K", "V"]
                              .map( el => el.split("=") ); // ["K", "V"]
@@ -95,3 +95,71 @@ if(loginForm !=null){
        }
     });
 }
+
+/*빠른 로그인 */
+const quickLoginBtns = document.querySelectorAll(".quick-login"); // NodeList로 얻어와짐
+//foreach문 사용하여 반복
+quickLoginBtns.forEach((item, index)=>{
+
+ // item : 현재 반복 시 꺼내온 객체
+ // index : 현재 반복 중인 인덱스
+
+ // quickLoginBtns 요소를 하나씩 꺼내서 이벤트 리스너 추가 
+ item.addEventListener("click", e=>{
+ 
+  const email = item.innerText; // 버튼에 작성된 이메일 얻어오기
+
+  location.href = "/member/quickLogin?memberEmail=" + email;
+
+ });
+
+});
+
+
+//---------------------------------------------------
+/* 회원 목록 조회(비동기) */
+const selectMemberList = document.querySelector("#selectMemberList");
+const memberList = document.querySelector("#memberList");
+
+// 조회 버튼 클릭 시
+
+selectMemberList.addEventListener("click", ()=>{
+
+  // 1) 비동기로 회원 목록 조회
+  // (포함될 회원 정보 : 회원 번호, 이메일, 닉네임, 탈퇴 여부)
+  
+  // 첫 번째 then(response => response.json()) ->
+  // JSON Array -> JS 객체 배열로 변환 [{}, {}, {},{}]
+
+  // 2) 두 번째 then
+  //    tbody에 이미 작성되어 있던 내용(이전에 조회한 목록) 삭제
+
+  // 3) 두 번째 then
+  // 조회된 JS 객체 배열을 이용해
+  // tbody에 들어갈 요소를 만들고 값 세팅 후 추가
+
+  fetch("/member/memberList")
+  .then(resp => resp.json())
+
+  .then(result=>{
+
+   for(let member of memberList){
+
+
+    const tr = document.createElement("tr");
+    const arr = ['memberNo', 'memberEmail', 'memberNickname', 'memberDelFl'];
+
+    for(let key of arr){
+      const td = document.createElement("td");
+
+      td.innerText = member[key];
+      tr.append(td);
+    }
+      // tbody의 자식으로 tr( 한 줄 ) 추가
+      memberList.append(tr);
+   }
+
+  });
+
+ 
+});

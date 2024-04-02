@@ -143,6 +143,11 @@ selectMemberList.addEventListener("click", ()=>{
 
   .then(result=>{
 
+    const memberList = JSON.parse(result);
+
+      // tbody 내용 삭제
+      memberListTable.innerHTML = "";
+
    for(let member of memberList){
 
 

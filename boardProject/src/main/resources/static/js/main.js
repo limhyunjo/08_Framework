@@ -141,23 +141,50 @@ selectMemberList.addEventListener("click", ()=>{
   fetch("/member/memberList")
   .then(resp => resp.json())
 
-  .then(result=>{
+  .then(member=>{
 
-    const memberList = JSON.parse(result);
+    // forEach 는 NodeList Array에서만 사용 가능
+    // member.forEach((member.index)=>{
+          // member : 반복 접근한 요소 (순서대로 하나씩 꺼낸 요소)
+          // index : 현재 접근 중인 index
 
-      // tbody 내용 삭제
-      memberListTable.innerHTML = "";
+          // tr 만들어서 그 안에 td 만들어서 append 후
+          // tr 을 tbody에 append
 
-   for(let member of memberList){
+          // const keyList = ['memberNo', 'memberEmail', 'memberNickname', 'memberDelFl'];
+
+          // const tr = document.createElement("tr");
+
+            // keyList에서 key를 하나씩 얻어온 후
+            // 해당 key에 맞는 member 객체 값을 얻어와
+            // 생성되는 td 요소에 innerText로 추가 후
+            // tr 요소의 자식으로 추가
+         
+            // keyList.forEach(key =>{ 
+            // tr.append(createTd(member[key])
+
+            // tbody 자식으로 tr 추가
+            // memberList.append(tr);
+          //})
+    //})
+
+    //td 요소를 만들고 text 추가 후 반환
+    // const createTd = (text) => {
+      // const td
+    //}
+     
+      memberList.innerHTML = "";
+
+   for(let mem of member){
 
 
     const tr = document.createElement("tr");
-    const arr = ['memberNo', 'memberEmail', 'memberNickname', 'memberDelFl'];
+    const arr = ['memberNo', 'memberEmail','memberNickname', 'memberDelFl'];
 
     for(let key of arr){
       const td = document.createElement("td");
 
-      td.innerText = member[key];
+      td.innerText = mem[key];
       tr.append(td);
     }
       // tbody의 자식으로 tr( 한 줄 ) 추가

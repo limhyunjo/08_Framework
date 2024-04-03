@@ -131,11 +131,10 @@ public class MemberServiceImpl implements MemberService{
 	}
 	
 	
-	// 전체 조회
 	@Override
 	public List<Member> memberList() {
-		
-		return mapper.selectMember(memberList());
+	
+		return mapper.selectMember();
 	}
 }
 

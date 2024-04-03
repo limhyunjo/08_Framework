@@ -244,10 +244,10 @@ public class MemberController {
 	@GetMapping("memberList")
 	public List<Member> memberList() {
 		
-		List<Member> memberList = service.memberList();
+		List<Member> member = service.memberList();
 		
 		
-		return memberList;
+		return member;
 	}
 	
 	

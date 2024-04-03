@@ -33,9 +33,9 @@ public interface MemberMapper {
 	 */
 	public int checkNickname(String memberNickname);
 
+
 	/** 전체 조회
-	 * @param memberList
 	 * @return
 	 */
-	public List<Member> selectMember(List<Member> memberList);
+	public List<Member> selectMember();
 }

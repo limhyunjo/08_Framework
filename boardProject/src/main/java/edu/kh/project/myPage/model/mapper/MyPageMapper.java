@@ -28,4 +28,10 @@ public interface MyPageMapper {
 	 */
 	int updatePw(Map<String, Object> map);
 
+	/** 회원 탈퇴
+	 * @param memberNo
+	 * @return
+	 */
+	int deletePw(int memberNo);
+
 }

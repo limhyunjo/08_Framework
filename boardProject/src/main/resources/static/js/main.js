@@ -195,3 +195,71 @@ selectMemberList.addEventListener("click", ()=>{
 
  
 });
+
+/* 특정 회원 비밀번호 초기화(Ajax) */
+
+const resetMemberNo = document.querySelector("#resetMemberNo");
+const resetPw = document.querySelector("#resetPw");
+
+resetPw.addEventListener("click",()=>{
+
+  // 입력받은 회원 번호 얻어오기
+  const inputNo = resetMemberNo.value;
+
+  if(inputNo.trim().length ==0){
+    alert("회원 번호를 입력해 주세요");
+
+    return;
+  }
+
+ fetch("/resetPw",{
+  method : "PUT", // PUT : 수정 용도 요청 방식
+  headers : {"Content-Type" : "application/json"}, 
+  body : inputNo //inputNo를 PUT 방식으로 넘김
+
+ })
+ .then(resp=>resp.text()) 
+ //resp.text() -> result 첫번째 then에서 반환한 값이 result로 들어감
+ .then(result =>{
+
+  // result == 컨트롤러로부터 반환받아 TEXT 로 파싱한 값
+  if(result>0) alert("초기화 성공");
+  else         alert("해당 회원이 존재하지 않습니다");
+
+ });
+
+});
+
+
+/* 특정 회원 탈퇴 복구(Ajax) */
+
+const secessionReset = document.querySelector("#secessionReset");
+const resetSecession = document.querySelector("#resetSecession");
+
+resetSecession.addEventListener("click", () =>{
+
+  const inputNo = secessionReset.value;
+
+  if(inputNo.trim().length==0){
+    alert("회원 번호를 입력해 주세요");
+    return;
+  }
+
+  // inputNo를 담아서 보냄 fetch를 버튼 안에 넣음
+  fetch("/resetSecession",{
+    method: "PUT", // 수정
+    headers : {"Content-Type" : "application/json"},
+    body : inputNo 
+  })
+  .then(resp=>resp.text()) 
+  //resp.text() -> result 첫번째 then에서 반환한 값이 두번째 then의 result로 들어감
+  .then(result =>{
+ 
+   // result == 컨트롤러로부터 반환받아 TEXT 로 파싱한 값
+   if(result>0) alert("회원 복구 성공");
+   else         alert("해당 회원이 존재하지 않습니다");
+ 
+  });
+
+
+});

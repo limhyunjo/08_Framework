@@ -111,6 +111,13 @@ SELECT * FROM "TB_AUTH_KEY";
 SELECT COUNT(*)
 FROM "TB_AUTH_KEY"
 WHERE EMAIL =  #{가입하려는 이메일 입력값}
-AND AUTH_KEY = #{위 이메일로 보낸 인증번호}
+AND AUTH_KEY = #{위 이메일로 보낸 인증번호};
 
 /* 비밀번호 123123*/
+ㄴ
+ UPDATE "MEMBER" SET
+      MEMBER_DEL_FL = 'N'
+      WHERE MEMBER_NO =3;
+     
+     COMMIT;
+     

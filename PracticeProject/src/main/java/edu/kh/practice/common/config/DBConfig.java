@@ -1,4 +1,4 @@
-package edu.kh.todo.common.config;
+package edu.kh.practice.common.config;
 
 import javax.sql.DataSource;
 
@@ -109,8 +109,8 @@ public class DBConfig {
 			// - setTypeAliasesPackage("패키지") 이용 시
 			//   클래스 파일명이 별칭으로 등록
 			
-			// ex) (원본) edu.kh.todo.model.dto.Todo   -->  Todo (별칭 등록)
-			sessionFactoryBean.setTypeAliasesPackage("edu.kh.todo");
+			// ex) (원본) edu.kh.todo.model.dto.Todo   -->  Todo (별칭 등록) 
+			sessionFactoryBean.setTypeAliasesPackage("edu.kh.practice");
 			
 			// 마이바티스 설정 파일 경로 지정
 			sessionFactoryBean.setConfigLocation(

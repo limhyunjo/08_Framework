@@ -69,7 +69,7 @@ public class AjaxController {
 	
 	@GetMapping("main")
 	public String ajaxMain( ) {
-		return "/ajax/main";
+		return "ajax/main";
 	}
 	
 	// 전체 Todo 개수 조회

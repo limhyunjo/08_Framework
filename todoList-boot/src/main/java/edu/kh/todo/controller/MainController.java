@@ -12,6 +12,7 @@ import edu.kh.todo.model.dto.Todo;
 import edu.kh.todo.model.service.TodoService;
 import lombok.extern.slf4j.Slf4j;
 
+
 @Slf4j // 로그 객체 자동 생성
 @Controller // 요청/응답 제어 역할 명시 + Bean등록 
 public class MainController {

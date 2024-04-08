@@ -36,7 +36,6 @@ public class MainController {
 	public List<Book> selectAll(	) {
 	
 	
-	
 		List<Book>bookList =service.selectAll();
 		
 		return bookList; // common의 main 파일로 forward한다

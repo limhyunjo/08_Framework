@@ -454,4 +454,32 @@ ALTER TABLE "BOOK" ADD CONSTRAINT "PK_BOOK" PRIMARY KEY (
 	"BOOK_NO"
 );
 
+--샘플 데이터 삽입
+INSERT INTO "BOOK"
+VALUES(
+           '1', 
+           '어린왕자',
+           '생택쥐베리',
+           '8000',
+           DEFAULT
+       
+ );
+ 
+INSERT INTO "BOOK"
+VALUES(
+           '2', 
+           '자바의 정석',
+           '남궁 성',
+           '30000',
+           DEFAULT
+       
+ );
+ 
+COMMIT;
+
+DELETE FROM "BOOK"
+WHERE "BOOK_NO" = 1;
+
+
+SELECT * FROM "BOOK";
 ----------------------------------------------------------------------------------------------

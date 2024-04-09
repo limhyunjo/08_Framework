@@ -17,4 +17,12 @@ public interface MainService {
 	 */
 	List<Book> selectAll();
 
+	/** 책 추가
+	 * @param bookTitle
+	 * @param bookWriter
+	 * @param bookPrice
+	 * @return
+	 */
+	int addBook(String bookTitle, String bookWriter, int bookPrice);
+
 }

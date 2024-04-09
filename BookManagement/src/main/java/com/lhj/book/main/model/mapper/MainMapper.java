@@ -11,10 +11,20 @@ public interface MainMapper {
 
 
 
-	/**
+	/** 전체 조회
 	 * @return
 	 */
 	List<Book> selectAll();
+
+
+
+	/** 책 추가
+	 * @param bookTitle
+	 * @param bookWriter
+	 * @param bookPrice
+	 * @return
+	 */
+	int addBook(String bookTitle, String bookWriter, int bookPrice);
 
 
 

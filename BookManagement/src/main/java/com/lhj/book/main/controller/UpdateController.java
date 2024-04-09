@@ -11,7 +11,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lhj.book.main.model.service.MainService;
 
-import edu.kh.todo.model.dto.Todo;
 
 
 @Controller // Bean으로 등록
@@ -21,38 +20,20 @@ public class UpdateController {
 	@Autowired // 같은 타입 Bean 의존성 주입 (DI)
 	private MainService service;
 	
-	/** 수정 화면 전환
-	 * @param todoNo : 수정할 할 일 번호
-	 * @param model : 데이터 전달 객체 (기본 : request )
-	 * @return todo/Update.html forward
-	 */
-	@GetMapping("update")
-	public String bookUpdate(
-			@RequestParam("bookNo") int todoNo,
-			Model model) {
-		
-		// 서비스 메서드 호출 후 결과 반환 받기
-		int result = service.addBook(todoTitle, todoContent);
-		
-		// 삽입 결과에 따라 message 값 지정
-		String message = null;
-		
-		if(result>0) message = "할 일 추가 성공 !!!";
-		else            message = "할 일 추가 실패 ....";
-		
-		
-		// 리다이렉트 후 1회성으로 사용할 데이터를 속성으로 추가
-		ra.addFlashAttribute("message", message);
-				
-		return "redirect:/"; //메인 페이지로 재요청
+	
+	@GetMapping("main")
+	public String ajaxMain( ) {
+		return "book/main";
 	}
+	
 	
 	
 	
 	@PostMapping("add") //  "/todo/add" POST 방식 요청 매핑
 	public String addTodo(
-			@RequestParam("todoTitle") String todoTitle,
-			@RequestParam("todoContent")String todoContent,
+			@RequestParam("bookTitle") String bookTitle,
+			@RequestParam("bookWriter")String bookWriter,
+			@RequestParam("bookWriter")int bookPrice,
 			RedirectAttributes ra
 			) {
 		
@@ -67,13 +48,13 @@ public class UpdateController {
 		
 		
 		// 서비스 메서드 호출 후 결과 반환 받기
-		int result = service.addBook(bookTitle, todoContent);
+		int result = service.addBook(bookTitle, bookWriter, bookPrice);
 		
 		// 삽입 결과에 따라 message 값 지정
 		String message = null;
 		
-		if(result>0) message = "할 일 추가 성공 !!!";
-		else            message = "할 일 추가 실패 ....";
+		if(result>0) message = "책 등록 성공";
+		else            message = "책 등록 실패";
 		
 		
 		// 리다이렉트 후 1회성으로 사용할 데이터를 속성으로 추가

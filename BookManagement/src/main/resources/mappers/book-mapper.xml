@@ -11,4 +11,11 @@
 		ORDER BY BOOK_NO
   	</select>
 
+<insert id="addBook" >
+
+INSERT INTO "BOOK"
+	VALUES(SEQ_TODO_NO.NEXTVAL, #{bookTitle}, #{bookWriter}, #{bookPrice},DEFAULT)
+</insert>
+
+
 </mapper>

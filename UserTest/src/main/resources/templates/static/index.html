@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메인 페이지</title>
+</head>
+<body>
+
+  <main>
+
+    <form action="searchSuccess" method="Get" name="searchForm" id="searchForm">
+
+    <label for="userId">회원 정보 조회(아이디 검색)</label>
+    <div class="search-input-area">
+      <input type="text" name="userId" id="userId" 
+      placeholder="회원 아이디 입력" maxlength="20" >
+
+      <button id="searchBtn">조회</button>
+    </div>
+
+    </form>
+  </main>
+
+    
+
+  <script src="/js/index.js"></script>
+</body>
+</html>

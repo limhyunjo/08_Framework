@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import com.lhj.book.main.model.dto.Book;
 import com.lhj.book.main.model.mapper.MainMapper;
 
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -28,4 +29,16 @@ public List<Book> selectAll() {
 	return mapper.selectAll();
 }
 
+
+@Override
+public int addBook(String bookTitle, String bookWriter, int bookPrice) {
+	
+	Book book = new Book();
+	book.setBookTitle(bookTitle);
+	book.setBookWriter(bookWriter);
+	book.setBookPrice(bookPrice);
+	
+	
+	return mapper.addBook(bookTitle, bookWriter, bookPrice);
+}
 }

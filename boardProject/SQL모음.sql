@@ -454,12 +454,12 @@ ALTER TABLE "BOOK" ADD CONSTRAINT "PK_BOOK" PRIMARY KEY (
 	"BOOK_NO"
 );
 
-CREATE SEQUENCE SEQ_BOOK_NO NOCACHE; 
+CREATE SEQUENCE SEQ_TODO_NO NOCACHE; 
 
 --샘플 데이터 삽입
 INSERT INTO "BOOK"
 VALUES(
-          SEQ_BOOK_NO.NEXTVAL, 
+           '1', 
            '어린왕자',
            '생택쥐베리',
            '8000',
@@ -469,7 +469,7 @@ VALUES(
  
 INSERT INTO "BOOK"
 VALUES(
-            SEQ_BOOK_NO.NEXTVAL,
+           '2', 
            '자바의 정석',
            '남궁 성',
            '30000',
@@ -480,69 +480,8 @@ VALUES(
 COMMIT;
 
 DELETE FROM "BOOK"
-WHERE "BOOK_NO" = 2;
+WHERE "BOOK_NO" = 1;
 
 
 SELECT * FROM "BOOK";
 ----------------------------------------------------------------------------------------------
-
-/*USER 테이블 만들기*/
-
-CREATE TABLE TB_USER(
-
-USER_NO NUMBER PRIMARY KEY,
-
-USER_ID VARCHAR2(50) UNIQUE NOT NULL,
-
-USER_NAME VARCHAR2(50) NOT NULL,
-
-USER_AGE NUMBER NOT NULL
-
-);
-
-CREATE SEQUENCE SEQ_UNO;
-
--- 샘플 데이터 삽입
-
-INSERT INTO TB_USER VALUES(SEQ_UNO.NEXTVAL, 'gd_hong', '홍길동', 20);
-
-INSERT INTO TB_USER VALUES(SEQ_UNO.NEXTVAL, 'sh_han', '한소희', 28);
-
-INSERT INTO TB_USER VALUES(SEQ_UNO.NEXTVAL, 'jm_park', '지민', 27);
-
-INSERT INTO TB_USER VALUES(SEQ_UNO.NEXTVAL, 'jm123', '지민', 25);
-
-COMMIT;
-
-SELECT  * FROM TB_USER;
-
----------------------------------------------------------
-
-/*customer 시험 테이블*/
-
-CREATE TABLE CUSTOMER(
-
-CUSTOMER_NO NUMBER PRIMARY KEY,
-
-CUSTOMER_NAME VARCHAR2(60) NOT NULL,
-
-CUSTOMER_TEL VARCHAR2(30) NOT NULL,
-
-CUSTOMER_ADDRESS VARCHAR2(200) NOT NULL
-
-);
-
-
-CREATE SEQUENCE SEQ_CUSTOMER_NO NOCACHE;
-
---샘플 데이터 삽입
-INSERT INTO CUSTOMER 
-VALUES(
-          SEQ_CUSTMER_NO.NEXTVAL, 
-           '홍길동',
-           '01012345678',
-           '서울시 중구 남대문로'
-               
- );
- 
-SELECT * FROM CUSTOMER;

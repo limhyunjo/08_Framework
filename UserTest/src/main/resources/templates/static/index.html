@@ -9,11 +9,13 @@
 
   <main>
 
-    <form action="searchSuccess" method="Get" name="searchForm" id="searchForm">
+    <form action="selectName">
+      
+      // 여기서 input의 name은 파라미터의 key 값으로 전달된다
 
-    <label for="userId">회원 정보 조회(아이디 검색)</label>
+    <label for="userId">회원 정보 조회(이름 검색)</label>
     <div class="search-input-area">
-      <input type="text" name="userId" id="userId" 
+      <input type="text" name="inputName"
       placeholder="회원 아이디 입력" maxlength="20" >
 
       <button id="searchBtn">조회</button>

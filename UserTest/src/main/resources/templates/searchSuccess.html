@@ -21,14 +21,19 @@
         <tbody>
         
          
-            <tr th:each=" us : ${user}" th:object="${us}">
-              <td th:text="*{userNo}">회원번호</td>
-              
-              <td th:text="*{userId}">회원아이디</td>
-    
-              <td th:text="*{userName}">회원이름</td>
-              <td th:text="*{userAge}">회원나이</td>
-            </tr>
+            <th th:each=" us : ${userList}" th:object="${us}">
+
+              <tr>
+
+                <th th:text="*{userNo}">회원번호</th>
+                
+                <th th:text="*{userId}">회원아이디</th>
+                
+                <th th:text="*{userName}">회원이름</th>
+                <th th:text="*{userAge}">회원나이</th>
+              </tr>
+
+            </th>
           </c:forEach>
     
         </tbody>

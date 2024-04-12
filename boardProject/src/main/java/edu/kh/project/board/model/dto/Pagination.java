@@ -180,8 +180,8 @@ public class Pagination {
 		endPage = pageSize - 1 + startPage;
 		
 		
-		// 페지지 끝 번호가 최대 페이지 수를 초과한 경우
-		if(endPage < maxPage) endPage = maxPage;
+		// 페이지 끝 번호가 최대 페이지 수를 초과한 경우
+		if(endPage > maxPage) endPage = maxPage;
 		
 		// prevPage : "<" 클릭 시 이동할 페이지 번호
 		//			 (이전 페이지 번호 목록 중 끝 번호)
@@ -195,8 +195,6 @@ public class Pagination {
 			prevPage = startPage -1;
 		}
 		
-		// nextPage: "->"maxPage 
-		                  // sljame 
 		
 		// nextPage : ">" 클릭 시 이동할 페이지 번호
 		//			 (다음 페이지 번호 목록 중 시작 번호)

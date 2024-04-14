@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>책 관리 프로그램</title>
+</head>
+
+<body>
+
+  <h1>책 관리 프로그램</h1>
+
+  <a href="/manage/insert">책 등록</a>
+
+  <br><br>
+
+  <a href="/manage/search">책 검색,수정,삭제</a>
+
+  <hr>
+
+  <h3>
+    모든 책 조회
+    <button id="selectAllBtn">조회</button>
+  </h3>
+
+  <table border="1" style="border-collapse: collapse; text-align: center;">
+    <thead>
+      <tr>
+        <th>책 번호</th>
+        <th>제목</th>
+        <th>글쓴이</th>
+        <th>가격</th>
+        <th>등록일</th>
+      </tr>
+    </thead>
+    <tbody id="selectBody">
+     
+    </tbody>
+  </table>
+
+  <th:block th:replace="~{common/footer}"></th:block>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

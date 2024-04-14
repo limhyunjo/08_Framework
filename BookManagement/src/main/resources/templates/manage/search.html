@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>책 검색, 수정, 삭제</title>
+
+</head>
+<body>
+
+  <h1>책 검색, 수정, 삭제</h1>
+
+
+
+  <h4>
+    제목 : 
+    <input type="text" id="inputTitle">
+    <button id="searchBtn">검색</button>
+  </h4>
+
+  <table border="1" style="border-collapse: collapse; text-align: center;">
+    <thead>
+      <tr>
+        <th>책 번호</th>
+        <th>제목</th>
+        <th>글쓴이</th>
+        <th>가격</th>
+        <th>등록일</th>
+        <th>수정버튼</th>
+        <th>삭제버튼</th>
+      </tr>
+    </thead>
+    <tbody id="tbody">
+     
+    </tbody>
+  </table>
+  
+  <button onclick="location.href='/'">메인 페이지로 이동</button>
+  
+  <th:block th:replace="~{common/footer}"></th:block>
+
+  <script src="/js/search.js"></script>
+</body>
+</html>

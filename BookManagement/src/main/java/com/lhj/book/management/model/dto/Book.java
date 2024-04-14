@@ -1,4 +1,4 @@
-package com.lhj.book.main.model.dto;
+package com.lhj.book.management.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,11 +6,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 public class Book {
 
 	

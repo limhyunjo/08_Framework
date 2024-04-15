@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@Slf4j
 @RequiredArgsConstructor // 이거 쓸 때는 꼭 final이 있어야 함
 public class UserController {
 

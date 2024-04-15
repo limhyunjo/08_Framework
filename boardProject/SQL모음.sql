@@ -126,6 +126,7 @@ AND AUTH_KEY = #{위 이메일로 보낸 인증번호};
 -- 파일 업로드 테스트용 테이블
 CREATE TABLE "UPLOAD_FILE"(
 	FILE_NO NUMBER PRIMARY KEY,
+	
 	FILE_PATH VARCHAR2(500) NOT NULL,
 	FILE_ORIGINAL_NAME VARCHAR2(300) NOT NULL,
 	FILE_RENAME VARCHAR2(100) NOT NULL,
@@ -639,7 +640,11 @@ SELECT BOARD_NO, BOARD_TITLE, BOARD_CONTENT, BOARD_CODE, READ_COUNT,
 	(SELECT IMG_PATH || IMG_RENAME 
 	 FROM "BOARD_IMG"
 	 WHERE BOARD_NO = 1998
-	 AND   IMG_ORDER = 0) THUMBNAIL
+	 AND   IMG_ORDER = 0) THUMBNAIL,
+	 
+	(SELECT COUNT(*)FROM "BOARD_LIKE"
+WHERE MEMBER_NO = 15
+AND BOARD_NO =1998) LIKE_CHECK
 
 FROM "BOARD"
 JOIN "MEMBER" USING(MEMBER_NO)
@@ -680,7 +685,23 @@ SELECT LEVEL, C.* FROM
    START WITH PARENT_COMMENT_NO IS NULL
    CONNECT BY PRIOR COMMENT_NO = PARENT_COMMENT_NO
    ORDER SIBLINGS BY COMMENT_NO;
+  
+  
+----------------------------------------------------------------------------------------------
+  
+  /*좋아요 테이블("BOARD_LIKE") 샘플 데이터 추가*/
 
+INSERT INTO "BOARD_LIKE"
+VALUES(15, 2001); -- 1번 회원이 1998번 글에 좋아요를 클릭함
+  
+COMMIT;
+
+-- 좋아요 여부 확인  (1:O / 2:X)
+SELECT COUNT(*)FROM "BOARD_LIKE"
+WHERE MEMBER_NO = 15
+AND BOARD_NO =2001;
+
+SELECT * FROM "BOARD_LIKE";
 -----------------------------------------------------------------------------------------------
 
 /* 책 관리 프로젝트 (연습용) */
@@ -738,4 +759,6 @@ WHERE "BOOK_NO" = 1;
 
 
 SELECT * FROM "BOOK";
+
+
 ----------------------------------------------------------------------------------------------

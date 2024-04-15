@@ -9,6 +9,6 @@
     
    <h3>결과 페이지</h3>
    <hr>
-   <h1 th:text="|${customerName} 고객님 추가 성공|"></h1>
+   <th:block th:utext="${customer.customerName}">고객 이름</th:block> 고객님 추가 성공!
 </body>
 </html>

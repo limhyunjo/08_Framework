@@ -259,7 +259,7 @@ public class MyPageController {
 	 *   섞여있는 파라미터를 분리
 	 *   
 	 *   문자열, 숫자 -> Stirng
-	 *   파일             -> MutipartFile (파일이 담긴다)
+	 *   파일             -> MultipartFile (파일이 담긴다)
 	 *   
 	 *   
 	 * */

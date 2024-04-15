@@ -46,6 +46,9 @@ public class BoardNameInterceptor implements HandlerInterceptor{
 		// 위의 요청 주소(/board/2) 뒤에 보드 코드를 잘라서  
 		//보드 네임을 얻어와 세팅할 코드를 만들 것임
 		
+		
+		try {
+		
 															// [" ", "board", "1"]
 		int boardCode = Integer.parseInt(uri.split("/")[2]); // String을 int로 바꿈
 		
@@ -68,6 +71,9 @@ public class BoardNameInterceptor implements HandlerInterceptor{
 			}
 		}
 		
+		}catch(Exception e) {
+			// 오류 나도 그냥 넘김
+		}
 		HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
 	}
 

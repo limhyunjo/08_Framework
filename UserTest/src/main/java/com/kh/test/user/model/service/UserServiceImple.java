@@ -27,7 +27,7 @@ public class UserServiceImple implements UserService {
 
 	@Override
 	public List<User> selectName(String inputName) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

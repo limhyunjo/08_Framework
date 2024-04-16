@@ -85,3 +85,15 @@ boardLike.addEventListener("click", e=>{
 
 });
 
+const deleteBtn = document.querySelector("#deleteBtn");
+deleteBtn.addEventListener("click", e =>{
+
+     
+  if(confirm("삭제 하시겠습니까?")){
+    location.href = `/editBoard/${boardCode}/${boardNo}/delete`;
+  }
+  else{
+    alert("취소됨");
+  }
+
+})

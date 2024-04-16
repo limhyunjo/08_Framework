@@ -702,6 +702,63 @@ WHERE MEMBER_NO = 15
 AND BOARD_NO =2001;
 
 SELECT * FROM "BOARD_LIKE";
+
+
+----------------------------------------------------------------------------------------------
+
+/*여러 행을 한 번에 삽입하는 방법 ! -> INSERT + SUBQUERY */
+-- ORA-02297: 시원스 번호는 이 위치에 사용할 수 없습니다
+--> 시퀀스로 번호 생성하는 부분으로 별도로 함수로 생성
+
+INSERT INTO "BOARD_IMG"
+( 
+
+SELECT NEXT_IMG_NO(),  '경로1', '원본1', '변경1', 1, 2001 FROM DUAL
+
+UNION 
+
+SELECT NEXT_IMG_NO(),  '경로2', '원본2', '변경2', 2, 2001 FROM DUAL
+
+UNION 
+
+SELECT NEXT_IMG_NO(),  '경로3', '원본3', '변경3', 3, 2001 FROM DUAL
+
+);
+
+
+
+SELECT SEQ_IMG_NO.NEXTVAL FROM DUAL;
+-- 서브 쿼리 안에는 시퀀스를 쓸 수 없다
+
+
+SELECT * FROM "BOARD_IMG";
+
+ROLLBACK;
+
+-- SEQ_IMG_NO 시퀀스의 다음 값을 반환하는 함수 생성
+CREATE OR REPLACE FUNCTION NEXT_IMG_NO
+
+-- 반환형
+RETURN NUMBER
+
+-- 사용할 변수
+IS IMG_NO NUMBER;
+
+BEGIN
+   SELECT SEQ_IMG_NO.NEXTVAL 
+   INTO IMG_NO
+	 FROM DUAL;
+	
+	RETURN IMG_NO;
+	
+END;
+;
+
+SELECT NEXT_IMG_NO() FROM DUAL;
+
+
+
+
 -----------------------------------------------------------------------------------------------
 
 /* 책 관리 프로젝트 (연습용) */

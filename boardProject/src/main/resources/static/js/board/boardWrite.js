@@ -90,7 +90,7 @@ const changeImageFn = (inputImage, order) => {
      inputImage.remove();    // 원본을 삭제
      inputImage = temp;      // 원본 변수에 백업본을 참조할 수 있게 대입
  
-     // 백업본에 없는 이벤트 리스너를 다시 추가
+     // 백업본에 없는 이벤트 리스너를 다시 추가 // 재귀호출
      inputImage.addEventListener("change", e => {
        changeImageFn(e.target, order);
      })

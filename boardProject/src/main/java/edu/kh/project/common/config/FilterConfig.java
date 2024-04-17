@@ -26,7 +26,7 @@ public class FilterConfig {
 		// 사용할 필터 객체 추가
 		filter.setFilter(new LoginFilter());
 		
-		String [] filteringURL = {"/myPage/*"};
+		String [] filteringURL = {"/myPage/*", "/editBoard/*"}; // 로그인 해야 사용할 수 있게 필턴
 		
 		// 필터가 동작할 URL을 세팅
 		// -> filteringURL 배열을 List로 변환

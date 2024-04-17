@@ -85,6 +85,7 @@ boardLike.addEventListener("click", e=>{
 
 });
 
+/* 게시글 삭제 버튼 */
 const deleteBtn = document.querySelector("#deleteBtn");
 deleteBtn.addEventListener("click", e =>{
 
@@ -97,3 +98,29 @@ deleteBtn.addEventListener("click", e =>{
   }
 
 })
+
+
+
+
+
+/* 게시글 수정 버튼 */
+
+const updateBtn = document.querySelector("#updateBtn");
+
+if(updateBtn != null){ // 수정 버튼이 존재 시
+
+  updateBtn.addEventListener("click", () =>{
+
+    // 현재 : /board/1/2010?cp=1
+   // 목표 :  /editBoard/1/2010/update?cp=1 (Get 방식)
+
+   //location.pathname : /board/1/2010
+   //.replace : 이름을 바꿔줌
+   //location.search : 현재 주소의 쿼리 스트링이 붙음 ?cp=1
+    location.href = location.pathname.replace('board','editBoard')
+                    +"/update"
+                    +location.search;
+
+  })
+
+}

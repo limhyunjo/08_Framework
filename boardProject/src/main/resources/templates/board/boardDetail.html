@@ -78,9 +78,10 @@
 
             <!-- ====================== 이미지가 있을 경우 출력하는 구문 ====================== -->
           <th:block th:if="${#lists.size(board.imageList) > 0}">
-            <!-- 썸네일이 있을 경우 -->
-               <th:block th:if="*{thumbnail}">
-                   <h5>썸네일</h5>
+            
+                <!-- 썸네일이 있을 경우 -->
+                <th:block th:if="*{thumbnail}">
+                    <h5>썸네일</h5>
                     <div class="img-box">
                         <div class="boardImg thumbnail">
                             <img th:src="|${thumbnail.imgPath}${thumbnail.imgRename}|">                     
@@ -89,8 +90,8 @@
                                th:download="${thumbnail.imgOriginalName}">다운로드</a>         
                         </div>
                     </div>
-                    
-               </th:block>
+                </th:block>
+                
                 
                <th:block th:if="${#lists.size(board.imageList) > start}">
                    
@@ -162,6 +163,8 @@
         let likeCheck =/*[[${board.likeCheck}]]*/ "좋아요 여부";
 
         const boardCode = /*[[${board.boardCode}]]*/"게시판 번호";
+
+        const userDefaultIamge = /*[[#{user.defadefault.image}]]*/ "기본이미지";
 
     </script>
 

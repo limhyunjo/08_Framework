@@ -87,17 +87,20 @@ boardLike.addEventListener("click", e=>{
 
 /* 게시글 삭제 버튼 */
 const deleteBtn = document.querySelector("#deleteBtn");
-deleteBtn.addEventListener("click", e =>{
 
-     
-  if(confirm("삭제 하시겠습니까?")){
-    location.href = `/editBoard/${boardCode}/${boardNo}/delete`;
-  }
-  else{
-    alert("취소됨");
-  }
+if(deleteBtn != null){
+  deleteBtn.addEventListener("click", e =>{
 
-})
+      
+    if(confirm("삭제 하시겠습니까?")){
+      location.href = `/editBoard/${boardCode}/${boardNo}/delete`;
+    }
+    else{
+      alert("취소됨");
+    }
+
+  })
+}
 
 
 
@@ -124,3 +127,30 @@ if(updateBtn != null){ // 수정 버튼이 존재 시
   })
 
 }
+
+
+
+// -----------------------------------------------------------
+
+/* 목록으로 돌아가는 버튼 */
+const goToList = document.querySelector("#goToListBtn");
+
+goToListBtn.addEventListener("click", ()=>{
+
+  // location.pathname = 현재 주소  /board/1/2011
+  // location.search = 쿼리 스트링이 나옴  ?cp=1
+
+  // 상세조회 : /board/1/2011?cp=1
+
+  // 목록 : /board/1?cp=1
+
+  let url = location.pathname;
+
+  // url을 자른 것을 다시 url에 저장
+  // /로 자른 마지막 index
+  url = url.substring(0, url.lastIndexOf("/"));
+
+  location.href = url + location.search;
+                          // 쿼리 스트링
+
+});

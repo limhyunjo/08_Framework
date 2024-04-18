@@ -756,6 +756,99 @@ END;
 
 SELECT NEXT_IMG_NO() FROM DUAL;
 
+---------------------------------------------------------------------------------------------
+
+-- 대댓글 샘플 데이터 추가
+
+INSERT INTO "COMMENT"	VALUES(
+			SEQ_COMMENT_NO.NEXTVAL,
+			'부모 댓글 1',
+			DEFAULT, DEFAULT,
+			2008,
+			15,
+			NULL
+);
+
+INSERT INTO "COMMENT"	VALUES(
+			SEQ_COMMENT_NO.NEXTVAL,
+			'부모 댓글 2',
+			DEFAULT, DEFAULT,
+			2008,
+			15,
+			NULL
+);
+
+INSERT INTO "COMMENT"	VALUES(
+			SEQ_COMMENT_NO.NEXTVAL,
+			'부모 댓글 3',
+			DEFAULT, DEFAULT,
+			2008,
+			15,
+			NULL
+);
+
+
+COMMIT;
+
+
+
+-- 부모 댓글 1의 자식 댓글
+INSERT INTO "COMMENT"	VALUES(
+			SEQ_COMMENT_NO.NEXTVAL,
+			'부모 1의 자식 1',
+			DEFAULT, DEFAULT,
+			2008,
+			15,
+			4003
+);
+
+INSERT INTO "COMMENT"	VALUES(
+			SEQ_COMMENT_NO.NEXTVAL,
+			'부모 1의 자식 2',
+			DEFAULT, DEFAULT,
+			2008,
+			15,
+			4003
+);
+
+
+--- 부모 댓글 2의 자식 댓글
+
+INSERT INTO "COMMENT"	VALUES(
+			SEQ_COMMENT_NO.NEXTVAL,
+			'부모 2의 자식 1',
+			DEFAULT, DEFAULT,
+			2008,
+			15,
+			4004
+);
+
+-- 부모 2의 자식 1의 자식 1
+INSERT INTO "COMMENT"	VALUES(
+			SEQ_COMMENT_NO.NEXTVAL,
+			'부모 2의 자식 1의 자식1',
+			DEFAULT, DEFAULT,
+			2008,
+			15,
+			4008
+);
+
+COMMIT;
+
+SELECT LEVEL, COMMENT_NO, PARENT_COMMENT_NO, COMMENT_CONTENT 
+FROM "COMMENT"
+WHERE BOARD_NO = 2008
+
+/*계층형 쿼리*/
+
+-- PARENT_COMMENT_NO 값이 NULL인 행이 부모(LV.1)
+START WITH PARENT_COMMENT_NO IS NULL 
+
+-- 부모의 COMMENT_NO와 같은 PARENT_COMMENT_NO 가진 행을 자식으로 지정
+CONNECT BY PRIOR COMMENT_NO = PARENT_COMMENT_NO
+
+-- 형제(같은 레벨 부모, 자식)들 간의 정렬 순서를 COMMENT_NO 오름 차순
+ORDER SIBLINGS BY COMMENT_NO;
 
 
 

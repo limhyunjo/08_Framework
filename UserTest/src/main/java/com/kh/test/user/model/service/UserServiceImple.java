@@ -17,19 +17,16 @@ public class UserServiceImple implements UserService {
 
 	
 	// mapper 의존성 주입 (DI)
-	private final UserMapper mapper; 
+	private final UserMapper mapper;
 
 	@Override
-	public User userSearch(String userId) {
-		
-		return mapper.userSearch(userId);
-	}
+	public List<User> searchName(String inputName) {
+	
+		return mapper.searchName(inputName);
+	} 
 
-	@Override
-	public List<User> selectName(String inputName) {
-		
-		return null;
-	}
+
+
 
 	
 

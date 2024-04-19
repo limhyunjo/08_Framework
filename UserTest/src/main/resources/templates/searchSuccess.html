@@ -21,7 +21,7 @@
         <tbody>
         
          
-            <th th:each=" us : ${userList}" th:object="${us}">
+            <th:block th:each=" us : ${userList}" th:object="${us}">
 
               <tr>
 
@@ -33,7 +33,7 @@
                 <th th:text="*{userAge}">회원나이</th>
               </tr>
 
-            </th>
+            </th:block>
           </c:forEach>
     
         </tbody>

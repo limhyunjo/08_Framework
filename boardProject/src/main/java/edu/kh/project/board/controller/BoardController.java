@@ -61,9 +61,12 @@ public class BoardController {
 	
 	// @PathVariable 은 공통 주소 board 뒤에 하위 주소가 있을 경우 다 읽어옴
 	
-	/** 게시글 목록 조회
+	/** 게시글 목록 조회 + 검색( name 속성의 key, query가 추가로 제출됨)
 	 * @param boardCode : 게시판 종류 구분
 	 * @param cp: (current page) 현재 조회 요청한 페이지 (없으면 1)
+	 * @param paramMap : 제출된 파라미터가 모두 저장된 Map
+	 * 										( 검색 시 key랑 query가  담겨 있음)
+	 * 
 	 * @return
 	 * 
 	 * - /board/000
@@ -82,7 +85,11 @@ public class BoardController {
 	public String selectBoardList(
 			@PathVariable("boardCode") int boardCode,// 주소를 옆의 변수에 저장하겠다
 			@RequestParam(value="cp", required = false, defaultValue="1") int cp ,
-			Model model // reqeust scope로 값을 전달하는 용도
+			Model model, // reqeust scope로 값을 전달하는 용도
+			
+			
+			@RequestParam Map<String, Object> paramMap
+			
 			
 			// Get매핑은 주소의 쿼리 스트링에 param이 담겨옴
 			// cp의 값이 있으면 그 페이지를 보고 아니면 1페이지 보기
@@ -90,8 +97,24 @@ public class BoardController {
 		
 		log.debug("boardCode: " + boardCode);
 		
+		
 		// 조회 서비스 호출 후 결과 반환
-		Map<String, Object> map = service.selectBoardList(boardCode, cp);
+		Map<String, Object> map = null;
+		
+		// 검색이 아닌 경우
+		if(paramMap.get("key") == null) {
+			map = service.selectBoardList(boardCode, cp);
+			
+		} else { // 검색인 경우
+			
+			// boardCode를 paramMap에 추가
+			paramMap.put("boardCode", boardCode);
+			
+			// 검색 서비스 호출 // map으로 반환 받아 돌아올 것임
+			map = service.searchList(paramMap, cp);
+			
+		}
+			
 		// 몇번 게시판 몇 페이지를 조회할 것인지 알려주기 위해 boardCode, cp 보냄
 		// boardCode : 게시판 번호 
 		// cp 현재 페이지 

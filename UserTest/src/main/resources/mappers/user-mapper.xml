@@ -8,10 +8,12 @@
   resultType은 조회된 1행만 생각한다
  -->
  <!-- 전달 받은 inputName 포함된 조회 -->
-<select id="selectName" resultType="User">
+<select id="search
+
+
+Name" resultType="User">
 SELECT * FROM TB_USER 
 WHERE USER_NAME LIKE '%${inputName}%'
 </select>
 </mapper>
 
-<!--  -->

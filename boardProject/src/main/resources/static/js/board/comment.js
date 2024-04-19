@@ -213,7 +213,7 @@ addContent.addEventListener("click", e => {
   }
 
 
-   // ajax를 이용해 댓글 등록 요청
+   // ajax를 이용해 댓글 등록 요청s
    const data = {
     "commentContent" : commentContent.value,
     "boardNo"        : boardNo,

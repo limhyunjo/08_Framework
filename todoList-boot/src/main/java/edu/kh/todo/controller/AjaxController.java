@@ -76,7 +76,7 @@ public class AjaxController {
 	// -> forward / redirect 를 원하는 것이 아님
 	// -> "전체 Todo 개수" 라는 데이터가 반환되는 것을 반환
 	@ResponseBody // 값 그대로 돌려보냄 (forward , redirect 아님)
-	@GetMapping("totalCount")
+	@GetMapping("totalCount")	
 	public int getTotalCount() {
 		
 		log.info("getTotalCount()메서드 호출됨");

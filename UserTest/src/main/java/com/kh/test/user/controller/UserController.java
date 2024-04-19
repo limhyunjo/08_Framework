@@ -55,7 +55,7 @@ public class UserController {
 		
 		
 		
-		List<User> userList = service.selectName(inputName);
+		List<User> userList = service.searchName(inputName);
 		
 		String path = null;
 		
@@ -63,11 +63,11 @@ public class UserController {
 		if(userList.isEmpty()) { //조회 결과 있을 경우
 			path ="searchFail"; // forward 경로
 			
-			// request scope 값 세팅
-			model.addAttribute("userList",userList) ;
-			
+		
 		}else {
 			path = "searchSuccess";  // 메인 페이지로 재요청
+			// request scope 값 세팅
+			model.addAttribute("userList",userList) ;
 			
 	
 			// 이름으로 검색하는 경우 겹치는 이름이 있을 수 있어 list로 조회

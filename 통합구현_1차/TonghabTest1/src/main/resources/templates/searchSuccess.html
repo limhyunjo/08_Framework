@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>조회 성공</title>
+</head>
+<body>   
+
+    <table border="1" style="border-collapse: collapse;">
+
+        <thead>
+          <th>번호</th>
+          <th>제목</th>
+          <th>작성자</th>
+          <th>내용</th>
+          <th>조회수</th>
+          <th>작성날짜</th>
+        </thead>
+    
+    
+        <tbody>
+        
+         
+            <th:block th:each="sl: ${selectList} " th:object="${sl}">
+             
+              <tr>
+
+                <th th:text="*{boardNo}">번호</th>
+                
+                <th th:text="*{boardTitle}">제목</th>
+                
+                <th th:text="*{userId}">작성자</th>
+                <th th:text="*{boardContent}">내용</th>
+                <th th:text="*{boardReadCount}">조회수</th>
+                <th th:text="*{boardDate}">작성날짜</th>
+              </tr>
+
+            </th:each=>
+          </c:forEach>
+    
+        </tbody>
+      </table>
+
+</body>
+</html>

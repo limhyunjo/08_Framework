@@ -153,6 +153,7 @@ addBtn.addEventListener('click',()=>{
         getTotalCount();
 
         // 할 일 목록 다시 조회
+
         selectTodoList();
 
     }else{ // 실패

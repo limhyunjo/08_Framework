@@ -79,7 +79,7 @@
 #updateLayer{
     width: 400px;
     height: 250px;
-    border: 3px solid blue;
+    border: 3px solid rgb(72, 205, 156);
     border-radius: 15px;
     background-color: white;
   

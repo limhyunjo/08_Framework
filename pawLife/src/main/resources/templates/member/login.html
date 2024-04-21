@@ -11,13 +11,19 @@
 <body>
 
     <main>
-
-        <section class="logo-area">
-            <a href="/">
-                <img src="/images/logo.png">
-            </a>
+        
+        <!-- 로고 / 클릭하면 메인으로 -->
+        <section class="logo-area">  
+            <div>
+                <a href="/"> <img src="/images/logo.png" id="logoImage"> </a>  
+            </div>
+           <div>
+            <a href="/" id="logoTitle">PAWLIFE</a>
+           </div>
+            
         </section>
-
+        
+      
 
         <form action="/member/login" method="post" id="loginForm">
             <section class="input-box">
@@ -33,10 +39,16 @@
                 <label for="saveId"><i class="fas fa-check"></i>아이디 저장</label>
             </div>
 
-            <button class="login-btn">Login</button>
+          
+            <div>
+                <button class="login-btn">Login</button>
+            </div>
+                
 
+          
+           
             <p class="text-area">
-                <a href="#">회원가입</a>
+                <a href="/member/signup">회원가입</a>
                 |
                 <a href="#">ID/PW찾기</a>
             </p>

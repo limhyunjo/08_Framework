@@ -7,12 +7,12 @@
 
   <th:block th:replace="~{common/common}"></th:block>
 
-  <link rel="stylesheet" href="/css/member/signup-style.css">
+  <link rel="stylesheet" href="/css/member/signup.css">
 </head>
 <body>
 
   <main>
-    <!-- 헤더 추가 -->
+    <!-- 헤더  -->
     <th:block th:replace="~{common/header}"></th:block>
 
     <section class="signUp-content">
@@ -21,7 +21,8 @@
 
         <!-- 이메일 입력 -->
         <label for="memberEmail">
-          <span class="required">*</span> 아이디(이메일)
+          <span class="required">🦔</span> 
+          <span class="required">아이디(이메일)</span> 
         </label>
 
         <div class="signUp-input-area">
@@ -36,7 +37,8 @@
 
         <!-- 인증번호 입력 -->
         <label for="emailCheck">
-          <span class="required">*</span> 인증번호
+          <span class="required">*</span> 
+          <span class="required">인증번호</span>
         </label>
 
         <div class="signUp-input-area">
@@ -50,7 +52,8 @@
 
         <!-- 비밀번호/비밀번호 확인 입력 -->
         <label for="memberPw">
-          <span class="required">*</span> 비밀번호
+          <span class="required">*</span> 
+          <span class="required">비밀번호</span>
         </label>
 
         <div class="signUp-input-area">
@@ -67,7 +70,8 @@
 
         <!-- 닉네임 입력 -->
         <label for="memberNickname">
-          <span class="required">*</span> 닉네임
+          <span class="required">*</span> 
+          <span class="required">닉네임</span> 
         </label>
 
         <div class="signUp-input-area">
@@ -79,7 +83,8 @@
 
         <!-- 전화번호 입력 -->
         <label for="memberTel">
-          <span class="required">*</span> 전화번호
+          <span class="required">*</span> 
+          <span class="required"> 전화번호</span> 
         </label>
 
         <div class="signUp-input-area">
@@ -90,7 +95,10 @@
 
 
         <!-- 주소 입력 -->
-        <label for="memberAddress">주소</label>
+        <label for="memberAddress">
+          <span class="required">*</span> 
+          <span class="required">주소</span> 
+        </label>
 
         <div class="signUp-input-area">
           <input type="text" name="memberAddress" placeholder="우편번호" maxlength="6" id="postcode">                       
@@ -106,7 +114,10 @@
           <input type="text" name="memberAddress" placeholder="상세 주소" id="detailAddress">
         </div>
 
-        <button id="signUpBtn">가입하기</button>
+        <div>
+          <button id="signUpBtn">가입하기</button>
+        </div>
+        
     </section>
     
   </main>

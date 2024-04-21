@@ -1,3 +1,4 @@
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -19,16 +20,34 @@
     border-radius: 5px;
   }
   
+
+  /* 로고 영역 */
+
+
   main .logo-area {
     text-align: center;
     margin-bottom: 30px;
   }
+
+  
+ .logo-area>div>a{
+  margin: 10px;
+}
   
   .logo-area img {
     width: 150px;
   }
+
+  #LogoImage{
+    width: 60px;
+ }
   
-  
+  #logoTitle{
+    text-decoration-line: none; /* a태그 밑줄 없애기 */
+    font-size: 26px;
+    font-weight: bold;
+    color: #000000;
+ }
   
   
   .input-box {
@@ -54,13 +73,15 @@
   .login-btn {
     cursor: pointer;
     display: inline-block;
-    width: 100%;
+    width: 170px;
     background: #dddddd;
     color: white;
     padding: 15px;
     font-size: 18px;
     border: 0;
-    border-radius: 5px;
+    border-radius: 15px;
+    margin: 15px 50px 15px 60px;
+    background-color: rgb(38, 37, 37);
   }
   
   .login-btn:focus {
@@ -94,8 +115,8 @@
     justify-content: center;
     align-items: center;
   
-    width: 25px;
-    height: 25px;
+    width: 20px;
+    height: 20px;
     border: 1px solid #ccc;
     border-radius: 50%;
     margin-right: 10px;

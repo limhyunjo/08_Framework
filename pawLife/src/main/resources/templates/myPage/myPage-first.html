@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Page</title><!-- 첫 화면 -->
+
+       <!-- 공용 css/ js 추가 -->
+  <th:block th:replace="~{common/common}"></th:block>
+
+
+  <!-- myPage 전용  CSS -->
+  <link rel="stylesheet" href="/css/myPage/myPage.css">
+</head>
+<body>
+    
+    <main>
+        <!-- 헤더 추가 -->
+        <th:block th:replace="~{common/header}"></th:block>
+
+        <section class="myPage-content">
+
+
+            <!-- 여기에  페이지 이름이랑 버튼들 추가 -->
+
+           
+
+            <div class="boardTitle-area">
+              
+              <h2 class="board-name">마이페이지</h2> 
+
+            </div>
+            
+
+
+
+          <div class="listbtn-area">
+            
+              <button type="button" class= "button" id="profileListBtn">프로필</button>
+            
+            
+              <button type="button" class= "button" id="adoptionListBtn">입양 리스트</button>
+           
+            
+              <button type="button" class= "button" id="boardListBtn">내가 쓴 게시글</button>
+            
+            
+              <button type="button" class= "button" id="commentListBtn">내가 쓴 댓글</button>
+            
+
+              <button type="button" class= "button" id="likeListBtn">좋아요 한 게시글</button>
+            
+          </div>
+
+
+
+
+         <!-- 마이페이지 본문 -->
+         <section class="myPage-main">
+
+             <!-- 
+                //입양 리스트 페이지 
+            <table border="1" style="border-collapse: collapse; text-align: center;">
+              <thead>
+                <tr>
+                  <th>이미지</th>
+                  <th>이름</th>
+                  <th>나이</th>
+                  <th>종</th>
+                  <th>발견장소</th>
+                 
+                </tr>
+              </thead>
+
+              // 나중에 채우기 
+              <tbody id="tbody">
+                <th:block th:each="item, iterStat : ${items}">
+                    <tr>
+                        <td>이미지</td>
+                        <td>이름</td>
+                        <td>나이</td>
+                        <td>종</td>
+                        <td>발견장소</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            // 가로 실선을 나타내는 div 
+                            <div class="horizontal-line"></div>
+                        </td>
+                    </tr>
+                </th:block>
+            </tbody>
+            </table>
+
+            //나중에 버튼 지우고 js에서 append하게 할거임
+
+            <div class="adoptionbtn-area">
+              
+              <button type="button" class= "button" id="adoption-updateBtn">수정</button>
+            
+
+              <button type="button" class= "button" id="adoption-completeBtn">입양완료</button>
+            
+            </div> 
+                 -->
+                 
+            <!-- 내가 쓴 게시물 -->
+            <table border="1" style="border-collapse: collapse; text-align: center;">
+              <thead>
+                <tr>
+                  <th>카테고리</th>
+                  <th>제목</th>
+                  <th>좋아요</th>
+                  <th>댓글</th>
+                  
+                 
+                </tr>
+              </thead>
+
+              <!-- 나중에 채우기 -->
+              <tbody id="tbody">
+                <th:block th:each="item, iterStat : ${items}">
+                    <tr>
+                        <td>카테고리</td>
+                        <td>제목</td>
+                        <td>좋아요</td>
+                        <td>댓글</td>
+                        
+                    </tr>
+                </th:block>
+            </tbody>
+            </table>
+
+
+
+         </section>
+
+        </section>
+
+    </main>
+
+    <!-- 푸터 추가 -->
+    <th:block th:replace="~{common/footer}"></th:block>
+
+    <script src="/js/myPage/myPage.js"></script>
+</body>
+</html>

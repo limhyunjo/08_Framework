@@ -5,16 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Page</title><!-- 첫 화면 -->
 
-       <!-- 공용 css/ js 추가 -->
-  <th:block th:replace="~{common/common}"></th:block>
-
-
-  <!-- myPage 전용  CSS -->
-  <link rel="stylesheet" href="/css/myPage/myPage.css">
+    <!-- 공용 css/ js 추가 -->
+    <th:block th:replace="~{common/common}"></th:block>
+    <!-- myPage 전용  CSS -->
+    <link rel="stylesheet" href="/css/myPage/myPage.css">
 </head>
 <body>
-    
     <main>
+
         <!-- 헤더 추가 -->
         <th:block th:replace="~{common/header}"></th:block>
 
@@ -33,7 +31,7 @@
             
 
 
-
+          <!-- 마이페이지 메뉴 버튼 -->
           <div class="listbtn-area">
             
               <button type="button" class= "button" id="profileListBtn">프로필</button>
@@ -48,7 +46,7 @@
               <button type="button" class= "button" id="commentListBtn">내가 쓴 댓글</button>
             
 
-              <button type="button" class= "button" id="likeListBtn">좋아요 한 게시글</button>
+              <button type="button" class= "button" id="likeListBtn">입양 게시글 북마크</button>
             
           </div>
 
@@ -59,9 +57,8 @@
          <section class="myPage-main">
 
           <!-- 프로필  -->
-          
-<!-- 
-           <div class="profile-container">
+
+           <!-- <div class="profile-container">
 
             <div class="profileImg-area">
             
@@ -85,17 +82,14 @@
             </div>
  
             <p class="memberDelete-area">
-              <a href="#" id="memberDeleteA">회원 탈퇴</a>
+              <a href="#" >회원 탈퇴</a>
             </p>
  
-           </div>
-            -->
-             
-            <div class="adoption-container">
-                 
-                  <!--  //입양 리스트 페이지 --> 
-            
-             <table border="1" class="adoptionList-container" style="border-collapse: collapse; text-align: center;">
+           </div> -->
+           
+             <!-- 
+                //입양 리스트 페이지 
+            <table border="1" style="border-collapse: collapse; text-align: center;">
               <thead>
                 <tr>
                   <th>이미지</th>
@@ -103,32 +97,12 @@
                   <th>나이</th>
                   <th>종</th>
                   <th>발견장소</th>
-                  <th>버튼</th>
                  
                 </tr>
               </thead>
 
-              <tbody id="adoptionTbody">
-
-                <tr>
-                  <td><img src="/images/cat1.jpg" id="adoptionProfileImg" alt="입양 리스트 이미지"></td>
-                  <td>고등어</td>
-                  <td>2살</td>
-                  <td>코리안 숏헤어</td>
-                  <td>ㅇㅇ 시 ㅇㅇ구 ㅇㅇ동 ㅇㅇㅇ동 어디 어디</td>
-                  <td class="adoptionbtn-area">
-                    <button type="button" class= "button" id="adoption-updateBtn">수정</button>
-            
-
-                    <button type="button" class= "button" id="adoption-completeBtn">입양완료</button>
-                  
-                  </td>
-                </tr>
-
-              </tbody>
-            
-              <!-- // 나중에 채우기  -->
-              <!-- <tbody id="tbody">
+              // 나중에 채우기 
+              <tbody id="tbody">
                 <th:block th:each="item, iterStat : ${items}">
                     <tr>
                         <td>이미지</td>
@@ -144,39 +118,172 @@
                         </td>
                     </tr>
                 </th:block>
-            </tbody> -->
-            </table>
-          
-            <!-- //나중에 버튼 지우고 js에서 append하게 할거임 -->
-
-            
-                 
-            <!-- 내가 쓴 게시물 -->
-            <!-- <table border="1" style="border-collapse: collapse; text-align: center;">
-              <thead>
-                <tr>
-                  <th>카테고리</th>
-                  <th>제목</th>
-                  <th>좋아요</th>
-                  <th>댓글</th>
-                  
-                 
-                </tr>
-              </thead>
-
-               //나중에 채우기
-              <tbody id="tbody">
-                <th:block th:each="item, iterStat : ${items}">
-                    <tr>
-                        <td>카테고리</td>
-                        <td>제목</td>
-                        <td>좋아요</td>
-                        <td>댓글</td>
-                        
-                    </tr>
-                </th:block>
             </tbody>
-            </table> -->
+            </table>
+
+            //나중에 버튼 지우고 js에서 append하게 할거임
+
+            <div class="adoptionbtn-area">
+              
+              <button type="button" class= "button" id="adoption-updateBtn">수정</button>
+            
+
+              <button type="button" class= "button" id="adoption-completeBtn">입양완료</button>
+            
+            </div> 
+                 -->
+                 
+
+
+                 <div class="profile-container">
+                 
+                  <!--  //입양 리스트 페이지 --> 
+            
+                  <table class="adoptionList-container board-table">
+                    <thead>
+                      <tr>
+                        <th>이미지</th>
+                        <th>이름</th>
+                        <th>나이</th>
+                        <th>종</th>
+                        <th>발견장소</th>
+                        <th>버튼</th>
+                       
+                      </tr>
+                    </thead>
+      
+                    <tbody id="adoptionTbody">
+      
+                      <tr>
+                        <td><img src="/images/cat1.jpg" id="adoptionProfileImg" alt="입양 리스트 이미지"></td>
+                        <td>고등어</td>
+                        <td>2살</td>
+                        <td>코리안 숏헤어</td>
+                        <td>ㅇㅇ 시 ㅇㅇ구 ㅇㅇ동 ㅇㅇㅇ동 어디 어디</td>
+                        <td class="adoptionbtn-area">
+                          <button type="button" class= "button" id="adoption-updateBtn">수정</button>
+                  
+      
+                          <button type="button" class= "button" id="adoption-completeBtn">입양완료</button>
+                        
+                        </td>
+                      </tr>
+      
+                    </tbody>
+                  </table>
+                  </div>
+
+
+
+
+
+
+
+
+
+            <!-- 내가 쓴 게시글 (입양후기) -->
+
+            <div class="profile-container">
+
+              <table class="board-table review-table">
+                <thead>
+                  <tr>
+                    <th>게시글 제목</th>
+                    <th>조회수</th>
+                    <th>댓글</th>
+                    <th>게시일</th>
+                  </tr>
+                </thead>
+
+                <tbody id="reviewList">
+                  <tr>
+                    <td>안녕하세요</td>
+                    <td>100</td>
+                    <td>10</td>
+                    <td>2024.04.02</td>
+                  </tr>
+
+                  <tr>
+                    <td>입양후기</td>
+                    <td>24</td>
+                    <td>1</td>
+                    <td>2024.03.02</td>
+                  </tr>
+                  <tr>
+                    <td>커뮤니티 게시글</td>
+                    <td>1</td>
+                    <td>23</td>
+                    <td>2024.02.02</td>
+                  </tr>
+
+
+                </tbody>
+              </table>
+            </div>
+
+
+            <!-- 내가 쓴 댓글 -->
+            <div class="profile-container">
+
+              <table class="board-table col-2">
+                <thead>
+                  <tr>
+                    <th>게시글 제목</th>
+                    <th>내가 쓴 댓글 내용</th>  
+                  </tr>
+                </thead>
+
+                <tbody id="commentList">
+                  <tr>
+                    <td>안녕하세요</td>
+                    <td>와오앙</td>
+                  </tr>
+
+                  <tr>
+                    <td>입양후기</td>
+                    <td>예뻐요</td>
+                  </tr>
+                  <tr>
+                    <td>커뮤니티 게시글</td>
+                    <td>와오앙</td>
+                  </tr>
+
+
+                </tbody>
+              </table>
+            </div>
+
+
+            <!-- 북마크 -->
+            <div class="profile-container">
+
+              <table class="board-table col-2">
+                <thead>
+                  <tr>
+                    <th>제목</th>
+                    <th>입양 완료</th>  
+                  </tr>
+
+                </thead>
+
+                <tbody id="bookmarkList">
+                  <tr>
+                    <td><a href="#">종로구/푸들</a></td>
+                    <td>완료</td>
+                  </tr>
+
+                  <tr>
+                    <td><a href="#">남대문구/말티즈</a></td>
+                    <td>미완료</td>
+                  </tr>
+
+                  <tr>
+                    <td><a href="#">중구/무슨 강아지</a></td>
+                    <td>완료</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
 
 
@@ -189,6 +296,6 @@
     <!-- 푸터 추가 -->
     <th:block th:replace="~{common/footer}"></th:block>
 
-    <script src="/js/myPage/myPage.js"></script>
+    <!-- <script src="/js/myPage/myPage.js"></script>s -->
 </body>
 </html>

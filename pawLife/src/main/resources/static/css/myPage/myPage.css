@@ -1,18 +1,10 @@
 :root{
     --main-color : rgb(204, 204, 204);
+    --title-background-color : rgb(238, 236, 236);
     /* --hover-color : #e9ae2f; */
  }
 
-
-
-*{
-  
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
- }
-
-
+ 
  body {
     display: flex;
     flex-direction: column;
@@ -26,7 +18,7 @@
   main{
     width: 1140px;
     flex-grow: 1;           /* 중심축 방향으로 팽창 */
-    min-height: 500px;
+    height: auto;
    
 
  }
@@ -40,9 +32,7 @@
   }
 
 
-  /* 게시판 버튼 클릭하면 색깔 바뀌기
-   */
-  
+  /* 게시판 버튼 클릭하면 색깔 바뀌기 */
 .listbtn-area button{
 
     cursor: pointer;
@@ -92,7 +82,7 @@
 /* *********************** 프로필 ********************* */
 
 
-/* 프로필 가운데 정렬 */
+
 .myPage-main .profile-container {
     display: flex;
     width: 100%;
@@ -101,8 +91,6 @@
    
     align-items: center;
     text-align: center;
-    
-    
 }
 
 .profile-container * {
@@ -113,8 +101,8 @@
 /* 프로필 이미지 */
 #memberProfileImg {
 
-    width: 70px;
-    height: 70px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
 
 }
@@ -123,49 +111,43 @@
 #profileNickName{
 
     font-size: 13px;
-    font-weight: bold;
     
 }
 /* 자기 소개 한마디 */
 #profileIntroduceText{
-    font-size: 14px;
+    font-size: 15px;
     width: 400px;
-    height: 45px;
-    border: 1px solid var(--main-color);
-    border-radius: 15px;
-    align-content: center;
+    height: 26px;
+    border: 1px solid black;
+    border-radius: 6px;
 
 }
 
 /* 개인 정보 수정 버튼 */
 #profileUpdateBtn{
   
-  border:1px solid black;
-  background-color: black;
-  color: white;
-  height: 30px;
-  width: 200px;
-  border-radius: 15px;
-}
+    border:1px solid black;
+    background-color: black;
+    color: white;
+    height: 30px;
+    width: 200px;
+    border-radius: 15px;
+  }
+  
+  /* 회원 탈퇴 */
+  #memberDeleteA{
+      font-size: 13px;
+      font-weight: bold;
+      color: red;
+  }
 
-/* 회원 탈퇴 */
-#memberDeleteA{
-    font-size: 13px;
-    font-weight: bold;
-    color: red;
-}
 
 /* ********************************************************** */
+
 
 /* 입양 리스트 */
 
 /* 입양 리스트 전체 내용물 */
-.adoption-container{
-    
-    display: flex;
- }
- 
-
  .adoptionList-container{
     align-items: center;
     margin: 10px;
@@ -175,12 +157,13 @@
 
 /* 입양 리스트의 버튼 영역 */
  .adoptionbtn-area {
-   
+   width: 100%;
     display: flex; /* adoptionbtn-area 내의 요소들을 가로로 배치합니다. */
     flex-direction: column; /* 요소들을 가운데 정렬합니다. */
-    margin:40px;
+    /* margin:40px; */
     justify-content: space-evenly;
     border: none;
+    margin-top: 20px;
 }
 
 /* 입양 리스트의 버튼 */
@@ -188,8 +171,10 @@
 
     cursor: pointer;
     display: inline-block;
+
     width: 70px;
     height: 35px;
+
     background: black;
     color: white;
    
@@ -197,7 +182,7 @@
     border: 1px solid black;
     border-radius: 35px;
 
-    margin: 10px;
+    margin: 10px 0;
 }
 
 /* 가로 실선 스타일 */
@@ -209,17 +194,45 @@
 
 /* 입양 리스트의 이미지 */
 #adoptionProfileImg{
-
-  width: 130px;
-  height: 180px;
+  width: 150px;
+  height: 150px;
+  border-radius: 5px;
 }
 
-.adoptionList-container tr > *:nth-of-type(1){ width: 30%; }
+.adoptionList-container tr > *:nth-of-type(1){ width: 20%; }
 .adoptionList-container tr > *:nth-of-type(2){ width: 10%; }
-.adoptionList-container tr > *:nth-of-type(3){ width: 5%; }
-.adoptionList-container tr > *:nth-of-type(4){ width: 10%; }
-.adoptionList-container tr > *:nth-of-type(5){ width: 40%; }
-.adoptionList-container tr > *:nth-of-type(6){ width: 5%; }
+.adoptionList-container tr > *:nth-of-type(3){ width: 10%; }
+.adoptionList-container tr > *:nth-of-type(4){ width: 15%; }
+.adoptionList-container tr > *:nth-of-type(5){ width: 30%; }
+.adoptionList-container tr > *:nth-of-type(6){ width: 15%; }
  
 
 
+/* ------------------------- */
+/* ***** 내가 쓴 게시글 ***** */
+/* ------------------------- */
+.board-table {
+    text-align: center;
+    width: 98%;
+    border-collapse: collapse;
+}
+.review-table tr > *:nth-of-type(1){ width: 30%; }
+.review-table tr > *:nth-of-type(2){ width: 20%; }
+.review-table tr > *:nth-of-type(3){ width: 20%; }
+.review-table tr > *:nth-of-type(4){ width: 30%; }
+
+.board-table > thead {
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+    background-color: var(--title-background-color);
+}
+.board-table tr {
+    border-bottom: 1px solid gray;
+    height: 40px;
+}
+
+/* ------------------------- */
+/* ** 내가 쓴 댓글 / 북마크 ** */
+/* ------------------------- */
+.col-2 tr > *:nth-of-type(1){ width: 50%; }
+.col-2 tr > *:nth-of-type(2){ width: 50%; }

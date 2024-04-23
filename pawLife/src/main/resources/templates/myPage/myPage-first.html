@@ -58,44 +58,9 @@
          <!-- 마이페이지 본문 -->
          <section class="myPage-main">
 
-          <!-- 프로필  -->
-          
-<!-- 
-           <div class="profile-container">
-
-            <div class="profileImg-area">
-            
-              <img src="/images/cat1.jpg" id="memberProfileImg" alt="프로필 이미지">
- 
-            </div>
-            
-            <p id="profileNickName">닉네임</p>
-  
-            <div class="profileIntroduce-area">
- 
-             
-              <p type="text" name="profileIntroduceText" id="profileIntroduceText">
-
-              자기소개 한마디
-              </p>
-            </div>
- 
-            <div>
-              <button id="profileUpdateBtn">개인정보 수정하기</button>
-            </div>
- 
-            <p class="memberDelete-area">
-              <a href="#" id="memberDeleteA">회원 탈퇴</a>
-            </p>
- 
-           </div>
-            -->
-             
-            <div class="adoption-container">
-                 
-                  <!--  //입양 리스트 페이지 --> 
-            
-             <table border="1" class="adoptionList-container" style="border-collapse: collapse; text-align: center;">
+             <!-- 
+                //입양 리스트 페이지 
+            <table border="1" style="border-collapse: collapse; text-align: center;">
               <thead>
                 <tr>
                   <th>이미지</th>
@@ -103,32 +68,12 @@
                   <th>나이</th>
                   <th>종</th>
                   <th>발견장소</th>
-                  <th>버튼</th>
                  
                 </tr>
               </thead>
 
-              <tbody id="adoptionTbody">
-
-                <tr>
-                  <td><img src="/images/cat1.jpg" id="adoptionProfileImg" alt="입양 리스트 이미지"></td>
-                  <td>고등어</td>
-                  <td>2살</td>
-                  <td>코리안 숏헤어</td>
-                  <td>ㅇㅇ 시 ㅇㅇ구 ㅇㅇ동 ㅇㅇㅇ동 어디 어디</td>
-                  <td class="adoptionbtn-area">
-                    <button type="button" class= "button" id="adoption-updateBtn">수정</button>
-            
-
-                    <button type="button" class= "button" id="adoption-completeBtn">입양완료</button>
-                  
-                  </td>
-                </tr>
-
-              </tbody>
-            
-              <!-- // 나중에 채우기  -->
-              <!-- <tbody id="tbody">
+              // 나중에 채우기 
+              <tbody id="tbody">
                 <th:block th:each="item, iterStat : ${items}">
                     <tr>
                         <td>이미지</td>
@@ -144,15 +89,23 @@
                         </td>
                     </tr>
                 </th:block>
-            </tbody> -->
+            </tbody>
             </table>
-          
-            <!-- //나중에 버튼 지우고 js에서 append하게 할거임 -->
 
+            //나중에 버튼 지우고 js에서 append하게 할거임
+
+            <div class="adoptionbtn-area">
+              
+              <button type="button" class= "button" id="adoption-updateBtn">수정</button>
             
+
+              <button type="button" class= "button" id="adoption-completeBtn">입양완료</button>
+            
+            </div> 
+                 -->
                  
             <!-- 내가 쓴 게시물 -->
-            <!-- <table border="1" style="border-collapse: collapse; text-align: center;">
+            <table border="1" style="border-collapse: collapse; text-align: center;">
               <thead>
                 <tr>
                   <th>카테고리</th>
@@ -164,7 +117,7 @@
                 </tr>
               </thead>
 
-               //나중에 채우기
+              <!-- 나중에 채우기 -->
               <tbody id="tbody">
                 <th:block th:each="item, iterStat : ${items}">
                     <tr>
@@ -176,7 +129,7 @@
                     </tr>
                 </th:block>
             </tbody>
-            </table> -->
+            </table>
 
 
 

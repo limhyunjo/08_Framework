@@ -251,3 +251,47 @@ ALTER TABLE "COMMENT" ADD
 CONSTRAINT "COMMENT_DEL_FL"
 CHECK("COMMENT_DEL_FL" IN ('Y', 'N'));
 
+-----------------------------------------------------------------------------------------
+
+
+-- 회원 번호 시퀀스 만들기
+CREATE SEQUENCE SEQ_MEMBER_NO NOCACHE;
+
+
+-- 샘플 회원 데이터 삽입 
+-- 비밀번호 test01!
+INSERT INTO "MEMBER"
+VALUES(SEQ_MEMBER_NO.NEXTVAL, 
+           'member01@kh.or.kr', 
+           '$2a$10$5tSWuEticsQ4YL9uRDldv.rqQNt53bl.OEkc5wCA3dTwJvJMgxrrG',
+           '샘플1',
+           '01012341234',
+           NULL,
+           DEFAULT,
+           DEFAULT,
+           DEFAULT
+       
+ );
+
+DELETE FROM "MEMBER"
+WHERE MEMBER_EMAIL = 'member01@kh.or.kr';
+ 
+COMMIT;
+
+SELECT * FROM "MEMBER"; 
+
+
+-- 로그인 
+-- -> BCrypt 암호화 사용 중
+-- -> DB에서 비밀번호 비교 불가능!!!
+-- -> 그래서 비밀번호 (MEMBER_PW)를 조회
+
+--      조건절
+-- --> 이메일이 일치하는 회원 + 탈퇴 안한 회원 조건만 추가
+SELECT MEMBER_NO, MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_PW,
+         MEMBER_TEL , PROFILE_IMG, AUTHORITY ,
+         TO_CHAR(ENROLL_DATE, 
+         'YYYY"년" MM"월" DD"일" HH24"시" MI"분" SS"초"' )ENROLL_DATE 
+FROM "MEMBER"
+WHERE MEMBER_EMAIL =?
+AND    MEMBER_DEL_FL = 'N';

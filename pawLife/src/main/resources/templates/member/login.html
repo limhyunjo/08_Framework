@@ -11,7 +11,7 @@
 <body>
 
     <main>
-        
+       
         <!-- 로고 / 클릭하면 메인으로 -->
         <section class="logo-area">  
             <div>
@@ -23,7 +23,9 @@
             
         </section>
         
-      
+        <div>
+          <th:block th:text="${session.loginMember}"></th:block>
+        </div>
 
         <form action="/member/login" method="post" id="loginForm">
             <section class="input-box">
@@ -39,6 +41,7 @@
                 <label for="saveId"><i class="fas fa-check"></i>아이디 저장</label>
             </div>
 
+         
           
             <div>
                 <button class="login-btn">Login</button>
@@ -54,6 +57,12 @@
             </p>
         </form>
     </main>
+
+    <script th:inline="javascript">
+        const message =  /*[[${message}]]*/ "전달 받은 message";
+      
+        if(message != null) alert(message);
+      </script>
     
 </body>
 </html>

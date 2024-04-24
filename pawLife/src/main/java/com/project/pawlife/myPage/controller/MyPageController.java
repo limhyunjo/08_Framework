@@ -27,9 +27,10 @@ public class MyPageController {
 	}
 	
 	
-	@GetMapping("myPage-profileupdate")
-	public String profileUpdate() {
-		
-		return "myPage/myPage-profileupdate";
-	}
+	
+   @GetMapping("myPage-profileupdate")
+   public String profileUpdate() {
+      
+      return "myPage/myPage-profileupdate";
+   }
 }

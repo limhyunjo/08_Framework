@@ -259,7 +259,7 @@ CREATE SEQUENCE SEQ_MEMBER_NO NOCACHE;
 
 
 -- 샘플 회원 데이터 삽입 
--- 비밀번호 test01!
+-- 비밀번호 pass01!
 INSERT INTO "MEMBER"
 VALUES(SEQ_MEMBER_NO.NEXTVAL, 
            'member01@kh.or.kr', 

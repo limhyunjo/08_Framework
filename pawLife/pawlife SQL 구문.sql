@@ -276,6 +276,14 @@ VALUES(SEQ_MEMBER_NO.NEXTVAL,
 DELETE FROM "MEMBER"
 WHERE MEMBER_EMAIL = 'member01@kh.or.kr';
  
+-- pass02!
+INSERT INTO "MEMBER" VALUES(SEQ_MEMBER_NO.NEXTVAL, 
+                'member02@kh.or.kr', 
+                '$2a$10$hqU1.IfzTNSo7Nb0oezwbuBVZDs7ZhXpXEV5iqPU4eXe1H2MFtMWO',
+	              '샘플회원2', 
+	              '01036901234',
+	               NULL, DEFAULT, DEFAULT, DEFAULT);
+	              
 COMMIT;
 
 SELECT * FROM "MEMBER"; 
@@ -288,10 +296,88 @@ SELECT * FROM "MEMBER";
 
 --      조건절
 -- --> 이메일이 일치하는 회원 + 탈퇴 안한 회원 조건만 추가
-SELECT MEMBER_NO, MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_PW,
-         MEMBER_TEL , PROFILE_IMG, AUTHORITY ,
-         TO_CHAR(ENROLL_DATE, 
-         'YYYY"년" MM"월" DD"일" HH24"시" MI"분" SS"초"' )ENROLL_DATE 
-FROM "MEMBER"
-WHERE MEMBER_EMAIL =?
-AND    MEMBER_DEL_FL = 'N';
+
+-----------------------------------------------------------------------
+
+/* 게시판 종류(BOARD_TYPE) 테이블 추가 */ 
+
+CREATE SEQUENCE SEQ_BOARD_CODE NOCACHE;
+
+INSERT INTO "BOARD_TYPE" VALUES(SEQ_BOARD_CODE.NEXTVAL, '입양 게시판');
+INSERT INTO "BOARD_TYPE" VALUES(SEQ_BOARD_CODE.NEXTVAL, '후기 게시판');
+
+-------------------------------------------------------------------
+
+-- 후기 게시글 번호 시퀀스 생성
+CREATE SEQUENCE SEQ_REVIEW_NO NOCACHE;
+
+
+/* 게시판 (BOARD) 테이블 샘플 데이터 삽입(PL/SQL) */ 
+
+		-- DBMS_RANDOM.VALUE(0,3): 0.0 이상, 3.0 미만의 난수 /  CEIL(): 올림처리
+
+SELECT * FROM MEMBER;  -- 조회해서 정상 로그인, 탈퇴안된 회원 번호를 아래에 작성회원 컬럼값으로 넣고 실행.
+
+-- 회원 번호 2번 member01로 함
+-- ALT + X 로 실행
+BEGIN
+	FOR I IN 1..10 LOOP
+		
+		INSERT INTO "REVIEW"
+		VALUES(SEQ_REVIEW_NO.NEXTVAL,
+					 SEQ_REVIEW_NO.CURRVAL || '번째 게시글',
+					 SEQ_REVIEW_NO.CURRVAL || '번째 게시글 내용 입니다',
+					 DEFAULT, DEFAULT, DEFAULT, DEFAULT,
+					 2,
+					 2
+		);
+		
+	END LOOP;
+END;
+
+SELECT * FROM REVIEW;
+
+------------------------------------------------------------
+
+-- 입양 게시글 번호 시퀀스 생성
+CREATE SEQUENCE SEQ_ADOPT_NO NOCACHE;
+
+
+/* 게시판 (BOARD) 테이블 샘플 데이터 삽입(PL/SQL) */ 
+
+		-- DBMS_RANDOM.VALUE(0,3): 0.0 이상, 3.0 미만의 난수 /  CEIL(): 올림처리
+
+SELECT * FROM MEMBER;  -- 조회해서 정상 로그인, 탈퇴안된 회원 번호를 아래에 작성회원 컬럼값으로 넣고 실행.
+
+-- 회원 번호 2번으로 함 
+
+---------------------------------- 여기 전까지 함 내일 노트북 들고 가서  안되는 이유 찾고 넣기 
+-- ALT + X 로 실행
+BEGIN
+	FOR I IN 1..10 LOOP
+		
+		INSERT INTO "ADOPT"
+		VALUES(SEQ_ADOPT_NO.NEXTVAL,
+					 SEQ_ADOPT_NO.CURRVAL || '번째 게시글',
+					 SEQ_ADOPT_NO.CURRVAL || '번째 게시글 내용 입니다',
+					 DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, '입양 동물 이름', 5, '입양 동물 종',
+					 2,
+					 1,
+					 DEFAULT
+		);
+		
+	END LOOP;
+END;
+
+SELECT * FROM REVIEW;
+
+
+
+------------------------------
+-- 후기게시판 게시글 작성
+
+INSERT INTO "REVIEW"
+VALUES(SEQ_REVIEW_NO.NEXTVAL, '게시글 테스트', '게시글 내용',
+			 DEFAULT, DEFAULT, DEFAULT, DEFAULT, 2, 2);
+
+

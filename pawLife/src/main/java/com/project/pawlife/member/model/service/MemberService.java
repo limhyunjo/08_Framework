@@ -4,10 +4,23 @@ import com.project.pawlife.member.model.dto.Member;
 
 public interface MemberService {
 
-	/** 로그인 서비스
+	/** 회원 로그인 
 	 * @param inputMember
-	 * @return loginMember 
+	 * @return loginMember
 	 */
 	Member login(Member inputMember);
 
+	/** 빠른 로그인
+	 * @param memberEmail
+	 * @return loginMember
+	 */
+	Member quickLogin(String memberEmail);
+
+	/** 회원 가입
+	 * @param inputMember
+	 * @return
+	 */
+	int signup(Member inputMember);
+
+	
 }

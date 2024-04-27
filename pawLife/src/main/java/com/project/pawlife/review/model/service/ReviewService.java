@@ -1,11 +1,12 @@
 package com.project.pawlife.review.model.service;
 
-import java.util.Map;
+import com.project.pawlife.review.model.dto.Review;
 
 public interface ReviewService {
 
 	// 게시글 작성
-	int reviewWrite(Map<String, Object> map);
+	int reviewWrite(Review inputReivew);
+
 
 
 

@@ -1,18 +1,18 @@
 package com.project.pawlife.adoption.controller;
 
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.pawlife.adoption.model.dto.Adopt;
 import com.project.pawlife.adoption.model.service.AdoptionService;
+import com.project.pawlife.member.model.dto.Member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,8 @@ public class AdoptionController {
 	 * @return
 	 */
 	@GetMapping("adoptionList")
-	public String adoptionPage() {
+	public String adoptionPage(
+			) {
 		return "adoption/adoptionList";
 	}
 	
@@ -47,24 +48,45 @@ public class AdoptionController {
 	 */
 	@GetMapping("adoptionWrite")
 	public String adoptionWrite() {
+		
+		
+		
 		return "adoption/adoptionWrite";
 	}
 	
 	
-	/** 입양 글 작성
-	 * @param map
+	
+	/** 입양 게시글 작성
+	 * @param inputAdopt
+	 * @param thumnailImg
 	 * @return
 	 */
-	@PostMapping("adoptionWrite")
-	public String adoptionWrite(
+	@PostMapping("adoptionInsert")
+	public String adoptionInsert(
 			Adopt inputAdopt,
-			@RequestParam("thumnailImg") MultipartFile thumnailImg
+			@RequestParam("thumnailImg") MultipartFile thumnailImg,
+			@RequestParam("adoptContent") String adoptContent,
+			@SessionAttribute("loginMember") Member loginMember
 			) {
 
+
+		int memberNo = loginMember.getMemberNo(); 
 		
-		int result = service.adoptionWrite(inputAdopt,thumnailImg);
+		int result = service.adoptionInsert(inputAdopt,thumnailImg,memberNo);
 		
-		return "redirect:/";
+		
+		String path=null;
+		
+		
+		if(result>0) {
+			
+			path="/adoption/adoptionList";
+			
+		}else {
+			path="/adoption/adoptionWrite";
+		}
+		
+		return "redirect:"+path;
 	}
 	
 	

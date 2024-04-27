@@ -11,8 +11,8 @@
     <main>
         <th:block th:replace="~{common/header}"></th:block>
        
-       
-        <form action="/adoption/adoptionWrite" method="POST" id="submitPost" enctype="multipart/form-data">
+        
+        <form action="/adoption/adoptionInsert" method="POST" id="submitPost" enctype="multipart/form-data">
             <section class="board">
                 <h1><input type="text" placeholder="제목" id="adoptTitle" name="adoptTitle"></h1>
                 <section class="board-box">
@@ -31,14 +31,18 @@
                             <input type="text" id="infoName" name="adoptName" placeholder="이름"><br>
                             <input type="text" id="infoAge" name="adoptAge"  placeholder="나이"><br>
                             <input type="text" id="infoType" name="adoptType" placeholder="종"><br>
-                            <input type="text" id="infoAddress" name="adoptAddress" placeholder="발견장소"><br>
+                            <input type="text" id="infoAddress" name="adoptAddress" placeholder="발견장소">
                         </div>
 
     
                     </div>
 
                     <textarea name="adoptContent" id="adoptContent" cols="100" rows="10" placeholder="내용을 입력해주세요."></textarea>
-                    <button onclick="submitPost()">글작성</button>
+                   
+                   
+                    <button>글작성</button>
+
+                    <!-- onclick="submitPost()" -->
     
                 </section>
             </section>

@@ -84,27 +84,22 @@ public class MemberController {
 				model.addAttribute("loginMember", loginMember);
 				
 			
-			 // 아이디 저장 (Cookie) - 브라우저에 쌓이는 클라이언트 데이터 (클라이언트 사이드)
-			
+			 // 아이디 저장 (Cookie)
+				
 			 // 쿠키 객체 생성 (K:V)
-			// K : saveId V: loginMember의 아이디== 이메일을 저장함
+			
 			Cookie cookie = new Cookie("saveId", loginMember.getMemberEmail());
 			
 			//어떤 요청을 할 때 쿠키가 첨부될지 지정
-			cookie.setPath("/"); 
-			//-> 메인 페이지와 그 이하 주소들 요청 마다 아이디 담아서 보내주겠다
+			cookie.setPath("/");
 			
 			// 쿠키 만료 기간
-			// 아이디 저장 시에 한달 동안을 쿠키의 나이로 하겠다
 			if(saveId !=null) { // 아이디 저장 체크 시 
 				cookie.setMaxAge(30*24*60*60); // 초 단위로 지정
 			}else {// 미체크 시
 				cookie.setMaxAge(0); // 0초 (클라이언트 쿠키 삭제)
 				
 			}
-			
-
-			// 콘솔 애플리케이션에서 아이디 저장하고 로그인 하면 쿠키 확인 가능
 			
 			// 응답 객체에 쿠키 추가하여 전달
 			resp.addCookie(cookie);

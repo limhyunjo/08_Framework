@@ -1,8 +1,7 @@
-// 쿠키 얻어오는 함수
 /* 쿠키에서 key가 일치하는 value 얻어오기 함수 */
 
-// 쿠키는 "K = V"; 형식
-// 매개 변수가 key하나라 () 없앰
+// 쿠키는 "K=V"; "K=V"; 형식
+
 // 배열.map(함수) : 배열의 각요소를 이용해 함수 수행 후 
 //                 결과 값으로 새로운 배열을 만들어서 반환 -> 새로운 배열을 만들어냄
 const getCookie= key =>{
@@ -53,3 +52,46 @@ if(loginEmail != null){// 로그인창의 이메일 입력 부분이 있을 때
 
 }
 
+// 로그인 시 비밀번호가 작성되지 않은 경우
+// 로그인 시도조차 못하게 하겠다 == form 제출을 못하게 하겠다
+// form 태그 제출을 막는 방법
+
+// form요소.addEventListener('submit", e=>{
+   // e.preventDefualt(); // 이메일이나 비밀번호가 없을 때 기본 이벤트 막기
+//})
+
+/* 이메일, 비밀번호 미작성 시 로그인 막기 */
+const loginForm = document.querySelector("#loginForm");
+const loginPw
+  = document.querySelector("#loginForm input[name='memberPw']");
+
+
+// #loginForm이 화면에 존재할 때 (== 로그인 상태 아닐 때)
+if(loginForm !=null){
+
+        // 제출 이벤트 발생 시
+        loginForm.addEventListener("submit", e=>{
+        //logingEmail : 이메일 input 요소
+        //loginPw : 비밀번호 input 요소
+
+        // 이메일 미작성
+       if(loginEmail.value.trim().length===0){
+          alert("이메일을 작성해 주세요!")
+       
+        e.preventDefault(); // 기본 이벤트 (제출) 막기
+         
+        loginEmail.focus(); // 초점 이동
+        return; 
+
+       }
+        // 비밀번호 미작성
+       if(loginPw.value.trim().length===0){
+          alert("비밀번호를 작성해 주세요!")
+       
+        e.preventDefault(); // 기본 이벤트 (제출) 막기
+         
+        loginPW.focus(); // 초점 이동
+        return; 
+       }
+    });
+}

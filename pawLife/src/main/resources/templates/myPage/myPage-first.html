@@ -58,34 +58,37 @@
 
           <!-- 프로필  -->
 
-           <div class="profile-container">
+           <div class="profile-container" id="profileContainer">
 
-            <div class="profileImg-area">
+           
+              <div class="profileImg-area">
             
-              <img src="/images/user.png" id="memberProfileImg" alt="프로필 이미지">
- 
-            </div>
-            
-            <p id="profileNickName">닉네임</p>
+                <img src="/images/user.png" id="memberProfileImg" alt="프로필 이미지">
+   
+              </div>
+              
+              <p id="profileNickName">닉네임</p>
+    
+              <div class="profileIntroduce-area">
+   
+               
+                <p type="text" name="profileIntroduceText" id="profileIntroduceText">
   
-            <div class="profileIntroduce-area">
- 
-             
-              <p type="text" name="profileIntroduceText" id="profileIntroduceText">
-
-              자기소개 한마디
+                자기소개 한마디
+                </p>
+              </div>
+   
+              <div>
+                <button id="profileUpdateBtn">개인정보 수정하기</button>
+              </div>
+   
+              <p class="memberDelete-area">
+                <a href="#" >회원 탈퇴</a>
               </p>
-            </div>
- 
-            <div>
-              <button id="profileUpdateBtn">개인정보 수정하기</button>
-            </div>
- 
-            <p class="memberDelete-area">
-              <a href="#" >회원 탈퇴</a>
-            </p>
- 
-           </div>
+   
+             </div>
+            
+            
            
              <!-- 
                 //입양 리스트 페이지 
@@ -186,7 +189,7 @@
 
             <!-- 내가 쓴 게시글 (입양후기) -->
 
-            <!-- <div class="profile-container">
+           <!--  <div class="profile-container">
 
               <table class="board-table review-table">
                 <thead>
@@ -198,7 +201,7 @@
                   </tr>
                 </thead>
 
-                <tbody id="reviewList">
+                <tbody id="reviewList"> 
                   <tr>
                     <td>안녕하세요</td>
                     <td>100</td>
@@ -219,7 +222,7 @@
                     <td>2024.02.02</td>
                   </tr>
 
-
+                   
                 </tbody>
               </table>
             </div>

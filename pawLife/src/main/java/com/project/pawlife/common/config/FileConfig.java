@@ -58,7 +58,7 @@ public class FileConfig implements WebMvcConfigurer{
 		
 		registry
 		.addResourceHandler("/myPage/file/**") // 클라이언트 요청 주소 패턴
-		.addResourceLocations("file:///C:\\uploadFiles\\test\\");
+		.addResourceLocations("file:///D:\\uploadFiles\\test\\");
 		
 		registry
 		.addResourceHandler(profileResourceHandler) // /myPage/profile

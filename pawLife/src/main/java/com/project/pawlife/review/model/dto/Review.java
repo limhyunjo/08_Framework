@@ -27,5 +27,5 @@ public class Review {
    private int boardCode;
    
    
-   
+
 }

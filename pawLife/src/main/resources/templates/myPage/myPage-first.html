@@ -54,18 +54,37 @@
 
 
          <!-- 마이페이지 본문 -->
-         <section class="myPage-main">
+      <section class="myPage-main">
 
           <!-- 프로필  -->
 
-           <div class="profile-container" id="profileContainer">
+        <div class="profile-container" id="profileContainer">
 
-           
+                    
+          <form action="profile" method="POST"
+          name="profileForm" id="profileForm" enctype="multipart/form-data">
+          
+             
               <div class="profileImg-area">
-            
-                <img src="/images/user.png" id="memberProfileImg" alt="프로필 이미지">
-   
+
+                <img th:with="user=#{user.default.image}" 
+                th:src="${session.loginMember.profileImg ?: user }" 
+                id="profileImg">
+
               </div>
+              
+
+              <span id="deleteImage">x</span>
+
+
+              <div class="profile-btn-area">
+                <label for="imageInput">이미지 선택</label>
+                <input type="file" name="profileImg" id="imageInput" accept="image/*">
+                <button id="pImageUpdate">변경하기</button>
+                
+              </div>
+
+            
               
               <p id="profileNickName">닉네임</p>
     
@@ -78,16 +97,21 @@
                 </p>
               </div>
    
+            
+          </form>
+
+
               <div>
                 <button id="profileUpdateBtn">개인정보 수정하기</button>
               </div>
-   
+
               <p class="memberDelete-area">
                 <a href="#" >회원 탈퇴</a>
               </p>
-   
-             </div>
+
             
+        </div>
+                    
             
            
              <!-- 
@@ -303,6 +327,19 @@
 
     <!-- 푸터 추가 -->
     <th:block th:replace="~{common/footer}"></th:block>
+
+    
+    <script th:inline="javascript">
+      const message =  /*[[${message}]]*/ "전달 받은 message";
+    
+      if(message != null) alert(message);
+    </script>
+
+
+        <!-- 타임리프 코드를 JS 코드로 해석해줌 -->
+        <script th:inline="javascript">
+          const loginMemberProfileImg = /* [[${session.loginMember.profileImg}]] */"회원 프로필 이미지";
+        </script>
 
     <script src="/js/myPage/myPage.js"></script>
 </body>

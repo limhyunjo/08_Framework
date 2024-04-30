@@ -1,12 +1,22 @@
 package com.project.pawlife.review.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.project.pawlife.adoption.model.dto.Adopt;
+import com.project.pawlife.member.model.dto.Member;
 import com.project.pawlife.review.model.dto.Review;
 import com.project.pawlife.review.model.service.ReviewService;
 
@@ -26,9 +36,51 @@ public class ReviewController {
 	
 	// 리뷰 게시판 리스트로 이동
 	@GetMapping("reviewList")
-	public String reviewPage() { return "review/reviewList"; }
+	public String reviewPage(@RequestParam(value="cp",required=false, defaultValue="1") int cp, Model model) { 
+		
+		Map<String, Object> map = service.selectReviewList(cp);
+		
+		model.addAttribute("pagination", map.get("pagination"));
+		model.addAttribute("reviewList", map.get("reviewList"));
+		
+		return "review/reviewList";
+	}
+	
+
+	// 후기 상세 페이지 이동
+	@GetMapping("reviewDetail")
+	public String reviewDetail() {
+		return "review/reviewDetail";
+	}
 	
 	
+	/** 리뷰 게시글 상세 조회
+	 * @return
+	 */
+	@GetMapping("reviewList/{reviewNo:[0-9]+}")
+	public String reviewDetail(@PathVariable("reviewNo") int reviewNo, Model model, RedirectAttributes ra) {
+		
+		Map<String, Integer> map = new HashMap<>();
+		map.put("reviewNo",reviewNo);
+		
+		Review review = service.selectOneReview(map);
+		
+		String path = null;
+		
+		if(review == null) {
+			
+			path = "redirect:/review/reviewList";
+			ra.addFlashAttribute("message","게시글이 존재하지 않습니다.");
+		}
+		else {
+			path = "review/reviewDetail";
+			model.addAttribute("review", review);
+		}
+		
+		return path;
+	}
+	
+
 	// 후기 글쓰기화면으로 이동
 	@GetMapping("reviewWrite")
 	public String reviewWrite() { return "review/reviewWrite"; }
@@ -39,11 +91,12 @@ public class ReviewController {
 	 * @return
 	 */
 	@PostMapping("reviewWrite")
-	public String reviewWrite(Review inputReivew, Model model) {
+	public String reviewWrite(Review inputReivew, @RequestParam("thumnailImg") MultipartFile thumnailImg,
+			@SessionAttribute("loginMember") Member loginMember, Model model) {
 
-		// 추가할것) boardCode, 로그인한 회원 번호 inputReivew에 세팅 <- pathVariable, sessionattribute
-
-		int result = service.reviewWrite(inputReivew);
+		int memberNo = loginMember.getMemberNo();
+		
+		int result = service.reviewWrite(inputReivew, thumnailImg, memberNo);
 		
 		String path = "";
 		String message = "";
@@ -59,29 +112,10 @@ public class ReviewController {
 		
 		model.addAttribute("message", message);
 		
-		return "redirect:" + path;
-		
+		return "redirect:/review/" + path;
 	}
+
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/** 후기 상세 페이지
-	 * @return
-	 */
-	@GetMapping("reviewDetail")
-	public String reviewDetail() {
-		return "review/reviewDetail";
-	}
 	
 	/** 후기 수정 페이지
 	 * @return
@@ -91,5 +125,6 @@ public class ReviewController {
 		return "review/reviewUpdate";
 	}
 
+	
 	
 }

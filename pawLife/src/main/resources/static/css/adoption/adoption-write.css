@@ -87,6 +87,13 @@ body{
     cursor: pointer;
 }
 
+
+.preview{
+    height: 350px;
+    width: 250px;
+    object-fit: cover;
+}
+
 /* 정보값 인풋 */
 .infomation>input{
     outline: none;

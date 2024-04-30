@@ -46,7 +46,7 @@
               <button type="button" class= "button" id="commentListBtn">내가 쓴 댓글</button>
             
 
-              <button type="button" class= "button" id="likeListBtn">북마크한 게시글</button>
+              <button type="button" class= "button" id="bookListBtn">북마크한 게시글</button>
             
           </div>
 
@@ -64,11 +64,11 @@
           <form action="profile" method="POST"
           name="profileForm" id="profileForm" enctype="multipart/form-data">
           
-             
+            <!-- session.loginMember.profileImg ?:  -->
               <div class="profileImg-area">
 
                 <img th:with="user=#{user.default.image}" 
-                th:src="${session.loginMember.profileImg ?: user }" 
+                th:src="${session.loginMember.profileImg ?:user }" 
                 id="profileImg">
 
               </div>
@@ -80,22 +80,14 @@
               <div class="profile-btn-area">
                 <label for="imageInput">이미지 선택</label>
                 <input type="file" name="profileImg" id="imageInput" accept="image/*">
-                <button id="pImageUpdate">변경하기</button>
+                <button >변경하기</button>
                 
               </div>
 
-            
-              
-              <p id="profileNickName">닉네임</p>
-    
-              <div class="profileIntroduce-area">
-   
-               
-                <p type="text" name="profileIntroduceText" id="profileIntroduceText">
-  
-                자기소개 한마디
-                </p>
-              </div>
+           
+              <th:block th:if="${session.loginMember != null}"
+                th:text="${session.loginMember.memberNickname}">닉네임
+              </th:block>
    
             
           </form>
@@ -105,14 +97,26 @@
                 <button id="profileUpdateBtn">개인정보 수정하기</button>
               </div>
 
-              <p class="memberDelete-area">
-                <a href="#" >회원 탈퇴</a>
-              </p>
 
+              <div class="memberDelete-area"></div>
+                  <form action="memberdel" method="POST" name="memberDel" id="memberDel">
+
+                  
+                    <button id="memberDelBtn">회원 탈퇴</button>
+                  
+                  </form>
+
+              </div>
             
         </div>
                     
-            
+
+
+     
+        
+		
+
+    
            
              <!-- 
                 //입양 리스트 페이지 
@@ -329,18 +333,15 @@
     <th:block th:replace="~{common/footer}"></th:block>
 
     
-    <script th:inline="javascript">
-      const message =  /*[[${message}]]*/ "전달 받은 message";
     
-      if(message != null) alert(message);
+
+      <!-- 타임리프 코드를 JS 코드로 해석해줌 -->
+    <script th:inline="javascript">
+      const loginMemberProfileImg = /* [[${session.loginMember.profileImg}]] */"회원 프로필 이미지";
     </script>
 
 
-        <!-- 타임리프 코드를 JS 코드로 해석해줌 -->
-        <script th:inline="javascript">
-          const loginMemberProfileImg = /* [[${session.loginMember.profileImg}]] */"회원 프로필 이미지";
-        </script>
-
     <script src="/js/myPage/myPage.js"></script>
+    <script src="/js/myPage/myPageProfile.js"></script>
 </body>
 </html>

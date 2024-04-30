@@ -1,15 +1,3 @@
-/* 계정 생성 (관리자 계정으로 접속) */
-ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;
-
-CREATE USER PAWLIFE IDENTIFIED BY PAWLIFE1234;
-
-GRANT CONNECT, RESOURCE TO PAWLIFE;
-
-ALTER USER PAWLIFE
-DEFAULT TABLESPACE USERS 
-QUOTA 20M ON USERS;
-
-/* MEMBER 테이블 생성 */
 CREATE TABLE "MEMBER" (
 	"MEMBER_NO"	NUMBER		NOT NULL,
 	"MEMBER_EMAIL"	NVARCHAR2(50)		NOT NULL,
@@ -91,6 +79,7 @@ COMMENT ON COLUMN "BOARD_TYPE"."BOARD_CODE" IS '게시판 종류 코드 번호';
 
 COMMENT ON COLUMN "BOARD_TYPE"."BOARD_NAME" IS '게시판명';
 
+-- BOOKMARK 테이블
 CREATE TABLE "BOOKMARK" (
 	"MEMBER_NO"	NUMBER		NOT NULL,
 	"ADOPT_NO"	NUMBER		NOT NULL
@@ -251,52 +240,44 @@ ALTER TABLE "COMMENT" ADD
 CONSTRAINT "COMMENT_DEL_FL"
 CHECK("COMMENT_DEL_FL" IN ('Y', 'N'));
 
------------------------------------------------------------------------------------------
+
+--BOOKMARK 테이블 북마크 체크 여부 컬럼 추가
+ALTER TABLE "BOOKMARK" ADD(BOOKMARK_CHECK CHAR(1) DEFAULT 'N');
+
+-- 게시글 북마크 여부
+ALTER TABLE "BOOKMARK" ADD
+CONSTRAINT "BOOKMARK_CHECK"
+CHECK("BOOKMARK_CHECK" IN ('Y', 'N'));
 
 
--- 회원 번호 시퀀스 만들기
+----------------------------------------------------------------------------------------------------------------
+
+/* 샘플 데이터 삽입 */
+
+-- 회원 번호 시퀀스 만들기 
 CREATE SEQUENCE SEQ_MEMBER_NO NOCACHE;
-
-
--- 샘플 회원 데이터 삽입 
--- 비밀번호 test01!
-INSERT INTO "MEMBER"
-VALUES(SEQ_MEMBER_NO.NEXTVAL, 
-           'member01@kh.or.kr', 
-           '$2a$10$5tSWuEticsQ4YL9uRDldv.rqQNt53bl.OEkc5wCA3dTwJvJMgxrrG',
-           '샘플1',
-           '01012341234',
-           NULL,
-           DEFAULT,
-           DEFAULT,
-           DEFAULT
-       
- );
-
-DELETE FROM "MEMBER"
-WHERE MEMBER_EMAIL = 'member01@kh.or.kr';
- 
--- pass02!
+-------------------------------------------------------------------------------
+-- 샘플 회원 데이터 삽입
+INSERT INTO "MEMBER" VALUES(SEQ_MEMBER_NO.NEXTVAL, 
+                'member01@kh.or.kr', 
+                'pass1234!',
+	              '샘플회원', 
+	              '01012341234',
+	               NULL, DEFAULT, DEFAULT, DEFAULT);
+	              
 INSERT INTO "MEMBER" VALUES(SEQ_MEMBER_NO.NEXTVAL, 
                 'member02@kh.or.kr', 
-                '$2a$10$hqU1.IfzTNSo7Nb0oezwbuBVZDs7ZhXpXEV5iqPU4eXe1H2MFtMWO',
+                '$2a$10$ISM4.feknchN.mS1qnxtYeB68Hv8/zIQNfTsXFc6Kw..OIolj8vX6',
 	              '샘플회원2', 
 	              '01036901234',
 	               NULL, DEFAULT, DEFAULT, DEFAULT);
 	              
-COMMIT;
+-- 샘플 회원 데이터 업데이트
+-- 비밀번호 암호화된 걸로 바꿈!	                
+UPDATE "MEMBER" SET MEMBER_PW ='$2a$10$pe0hHmf2e2nzZjn90dOAQ.ovfwp9FhonLmS9CWtBtuV.yDMBf.3u6'
+WHERE MEMBER_NO  = 1; --1행 수정됨
 
-SELECT * FROM "MEMBER"; 
-
-
--- 로그인 
--- -> BCrypt 암호화 사용 중
--- -> DB에서 비밀번호 비교 불가능!!!
--- -> 그래서 비밀번호 (MEMBER_PW)를 조회
-
---      조건절
--- --> 이메일이 일치하는 회원 + 탈퇴 안한 회원 조건만 추가
-
+SELECT * FROM "MEMBER";         
 -----------------------------------------------------------------------
 
 /* 게시판 종류(BOARD_TYPE) 테이블 추가 */ 
@@ -318,7 +299,6 @@ CREATE SEQUENCE SEQ_REVIEW_NO NOCACHE;
 
 SELECT * FROM MEMBER;  -- 조회해서 정상 로그인, 탈퇴안된 회원 번호를 아래에 작성회원 컬럼값으로 넣고 실행.
 
--- 회원 번호 2번 member01로 함
 -- ALT + X 로 실행
 BEGIN
 	FOR I IN 1..10 LOOP
@@ -328,7 +308,7 @@ BEGIN
 					 SEQ_REVIEW_NO.CURRVAL || '번째 게시글',
 					 SEQ_REVIEW_NO.CURRVAL || '번째 게시글 내용 입니다',
 					 DEFAULT, DEFAULT, DEFAULT, DEFAULT,
-					 2,
+					 1,
 					 2
 		);
 		
@@ -349,9 +329,6 @@ CREATE SEQUENCE SEQ_ADOPT_NO NOCACHE;
 
 SELECT * FROM MEMBER;  -- 조회해서 정상 로그인, 탈퇴안된 회원 번호를 아래에 작성회원 컬럼값으로 넣고 실행.
 
--- 회원 번호 2번으로 함 
-
----------------------------------- 여기 전까지 함 내일 노트북 들고 가서  안되는 이유 찾고 넣기 
 -- ALT + X 로 실행
 BEGIN
 	FOR I IN 1..10 LOOP
@@ -361,7 +338,7 @@ BEGIN
 					 SEQ_ADOPT_NO.CURRVAL || '번째 게시글',
 					 SEQ_ADOPT_NO.CURRVAL || '번째 게시글 내용 입니다',
 					 DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, '입양 동물 이름', 5, '입양 동물 종',
-					 2,
+					 1,
 					 1,
 					 DEFAULT
 		);
@@ -369,7 +346,7 @@ BEGIN
 	END LOOP;
 END;
 
-SELECT * FROM REVIEW;
+SELECT * FROM REVIEW ORDER BY REVIEW_NO;
 
 
 
@@ -380,33 +357,105 @@ INSERT INTO "REVIEW"
 VALUES(SEQ_REVIEW_NO.NEXTVAL, '게시글 테스트', '게시글 내용',
 			 DEFAULT, DEFAULT, DEFAULT, DEFAULT, 2, 2);
 
+ SELECT REVIEW_TITLE, COMMENT_CONTENT,
+ TO_CHAR( COMMENT_WRITE_DATE, 'YYYY"년" MM"월" DD"일" PM HH"시" MI"분" SS"초"') 
+ FROM "REVIEW"
+ JOIN "COMMENT" USING (REVIEW_NO)
+ WHERE "COMMENT".MEMBER_NO=1
+ ORDER BY COMMENT_WRITE_DATE DESC;
 
-			
--------------------------------------------------------------------------------
-			
-     SELECT REVIEW_TITLE, COMMENT_CONTENT, COMMENT_WRITE_DATE
-     FROM "COMMENT"
-     JOIN "REVIEW" USING (REVIEW_NO)
-     ORDER BY COMMENT_WRITE_DATE DESC;
-			
--- 댓글?
-SELECT REVIEW_TITLE, COMMENT_CONTENT
-FROM "COMMENT"
-JOIN "REVIEW" USING (REVIEW_NO);
+ SELECT * FROM "REVIEW";  
+    
+------------------------------
+-- 이메일 인증키 테이블 생성
+CREATE TABLE "AUTH_KEY" (
+	"KEY_NO"	NUMBER		NOT NULL,
+	"EMAIL"	NVARCHAR2(50)		NOT NULL,
+	"AUTH_KEY"	CHAR(6)		NOT NULL,
+	"CREATE_TIME"	DATE	DEFAULT SYSDATE	NOT NULL
+);
+
+COMMENT ON COLUMN "AUTH_KEY"."KEY_NO" IS '인증키 구분 번호 (시퀀스 생성)';
+
+COMMENT ON COLUMN "AUTH_KEY"."EMAIL" IS '인증 이메일';
+
+COMMENT ON COLUMN "AUTH_KEY"."AUTH_KEY" IS '인증번호';
+
+COMMENT ON COLUMN "AUTH_KEY"."CREATE_TIME" IS '인증 번호 생성 시간';
+
+ALTER TABLE "AUTH_KEY" ADD CONSTRAINT "PK_AUTH_KEY" PRIMARY KEY (
+	"KEY_NO"
+);
 
 
-  SELECT REVIEW_TITLE, COMMENT_CONTENT,COMMENT_WRITE_DATE
-     FROM "COMMENT"
-     JOIN "REVIEW" USING (REVIEW_NO)
-  
-     ORDER BY COMMENT_WRITE_DATE DESC;
----------------------------------------------
--- COMMENT 테이블에 댓글 작성한 시간 컬럼 추가
+		SELECT REVIEW_NO, REVIEW_TITLE FROM "REVIEW"
+		WHERE REVIEW_DEL_FL = 'N' AND BOARD_CODE = 2
+		ORDER BY REVIEW_NO DESC;
 
-ALTER TABLE "COMMENT"
-ADD "COMMNET_WRITE_DATE"	DATE	DEFAULT SYSDATE	 NOT NULL;
+ALTER TABLE "REVIEW" ADD THUMNAIL VARCHAR2(500);
+ALTER TABLE emp ADD email VARCHAR(25) DEFAULT 'test@test.com' NOT NULL;
 
-ALTER TABLE "COMMENT"
-RENAME COLUMN "COMMNET_WRITE_DATE" TO "COMMENT_WRITE_DATE";
--------------------------------------------
+SELECT * FROM REVIEW ORDER BY REVIEW_NO;
+
+SELECT REVIEW_NO, REVIEW_TITLE, REVIEW_CONTENT, READ_COUNT, MEMBER_NO, MEMBER_NICKNAME, PROFILE_IMG,
+		TO_CHAR(REVIEW_WRITE_DATE,'YYYY-MM-DD HH24:MI:SS') REVIEW_WRITE_DATE,
+		TO_CHAR(REVIEW_UPDATE_DATE,'YYYY-MM-DD HH24:MI:SS') REVIEW_UPDATE_DATE
+FROM "REVIEW"
+JOIN "MEMBER" USING(MEMBER_NO)
+WHERE REVIEW_DEL_FL='N' AND BOARD_CODE = 2 AND REVIEW_NO = 33;
+
+
+
+
+------------------------------------------------------
+/* 댓글 */
+
+-- 댓글 번호 시퀀스 생성
+CREATE SEQUENCE SEQ_COMMNET_NO NOCACHE;
+
+DROP SEQUENCE  SEQ_COMMNET_NO;
+
 SELECT * FROM "COMMENT";
+SELECT * FROM "MEMBER";
+
+
+-- 댓글 목록 조회
+SELECT MEMBER_NICKNAME, COMMENT_CONTENT , TO_CHAR(COMMENT_WRITE_DATE, 'YYYY-MM-DD HH24:MI:SS') COMMENT_WRITE_DATE
+FROM "COMMENT"
+JOIN MEMBER USING(MEMBER_NO)
+WHERE REVIEW_NO = 33 AND COMMENT_DEL_FL = 'N'
+ORDER BY COMMENT_WRITE_DATE DESC;
+
+
+-- 댓글 등록
+INSERT INTO "COMMENT"
+VALUES(SEQ_COMMNET_NO.NEXTVAL, '댓글내용1', DEFAULT, 1, 32, DEFAULT);
+
+INSERT INTO "COMMENT"
+VALUES(SEQ_COMMNET_NO.NEXTVAL, '댓글내용2', DEFAULT, 1, 32, DEFAULT);
+
+INSERT INTO "COMMENT"
+VALUES(SEQ_COMMNET_NO.NEXTVAL, '댓글내용3', DEFAULT, 1, 32, DEFAULT);
+
+-- 댓글 수정
+UPDATE "COMMENT" SET COMMENT_CONTENT  = '댓글내용1'
+WHERE COMMENT_NO = 2;
+
+-- 댓글 삭제
+UPDATE "COMMENT" SET COMMENT_DEL_FL = 'Y'
+WHERE COMMENT_NO = 2;
+
+
+
+
+-- 댓글 수정
+
+SELECT * FROM "BOOKMARK";
+-- 
+SELECT ADOPT_NO, ADOPT_TITLE, ADOPT_DEL_FL
+FROM "BOOKMARK"
+JOIN "ADOPT" USING (ADOPT_NO)
+WHERE "MEMBER_NO"=1;
+
+SELECT *
+FROM "ADOPT";

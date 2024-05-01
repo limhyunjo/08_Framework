@@ -8,6 +8,10 @@ profileUpdateBtn.addEventListener("click", () => {
 
 //------------------------------------------------------------------
 
+
+
+//-------------------------------------------------------------------
+
 /* 화면 비동기로 바꾸는 버튼 얻어오기 */
 
 /* 프로필 버튼 */
@@ -60,17 +64,19 @@ const selectAdoptBoard=()=>{
       // bookmarkList null이거나 빈 배열인 경우
       // HTML 화면에 내용이 없다는 메시지를 표시하는 코드 추가
 
-     // 기존 요소 지우기
-     const message = document.getElementById("noCommentMessage");
-     if (message) {
-         message.innerHTML = ""; // 내용 지우기
-     } else {
-         // 내용 설정
-     
-     message.innerHTML = "아직 등록한 입양 게시물이 없습니다";
-     }
- 
-   
+
+    
+
+          // 없다면 새로운 메시지 요소를 생성합니다.
+         let message = document.createElement("div");
+          message.id = "noCommentMessage";
+          message.innerText = "아직 작성된 입양 게시물이 없습니다";
+          
+          // 그리고 해당 메시지를 보여줄 컨테이너에 추가합니다. (profilebox라고 가정합니다)
+          const profilebox = document.querySelector("#profileContainer");
+          profilebox.append(message);
+        
+      
 
 
   } else {
@@ -241,6 +247,27 @@ const selectMyReviewBoard = () =>{
    
      profilebox.innerHTML =""; // 기존 내용 지우기
 
+
+     if (reviewList == null || reviewList.length === 0) {
+      // commentList가 null이거나 빈 배열인 경우
+      // HTML 화면에 내용이 없다는 메시지를 표시하는 코드 추가
+
+     // 기존 요소 지우기
+        // 없다면 새로운 메시지 요소를 생성합니다.
+        let message = document.createElement("div");
+        message.id = "noCommentMessage";
+        message.innerText = "아직 작성된 후기 게시글이 없습니다";
+        
+        // 그리고 해당 메시지를 보여줄 컨테이너에 추가합니다. (profilebox라고 가정합니다)
+        const profilebox = document.querySelector("#profileContainer");
+        profilebox.append(message);
+      
+    
+   
+
+
+  } else {
+
      const table = document.createElement("table");
      table.id='reviewbox'
      const tbody = document.createElement("tbody");
@@ -293,7 +320,7 @@ const selectMyReviewBoard = () =>{
      profilebox.append(table);
      
 
-     
+    }
    
   });
 }
@@ -310,7 +337,7 @@ boardListBtn.addEventListener('click',()=>{
     // profilecontainer가 reviewList로 바꿔어야 함
    /*  getInnerHTML(); */
    selectMyReviewBoard();
-
+   showMessage();
 
 
 });
@@ -344,15 +371,16 @@ const selectMyCommentBoard = () =>{
       // HTML 화면에 내용이 없다는 메시지를 표시하는 코드 추가
 
      // 기존 요소 지우기
-     const message = document.getElementById("noCommentMessage");
-     if (message) {
-         message.innerHTML = ""; // 내용 지우기
-     } else {
-         // 내용 설정
-     
-     message.innerHTML = "아직 작성된 댓글이 없습니다";
-     }
- 
+        // 없다면 새로운 메시지 요소를 생성합니다.
+        let message = document.createElement("div");
+        message.id = "noCommentMessage";
+        message.innerText = "아직 작성된 댓글이 없습니다";
+        
+        // 그리고 해당 메시지를 보여줄 컨테이너에 추가합니다. (profilebox라고 가정합니다)
+        const profilebox = document.querySelector("#profileContainer");
+        profilebox.append(message);
+      
+    
    
 
 
@@ -434,7 +462,7 @@ commentListBtn.addEventListener('click',()=>{
     // profilecontainer가 reviewList로 바꿔어야 함
    /*  getInnerHTML(); */
    selectMyCommentBoard();
-
+   showMessage();
 
 
 });
@@ -462,15 +490,16 @@ const selectMyBookMark=()=>{
       // HTML 화면에 내용이 없다는 메시지를 표시하는 코드 추가
 
      // 기존 요소 지우기
-     const message = document.getElementById("noCommentMessage");
-     if (message) {
-         message.innerHTML = ""; // 내용 지우기
-     } else {
-         // 내용 설정
+       // 없다면 새로운 메시지 요소를 생성합니다.
+       let message = document.createElement("div");
+       message.id = "noCommentMessage";
+       message.innerText = "아직 북마크한 게시물이 없습니다";
+       
+       // 그리고 해당 메시지를 보여줄 컨테이너에 추가합니다. (profilebox라고 가정합니다)
+       const profilebox = document.querySelector("#profileContainer");
+       profilebox.append(message);
      
-     message.innerHTML = "아직 북마크한 게시글이 없습니다";
-     }
- 
+   
    
 
 

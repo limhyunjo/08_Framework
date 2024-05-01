@@ -20,7 +20,7 @@
 	<!-- 댓글 수정 -->
 	<update id="update">
 		UPDATE "COMMENT" SET COMMENT_CONTENT  = #{commentContent}
-		WHERE COMMENT_NO = #{commentNo} AND MEMBER_NO = #{memberNo}
+		WHERE COMMENT_NO = #{commentNo}
 	</update>
 	
 	<!-- 댓글 삭제 -->

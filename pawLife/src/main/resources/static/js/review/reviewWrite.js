@@ -1,12 +1,13 @@
-// const submitPost = document.querySelector("#submitPost");
+const submitPost = document.querySelector("#submitPost");
 
-// submitPost.addEventListener("submit", e => {
+submitPost.addEventListener("submit", e => {
 
-//     // 유효성 검사 넣어라
+   const title = document.querySelector("#reviewTitle");
+   const content = document.querySelector("#reviewContent");
 
-//     oEditors.getById["reviewContent"].exec("UPDATE_CONTENTS_FIELD", []);
+   oEditors.getById["reviewContent"].exec("UPDATE_CONTENTS_FIELD", []);
 
-// })
+ })
 
 
 

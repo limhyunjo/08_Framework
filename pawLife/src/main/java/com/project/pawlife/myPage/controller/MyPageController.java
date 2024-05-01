@@ -1,10 +1,14 @@
 package com.project.pawlife.myPage.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -204,7 +208,29 @@ public class MyPageController {
 		 ra.addFlashAttribute("message",message);
 		 return "redirect:" +path;
    }
-   
+
+ @PostMapping("adoptDelButton")
+  public String adoptDel(
+		  @SessionAttribute("loginMember") Member loginMember,		
+		   RedirectAttributes ra
+		  ) {
+	   int memberNo = loginMember.getMemberNo();
+	   int result = service.adoptDel(memberNo);
+	   
+	   String path = null;
+	   String message = null;
+	   
+	   if(result > 0) {
+		   message = "입양 완료 되었습니다";
+		   path="/myPage/myPage-first";
+	   }else {
+		   message = "입양 미완료 되었습니다";
+		   path = "/myPage/myPage-first";
+	   }
+	   
+	   ra.addFlashAttribute("message",message);
+	   return "redirect:" + path;
+ }
    
    /** 회원 탈퇴
  * @param loginMember
@@ -251,8 +277,9 @@ public class MyPageController {
 	 */
 @PostMapping("profile")
 public String profile(
-		@RequestParam("profileImg") MultipartFile profileImg,
+		@RequestParam("imageInput") MultipartFile imageInput,
 		@SessionAttribute("loginMember") Member loginMember, 
+		@RequestParam("statusCheck") int statusCheck,
 		// session에 있는 loginMember의 주소를 가져옴
 		RedirectAttributes ra) throws IllegalStateException, IOException {
 	
@@ -263,7 +290,7 @@ public String profile(
 	// -> /myPage/profile/변경된 파일명 형태의 문자열
 	//  현재 로그인한 회원의 PROFILE_IMG 컬럼 값으로 수정( UPDATE )
 	
-	int result = service.profile(profileImg, loginMember);
+	int result = service.profile(imageInput, loginMember,statusCheck);
 	
 	
 	String message = null;
@@ -282,6 +309,52 @@ public String profile(
 	
 	
 	
-	return "redirect:profile";
-}
+	return "redirect:/myPage/first"; 
+ }
+
+ //----------------------------------------------------------------------
+
+   // 입양 리스트 
+   
+
+	/** 입양리스트에서 수정 버튼 클릭시 
+	 *  해당 게시글의 입양 수정 화면으로 전환
+	 * @return
+	 */
+	@GetMapping("adoption/editAdoption/{adoptNo:[0-9]+}/update")
+	public String adoptionUpdate(
+			@PathVariable("adoptNo") int adoptNo,
+			@SessionAttribute("loginMember") Member loginMember,
+			RedirectAttributes ra,
+			Model model
+			) {
+		
+		Map<String, Integer> map = new HashMap<>();
+		map.put("adoptNo",adoptNo);
+		Adopt adopt = service.selectOneAdopt(map);
+		
+		
+		String message = null;
+		String path = null;
+		
+		if(adopt == null) {
+			message = "해당 게시글이 존재하지 않습니다.";
+			path = "redirect:/myPage/first"; 
+			
+			ra.addFlashAttribute("message",message);
+			
+	
+		}else {
+			path ="adoption/adoptionUpdate";
+			
+			// forward의 경우
+			model.addAttribute("adopt",adopt);
+		}
+		
+		return path;
+	}
+		     
+
+
+
 }

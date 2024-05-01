@@ -42,4 +42,22 @@ public interface AdoptionService {
 	 */
 	int adoptDelete(Map<String, Integer> map);
 
+	/** 이메일 전송
+	 * @param contactInput
+	 * @return
+	 */
+	int sendEmail(Adopt contactInput);
+
+	/** 작성자 이메일 찾기
+	 * @param adoptNo
+	 * @return
+	 */
+	String writerEmail(int adoptNo);
+	/** 검색 기능
+	 * @param paramMap
+	 * @param cp
+	 * @return
+	 */
+	Map<String, Object> searchList(Map<String, Object> paramMap, int cp);
+
 }

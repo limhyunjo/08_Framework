@@ -6,10 +6,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.pawlife.review.model.dto.Review;
 
+/**
+ * 
+ */
 public interface ReviewService {
 
 	// 게시글 작성
-	int reviewWrite(Review inputReivew, MultipartFile thumnailImg, int memberNo);
+	int reviewInsert(Review inputReview, MultipartFile thumnailImg, int memberNo);
 
 	/** 게시글 리스트
 	 * @param cp
@@ -22,6 +25,20 @@ public interface ReviewService {
 	 * @return
 	 */
 	Review selectOneReview(Map<String, Integer> map);
+
+	/** 게시글 수정
+	 * @param inputReview
+	 * @param thumnailImg
+	 * @param statusCheck
+	 * @return
+	 */
+	int reviewUpdate(Review inputReview, MultipartFile thumnailImg, int statusCheck);
+
+	/** 게시글 삭제
+	 * @param map
+	 * @return
+	 */
+	int reviewDelete(Map<String, Integer> map);
 
 
 

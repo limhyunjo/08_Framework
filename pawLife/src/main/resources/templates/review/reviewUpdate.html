@@ -12,42 +12,53 @@
         <th:block th:replace="~{common/header}"></th:block>
        
        
-        <from action="/adoptionWrite">
+        <form th:action="@{update}" id="reviewUpdateForm" th:object="${review}" method="POST" enctype="multipart/form-data">
+           
             <section class="board">
-
-
-    
-                <h1><input type="text" placeholder="제목" id="inputTitle"></h1>
-    
-    
-    
+                <!-- 제목 -->
+                <h1><input type="text" placeholder="제목" name="reviewTitle" id="reviewTitle" th:value="*{reviewTitle}"></h1>
+                <!-- 이미지 칸 -->
+                <div class="info-img">
+                    <label for="thumnail">
+                        <img class="preview" th:src="*{thumnail}">
+                    </label>
+                    <input type="file" class="review-img" name="thumnailImg" id="thumnail" accept="image/*">
+                    <span class="delete-image">&times;</span>
+                </div>
+                <!-- 에디터 -->
                 <section class="board-box">
-
-                    <textarea name="adoptionContent" id="adoptionContent" cols="100" rows="10" placeholder="내용 입력"></textarea>
-        
+                    <textarea name="reviewContent" id="reviewContent" cols="100" rows="10" placeholder="내용 입력" th:text="*{reviewContent}"></textarea>
+                    
                     <button id="updateBtn">수정하기</button>
-    
+                    <input type="hidden" name="statusCheck" value="-1">
                 </section>
+
             </section>
-        </from>
 
-
-
+        </form>
 
     </main>
 
     <th:block th:replace="~{common/footer}"></th:block> 
-
+    <!-- editor -->
     <script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+
     <script type="text/javascript">
         var oEditors = [];
+
         nhn.husky.EZCreator.createInIFrame({
-         oAppRef: oEditors,
-         elPlaceHolder: "adoptionContent",
-         sSkinURI: "/smarteditor/SmartEditor2Skin.html",
-         fCreator: "createSEditor2"
+        oAppRef: oEditors,
+        elPlaceHolder: "reviewContent", // textarea id값
+        sSkinURI: "/smarteditor/SmartEditor2Skin.html", // SmartEditor2Skin.html 경로
+        fCreator: "createSEditor2"
         });
-        </script>
+    </script>
+
+    <script th:inline="javascript">
+        const thumnailImage =/*[[${review.thumnail}]]*/ "썸네일";
+    </script>
+
+    <script src="/js/review/reviewUpdate.js"></script>
 
 </body>
 </html>

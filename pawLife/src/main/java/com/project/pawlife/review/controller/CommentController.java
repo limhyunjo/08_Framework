@@ -51,7 +51,7 @@ public class CommentController {
 	 * @param boardNo
 	 * @return
 	 */
-
+	@ResponseBody
 	@PutMapping("")
 	public int update(@RequestBody Comment comment) {
 		

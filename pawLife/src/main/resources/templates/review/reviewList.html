@@ -29,7 +29,7 @@
             <div class="card-row">
                <a class="card" th:each="review : ${reviewList}" th:object="${review}"
                   th:href="@{/review/reviewList/{reviewNo} (reviewNo=*{reviewNo},cp=${pagination.currentPage})}">
-                    <img class="card-img" src="/images/logo.png" id="card">
+                  <img class="card-img" th:src="*{thumnail}">
                     <span class="card-title" th:text="*{reviewTitle}">예쁜 강아지</span>
                </a>
             </div>

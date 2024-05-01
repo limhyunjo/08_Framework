@@ -35,18 +35,30 @@ public class AdoptionController {
 	@Autowired
 	private final AdoptionService service;
 	
-	/** 입양 게시판 리스트 항목으로 이동
+	/** 입양 게시판 리스트 항목으로 이동 + 게시글 검색
 	 * @param cp : 현재 조회 요청한 페이지(없으면 1)
 	 * @return
 	 */
 	@GetMapping("adoptionList")
 	public String adoptionPage(
 			@RequestParam(value="cp",required=false, defaultValue="1") int cp /*페이지 수*/,
-			Model model
+			Model model,
+			@RequestParam Map<String, Object> paramMap
 			) {
 		
 		// 조회 서비스 요청 후 결과 반환
-		Map<String, Object> map = service.selectAdoptList(cp);
+		Map<String, Object> map = null;
+		
+		if(paramMap.get("key")==null) {
+		
+			map = service.selectAdoptList(cp);
+		
+		}else {
+			
+			// 검색 서비스 호출
+			map = service.searchList(paramMap, cp);
+			
+		}
 		
 		model.addAttribute("pagination",map.get("pagination"));
 		model.addAttribute("adoptList",map.get("adoptList"));
@@ -243,6 +255,12 @@ public class AdoptionController {
 	}
 	
 	
+	/** 게시글 삭제
+	 * @param loginMember
+	 * @param adoptNo
+	 * @param ra
+	 * @return
+	 */
 	@PostMapping("editAdoption/{adoptNo:[0-9]+}/delete")
 	public String deleteAdopt(
 			@SessionAttribute("loginMember") Member loginMember,
@@ -293,7 +311,57 @@ public class AdoptionController {
 	}
 	
 	
+	/** 문의 페이지 이동
+	 * @return
+	 */
+	@GetMapping("contactAdopt/{adoptNo:[0-9]+}")
+	public String contactAdopt(@PathVariable("adoptNo") int adoptNo) {
+		return "adoption/adoptionContact";
+	}
 	
+	
+	/** 문의 내용 이메일 전송
+	 * @param aoptNo
+	 * @param loginMember
+	 * @param ra
+	 * @return
+	 */
+	@PostMapping("contactAdopt/{adoptNo:[0-9]+}/contact")
+	public String contactMail(
+			@PathVariable("adoptNo") int adoptNo,
+			@SessionAttribute("loginMember") Member loginMember,
+			RedirectAttributes ra,
+			Adopt contactInput,
+			Model model
+			) {
+		
+		String email = service.writerEmail(adoptNo);
+		
+		
+		
+		contactInput.setContactEmail(email);
+		
+		contactInput.setAdoptNo(adoptNo);
+		
+		int result = service.sendEmail(contactInput);
+		
+		model.addAttribute(contactInput);
+		
+		String path = null;
+		String message = null;
+		
+		if(result>0) {
+			path = "/adoption/adoptionList"+adoptNo;
+			message="문의가 발송되었습니다.";
+		}else {
+			path = "/contactAdopt/"+adoptNo;
+			message="문의 발송 실패.";
+		}
+		
+		ra.addFlashAttribute("message",message);
+		
+		return "redirect:"+path;
+	}
 	
 	
 

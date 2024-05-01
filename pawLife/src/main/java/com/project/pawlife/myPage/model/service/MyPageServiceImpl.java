@@ -111,7 +111,7 @@ public class MyPageServiceImpl implements MyPageService{
 
 	// 프로필 이미지 변경
 	@Override
-	public int profile(MultipartFile profileImg, Member loginMember) throws IllegalStateException, IOException{
+	public int profile( MultipartFile imageInput, Member loginMember, int statusCheck) throws IllegalStateException, IOException{
 		
 		// 수정할 경로
 		String updatePath = null;
@@ -119,13 +119,17 @@ public class MyPageServiceImpl implements MyPageService{
 		// 변경명 저장
 		String rename = null;
 		
+		if(statusCheck==-1) {
+			loginMember.setProfileImg("none");
+		}
+		
 		// 업로드한 이미지가 있을 경우
-		if( !profileImg.isEmpty()) {
+		if( !imageInput.isEmpty()) {
 			
 			// updatePath 조합
 			
 			// 파일명 변경
-			rename = Utility.fileRename(profileImg.getOriginalFilename());
+			rename = Utility.fileRename(imageInput.getOriginalFilename());
 			
 			
 			//  /myPage/profile/변경된 파일명.jpg
@@ -146,10 +150,10 @@ public class MyPageServiceImpl implements MyPageService{
 			
 			// 프로필 이미지를 없앤 경우(NULL로 수정한 경우) 를 제외
 			// -> 업로드한 이미지가 있을 경우
-			if(!profileImg.isEmpty()) {
+			if(!imageInput.isEmpty()) {
 			
 			// 파일을 서버에 지정된 폴더에 저장
-			profileImg.transferTo(new File(profileFolderPath + rename ));
+				imageInput.transferTo(new File(profileFolderPath + rename ));
 			
 			}
 			// 세션 회원 정보에서 프로필 이미지 경로를 
@@ -170,6 +174,26 @@ public class MyPageServiceImpl implements MyPageService{
 		return result;
 	}
 
+    // 로그인한 회원이 작성한 입양 게시글 수정 페이지로 이동
+	@Override
+	public Adopt selectOneAdopt(Map<String, Integer> map) {
+		
+		return mapper.selectOneAdopt(map);
+	}
+
+   // 로그인한 회원이 작성한 입양 게시글( 마이페이지 입양 리스트)에서 입양 완료 버튼을 누른 경우
+	@Override
+	public int adoptDel(int memberNo) {
+		
+		int result = mapper.adoptDel(memberNo);
+		
+		
+		return result;
+	}
+
+
+
+	
 
 
 

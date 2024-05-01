@@ -3,7 +3,7 @@
 <mapper namespace="com.project.pawlife.review.model.mapper.ReviewMapper">
 
 	<!-- 후기 게시글 작성 -->
-	<insert id="reviewWrite">
+	<insert id="reviewInsert">
 		INSERT INTO "REVIEW"
 		VALUES(SEQ_REVIEW_NO.NEXTVAL, #{reviewTitle}, #{reviewContent}, DEFAULT, DEFAULT, DEFAULT, DEFAULT, #{memberNo}, 2, #{thumnail})
 	</insert>
@@ -16,7 +16,7 @@
 	
 	<!-- 페이지 목록 조회 -->
 	<select id="selectReviewList">
-		SELECT REVIEW_NO, REVIEW_TITLE FROM "REVIEW"
+		SELECT REVIEW_NO, REVIEW_TITLE, THUMNAIL FROM "REVIEW"
 		WHERE REVIEW_DEL_FL = 'N' AND BOARD_CODE = 2
 		ORDER BY REVIEW_NO DESC
 	</select>
@@ -30,4 +30,22 @@
 		JOIN "MEMBER" USING(MEMBER_NO)
 		WHERE REVIEW_DEL_FL='N' AND BOARD_CODE = 2 AND REVIEW_NO = #{reviewNo}
 	</select>
+	
+	<!-- 게시글 수정 -->
+	<update id="reviewUpdate">
+		UPDATE "REVIEW" SET
+	 	REVIEW_TITLE = #{reviewTitle}, REVIEW_CONTENT = #{reviewContent}
+	 	
+	 	<if test='thumnail != "none"'>
+	 		, THUMNAIL = #{thumnail}
+	 	</if>
+	 	
+	 	WHERE REVIEW_NO = #{reviewNo} AND BOARD_CODE = 2 AND MEMBER_NO = #{memberNo} 
+	</update>
+	
+	<!-- 게시글 삭제 -->
+	<update id="reviewDelete">
+	UPDATE "REVIEW" SET REVIEW_DEL_FL = 'Y'
+	WHERE REVIEW_NO = #{reviewNo}
+	</update>
 </mapper>

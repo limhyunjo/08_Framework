@@ -9,9 +9,14 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import com.project.pawlife.adoption.model.dto.Adopt;
 import com.project.pawlife.adoption.model.mapper.AdoptionMapper;
@@ -19,6 +24,7 @@ import com.project.pawlife.common.exception.AdoptInsertException;
 import com.project.pawlife.common.util.Pagination;
 import com.project.pawlife.common.util.Utility;
 
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,6 +41,13 @@ public class AdoptionServiceImpl implements AdoptionService {
 
 	@Value("${my.adopt.folder-path}")
 	private String adoptFolderPath;
+	
+	
+	// EmailConfig 설정이 적용된 객체(메일 보내기 가능)
+	private final JavaMailSender mailSender;
+		
+	// 타임리프(템플릿 엔진)을 이용해서 html 코드 -> java로 변환
+	private final SpringTemplateEngine templateEngine;
 	
 	@Autowired
 	private final AdoptionMapper mapper;
@@ -196,6 +209,113 @@ public class AdoptionServiceImpl implements AdoptionService {
 	@Override
 	public int adoptDelete(Map<String, Integer> map) {
 		return mapper.adoptDelete(map);
+	}
+	
+	/** 작성자 이메일 찾기
+	 *
+	 */
+	@Override
+	public String writerEmail(int adoptNo) {
+		return mapper.writerEmail(adoptNo);
+	}
+	
+	
+	/** 이메일 전송
+	 *
+	 */
+	@Override
+	public int sendEmail(Adopt contactInput) {
+		
+		try {
+			
+			// 제목
+			String subject = "[PAWLIFE] 입양 문의 요청이 도착하였습니다.";
+			
+			// 메일 보내는 객체
+			MimeMessage mimeMessage = mailSender.createMimeMessage();
+			
+			// 타임 리프
+			MimeMessageHelper helper 
+			= new MimeMessageHelper(mimeMessage, true, "UTF-8");
+			
+			
+			
+			helper.setTo(contactInput.getContactEmail()); // 받는 사람 이메일 지정
+			helper.setSubject(subject); // 이메일 제목 지정
+			
+			helper.setText( loadHtml(subject, contactInput) , true);
+
+			helper.addInline("logo", 
+					new ClassPathResource("static/images/logo.jpg"));
+		
+			
+			// 메일 보내기
+			mailSender.send(mimeMessage);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+		
+		
+	
+		// 기입된 값 DB에 집어넣기
+		int result = mapper.insertContact(contactInput);
+		
+		if(result==0) {
+			return 0;
+		}
+		
+		
+		
+		return result;
+	
+	
+	}
+	
+	
+	
+	// HTML 파일을 읽어와 String으로 변환 (타임리프 적용)
+		public String loadHtml(String adoptionContactMail, Adopt contactInput) {
+			
+			// org.tyhmeleaf.Context 선택!!
+			Context context = new Context();
+			
+			//타임리프가 적용된 HTML에서 사용할 값 추가
+			context.setVariable("contactInput", contactInput);
+			
+			// templates/email 폴더에서 htmlName과 같은 
+			// .html 파일 내용을 읽어와 String으로 변환
+			return templateEngine.process("adopt/" + adoptionContactMail, context);
+			
+		}
+	
+	@Override
+	public Map<String, Object> searchList(Map<String, Object> paramMap, int cp) {
+
+		int listCount = mapper.getSearchCount(paramMap);
+		
+		Pagination pagination = new Pagination(cp, listCount);
+		
+		int limit = pagination.getLimit(); 
+		int offset = (cp - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<Adopt> adoptList = mapper.selectSearchList(paramMap, rowBounds);
+		
+		// 4. 목록 조회 결과 + Pagination 객체를 Map으로 묶음
+		Map<String, Object> map = new HashMap<>();
+				
+		map.put("pagination", pagination);
+		map.put("adoptList", adoptList);
+		
+		// 5. 결과 반환
+		return map;
+		
+				
+		
+		
 	}
 	
 	

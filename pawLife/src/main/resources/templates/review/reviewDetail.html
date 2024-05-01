@@ -50,17 +50,15 @@
 
             <section class="board-box">
                 <div class="info-box">
-                    <img th:src="*{thumnail}" class="reviewion-img">
+                    <!-- <img th:src="*{thumnail}" class="reviewion-img"> -->
                 </div>
                 <th:block class="reviewContent" th:utext="*{reviewContent}"></th:block>
             </section>
 
 
-
+            <!-- 댓글 영역-->
             <section class="comment-box">
-                <!-- 댓글 영역-->
                 <th:block th:replace="~{review/comment}"></th:block>
-
             </section>
 
             <button id="listBtn" onclick="location.href='/review/reviewList'">목록으로</button>

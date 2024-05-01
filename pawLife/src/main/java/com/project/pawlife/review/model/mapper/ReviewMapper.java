@@ -15,7 +15,7 @@ public interface ReviewMapper {
 	 * @param inputReivew
 	 * @return
 	 */
-	int reviewWrite(Review inputReivew);
+	int reviewInsert(Review inputReivew);
 
 	/** 삭제되지 않은 게시글 조회
 	 * @return
@@ -33,6 +33,18 @@ public interface ReviewMapper {
 	 * @return
 	 */
 	Review selectOneReview(Map<String, Integer> map);
+
+	/** 게시글 수정
+	 * @param inputReview
+	 * @return
+	 */
+	int reviewUpdate(Review inputReview);
+
+	/** 게시글 삭제
+	 * @param map
+	 * @return
+	 */
+	int reviewDelete(Map<String, Integer> map);
 
 	
 }

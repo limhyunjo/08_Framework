@@ -4,15 +4,29 @@
   
   
    <!-- 로그인한 회원이 작성한 입양 게시글 조회 -->
+   <select id="selectAdopt" resultType="adopt">
+     SELECT MEMBER_NO, ADOPT_NO,THUMNAIL , ADOPT_NAME , ADOPT_AGE, 
+     ADOPT_TYPE , ADOPT_ADDRESS , ADOPT_DEL_FL
+     FROM "ADOPT"
+     WHERE MEMBER_NO =#{memberNo}
+     ORDER BY ADOPT_NO DESC
+   </select>
   
+  <!-- 로그인한 회원이 작성한 입양 게시글 입양 완료 여부 바꾸기 버튼 누름 -->
+   <select id="adoptDel" >
+        UPDATE "ADOPT" SET
+        MEMBER_DEL_FL ='Y'
+        WHERE MEMBER_NO = #{memberNo}
+   </select>
   
   <!-- 로그인한 회원이 작성한 후기 게시글 조회 -->
     <select id="selectReview" resultType="review">
-     SELECT REVIEW_TITLE, READ_COUNT,
+     SELECT REVIEW_TITLE, READ_COUNT, REVIEW_NO,
        TO_CHAR(REVIEW_WRITE_DATE, 'YYYY-MM-DD DAY') AS "REVIEW_WRITE_DATE"
      
      FROM "REVIEW"
      WHERE MEMBER_No=#{memberNo}
+      ORDER BY REVIEW_NO DESC
     </select>
     
      <!-- 로그인한 회원이 작성한 댓글 조회 -->
@@ -31,7 +45,7 @@
     
     <!-- 로그인한 회원이 북마크한 게시물 조회 -->
     <select id="selectBookMark" resultType="adopt">
-       SELECT A.ADOPT_TITLE, A.ADOPT_NO
+        SELECT A.ADOPT_TITLE, A.ADOPT_NO, A.ADOPT_COMPL 
        FROM "BOOKMARK" B
        JOIN "ADOPT" A ON (A.ADOPT_NO = B.ADOPT_NO)
        WHERE B."MEMBER_NO" = #{memberNo}
@@ -63,10 +77,15 @@
    
    	<!-- 프로필 이미지 변경 -->
 	<update id="profile">
-	  UPDATE "MEMBER" SET
-	  PROFILE_IMG = #{profileImg}
+	    UPDATE "MEMBER" SET
+	  <if test="profileImg != 'none'">
+	    PROFILE_IMG = #{profileImg}
+	  </if>
 	  WHERE MEMBER_NO = #{memberNo}
 	</update>
+	
+	 	
+ 	
     
     <!-- 회원 탈퇴 -->
       <update id="deleteMember">
@@ -74,6 +93,29 @@
         MEMBER_DEL_FL ='Y'
         WHERE MEMBER_NO = #{memberNo}
       </update>
-    
+      
+      
+      
+      <!-- 로그인한 회원이 작성한 입양 게시글 수정 페이지로 이동-->
+	<select id="selectOneAdopt">
+		SELECT ADOPT_NO,ADOPT_TITLE, ADOPT_CONTENT,
+				THUMNAIL, ADOPT_NAME, ADOPT_AGE, ADOPT_TYPE, ADOPT_ADDRESS,
+				READ_COUNT,
+				MEMBER_NO,MEMBER_NICKNAME,PROFILE_IMG,
+				TO_CHAR(ADOPT_WRITE_DATE,'YYYY-MM-DD HH24:MI:SS') ADOPT_WRITE_DATE,
+				TO_CHAR(ADOPT_UPDATE_DATE,'YYYY-MM-DD HH24:MI:SS') ADOPT_DATE_DATE
+				
+				<if test="memberNo!=null">
+				,(SELECT COUNT(*) FROM BOOKMARK
+				WHERE ADOPT_NO=#{adoptNo} AND MEMBER_NO=#{memberNo}) BOOKMARK
+				</if>
+				
+		FROM ADOPT
+		JOIN "MEMBER" USING(MEMBER_NO)
+		WHERE ADOPT_DEL_FL='N'
+		AND BOARD_CODE=1
+		AND ADOPT_NO=#{adoptNo}
+	</select>
+      
   
 </mapper>

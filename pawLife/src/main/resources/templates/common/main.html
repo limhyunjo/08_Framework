@@ -52,128 +52,66 @@
          <div class="card-container">
             <a href="/adoption/adoptionList">입양 게시판<i class="fa-solid fa-chevron-right"></i></a>
 
-            <div  class="card-row">
 
-               <a 
-               href="#"
-               class="card" th:each="adopt : ${adoptList}" th:object="${adopt}" th:if="${adoptStat.index} lt 4">
-                  <!-- <a th:href="@{/adoption/adoptionList/{adoptNo} (adoptNo=*{adoptNo},cp=${pagination.currentPage})}" class="link"></a> -->
-                  <img class="card-img" th:src="*{thumnail}">
-                  <span th:text="*{adoptTitle}" class="card-title">예쁜 강아지</span>
+            <!-- 게시글 미존재시 -->
+            <th:block th:if="${#lists.isEmpty(adoptList)}">
+                <tr>
+                    <th colspan="6">게시글이 존재하지 않습니다.</th>
+                </tr>
+            </th:block>
+
+            <!-- 게시글 존재시 -->
+            <div class="card-row">
+               <a class="card" th:each="adopt : ${adoptList}" th:object="${adopt}" th:if="${adoptStat.index} lt 4"
+                  th:href="@{/adoption/adoptionList/{adoptNo} (adoptNo=*{adoptNo})}"> <!-- a 태그 내 class="link" : 원래 추가되어있던 클래스 -->
+                    <img class="card-img" th:src="*{thumnail}">
+                    <span class="card-title" th:text="*{adoptTitle}">입양 게시글 제목</span>
                </a>
-
-
-            </div>
-            <div  class="card-row">
-
-               <div class="card" th:each="adopt : ${adoptList}" th:object="${adopt}" th:if="${adoptStat.index} lt 8 and ${adoptStat.index} gt 3">
-                  <!-- <a th:href="/adoption/adoptionDetail" class="link"></a> -->
-                  <img class="card-img" th:src="*{thumnail}">
-                  <span th:text="*{adoptTitle}" class="card-title">예쁜 강아지</span>
-               </div>
-
-
             </div>
 
-
-            <!-- <div class="card-row">
-               <div class="card">
-                  <a href="/adoption/adoptionDetail" class="link"></a>
-                  <img class="card-img" src="/images/dog1.jpg" alt="게시판 썸네일 이미지">
-                  <span class="card-title">예쁜 강아지</span>
-               </div>
-               <div class="card">
-                  <a href="/adoption/adoptionDetail" class="link"></a>
-                  <img class="card-img" src="/images/dog2.jpg" alt="게시판 썸네일 이미지">
-                  <span class="card-title">귀여운 강아지</span>
-               </div>
-               <div class="card">
-                  <a href="/adoption/adoptionDetail" class="link"></a>
-                  <img class="card-img" src="/images/dog3.jpg" alt="게시판 썸네일 이미지">
-                  <span class="card-title">졸린 강아지</span>
-               </div>
-               <div class="card">
-                  <a href="/adoption/adoptionDetail" class="link"></a>
-                  <img class="card-img" src="/images/dog4.jpg" alt="게시판 썸네일 이미지">
-                  <span class="card-title">집 가고싶은 강아지</span>
-               </div>
-            </div> -->
-
-            <!-- <div class="card-row">
-               <div class="card">
-                  <a href="/adoption/adoptionDetail" class="link"></a>
-                  <img class="card-img" src="/images/cat1.jpg" alt="게시판 썸네일 이미지">
-                  <span class="card-title">예쁜 고양이</span>
-               </div>
-               <div class="card">
-                  <a href="/adoption/adoptionDetail" class="link"></a>
-                  <img class="card-img" src="/images/cat2.jpg" alt="게시판 썸네일 이미지">
-                  <span class="card-title">귀여운 고양이</span>
-               </div>
-               <div class="card">
-                  <a href="/adoption/adoptionDetail" class="link"></a>
-                  <img class="card-img" src="/images/cat3.jpg" alt="게시판 썸네일 이미지">
-                  <span class="card-title">누워있는 고양이</span>
-               </div>
-               <div class="card">
-                  <a href="/adoption/adoptionDetail" class="link"></a>
-                  <img class="card-img" src="/images/cat4.jpg" alt="게시판 썸네일 이미지">
-                  <span class="card-title">집 가고싶은 고양이</span>
-               </div>
-            </div>-->
+            <div class="card-row">
+               <a class="card" th:each="adopt : ${adoptList}" th:object="${adopt}" th:if="${adoptStat.index} lt 8 and ${adoptStat.index} gt 3"
+                  th:href="@{/adoption/adoptionList/{adoptNo} (adoptNo=*{adoptNo})}"> <!-- a 태그 내 class="link" : 원래 추가되어있던 클래스 -->
+                    <img class="card-img" th:src="*{thumnail}">
+                    <span class="card-title" th:text="*{adoptTitle}">입양 게시글 제목</span>
+               </a>
+            </div>
          </div> 
 
          <!-- 후기 게시판 -->
          <div class="card-container">
             <a href="/review/reviewList">입양 후기 게시판<i class="fa-solid fa-chevron-right"></i></a>
 
+            <!-- 게시글 존재시 -->
             <div class="card-row">
-               <div class="card">
-                  <!-- 1,2,3,4 -->
-                  <a href="/adoption/adoptionDetail" class="link"></a>
-                  <img class="card-img" src="/images/cat1.jpg" alt="게시판 썸네일 이미지">
-                  <span class="card-title">예쁜 고양이</span>
-               </div>
-               <div class="card">
-                  <a href="/adoption/adoptionDetail" class="link"></a>
-                  <img class="card-img" src="/images/cat2.jpg" alt="게시판 썸네일 이미지">
-                  <span class="card-title">귀여운 고양이</span>
-               </div>
-               <div class="card">
-                  <a href="/adoption/adoptionDetail" class="link"></a>
-                  <img class="card-img" src="/images/cat3.jpg" alt="게시판 썸네일 이미지">
-                  <span class="card-title">누워있는 고양이</span>
-               </div>
-               <div class="card">
-                  <a href="/adoption/adoptionDetail" class="link"></a>
-                  <img class="card-img" src="/images/cat4.jpg" alt="게시판 썸네일 이미지">
-                  <span class="card-title">집 가고싶은 고양이</span>
-               </div>
+               <a class="card" th:each="review : ${reviewList}" th:object="${review}" th:if="${reviewStat.index} lt 4"
+                  th:href="@{/review/reviewList/{reviewNo} (reviewNo=*{reviewNo})}"> <!-- a 태그 내 class="link" : 원래 추가되어있던 클래스 -->
+                    <img class="card-img" th:src="*{thumnail}">
+                    <span class="card-title" th:text="*{reviewTitle}">후기 게시글 제목</span>
+               </a>
             </div>
 
             <div class="card-row">
-               <div class="card">
-                  <a href="/adoption/adoptionDetail" class="link"></a>
-                  <img class="card-img" src="/images/dog1.jpg" alt="게시판 썸네일 이미지">
-                  <span class="card-title">예쁜 강아지</span>
-               </div>
-               <!--  -->
-               <div class="card">
-                  <a href="/adoption/adoptionDetail" class="link"></a>
-                  <img class="card-img" src="/images/dog2.jpg" alt="게시판 썸네일 이미지">
-                  <span class="card-title">귀여운 강아지</span>
-               </div>
-               <div class="card">
-                  <a href="/adoption/adoptionDetail" class="link"></a>
-                  <img class="card-img" src="/images/dog3.jpg" alt="게시판 썸네일 이미지">
-                  <span class="card-title">졸린 강아지</span>
-               </div>
-               <div class="card">
-                  <a href="/adoption/adoptionDetail" class="link"></a>
-                  <img class="card-img" src="/images/dog4.jpg" alt="게시판 썸네일 이미지">
-                  <span class="card-title">집 가고싶은 강아지</span>
-               </div>
+               <a class="card" th:each="review : ${reviewList}" th:object="${review}" th:if="${reviewStat.index} lt 8 and ${reviewStat.index} gt 3"
+                  th:href="@{/review/reviewList/{reviewNo} (reviewNo=*{reviewNo})}">
+                    <img class="card-img" th:src="*{thumnail}">
+                    <span class="card-title" th:text="*{reviewTitle}">후기 게시글 제목</span>
+               </a>
             </div>
+         </div>
+
+
+
+
+
+            <!-- <div class="card-row">
+               <a class="card" th:each="review : ${reviewList}" th:object="${review}" th:if="${adoptStat.index} lt 4"
+                  th:href="@{/review/reviewList/{reviewNo} (reviewNo=*{reviewNo})}">
+                    <img class="card-img" src="/images/logo.png" id="card">
+                    <span class="card-title" th:text="*{reviewTitle}">예쁜 강아지</span>
+               </a>
+            </div> -->
+
          </div>
       </section>
 

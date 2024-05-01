@@ -25,7 +25,11 @@ public class FilterConfig {
 		filter.setFilter(new LoginFilter());
 		
 		
-		String[] filteringURL = {"/myPage/*","/adoption/adoptionWrite/*","/adoption/editAdoption/*"};
+		String[] filteringURL = {"/myPage/*",
+								"/adoption/adoptionWrite/*",
+								"/adoption/editAdoption/*",
+								"/adoption/adoptionContact/*",
+								"/adoption/contactAdopt/*"};
 		
 		// 필터가 동작할 URL 세팅
 		

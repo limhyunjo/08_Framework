@@ -10,7 +10,7 @@ const getCookie= key =>{
 
 
     // cookies 문자열을 배열 형태로 변환
-    const cookieList = cookies.split(";") // ["K=V", "K=V"] 배열 모양으로 쪼개짐
+    const cookieList = cookies.split("; ") // ["K=V", "K=V"] 배열 모양으로 쪼개짐
                              // .map(el => {return el.split}) // ["K", "V"]
                              .map( el => el.split("=") ); // ["K", "V"]
     

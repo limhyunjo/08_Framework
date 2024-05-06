@@ -172,7 +172,7 @@ deleteImage.addEventListener("click", ()=>{
 
 
   //프로필 이미지 (img)를 기본 이미지로 변경
-  profileImg.src ="";
+  profileImg.src = "/images/user.png";
 
   // input에 저장된 값(value)를 ''(빈칸)으로 변경
     // -> input에 저장된 파일 정보가 모두 사라짐 == 데이터 삭제

@@ -15,27 +15,31 @@ public interface MyPageService {
 	
 	/** 로그인한 회원이 작성한 입양 게시글 조회
 	 * @param memberNo
+	 * @param cp 
 	 * @return adoptList
 	 */
-	List<Adopt> selectAdopt(int memberNo);
+	Map<String, Object> selectAdopt(int memberNo, int cp);
 
 	/** 로그인한 회원이 쓴 후기 게시글 조회
 	 * @param memberNo 
+	 * @param cp 
 	 * @return reviewList
 	 */
-	List<Review> selectReview(int memberNo);
+	Map<String, Object> selectReview(int memberNo, int cp);
 
 	/** 로그인한 회원이 쓴 댓글 조회
 	 * @param memberNo
+	 * @param cp 
 	 * @return commentList
 	 */
-	List<Review> selectComment(int memberNo);
+	Map<String, Object> selectComment(int memberNo, int cp);
 	
 	/** 로그인한 회원이 북마크한 게시물 조회
 	 * @param memberNo
+	 * @param cp 
 	 * @return bookmarkList
 	 */
-	List<Adopt> selectBookMark(int memberNo);
+	Map<String, Object> selectBookMark(int memberNo, int cp);
 	
 	
 	/** 개인정보 수정 (닉네임/ 전화번호 )
@@ -82,6 +86,13 @@ public interface MyPageService {
 	 * @return
 	 */
 	int adoptDel(int memberNo);
+
+	/** 로그인한 회원이 작성한 입양 게시글 완료 여부 변경
+	 * @param memberNo 
+	 * @param adopt
+	 * @return
+	 */
+	int changeAdoptComplete(int memberNo, Adopt adopt);
 
 
 

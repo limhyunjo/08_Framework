@@ -36,6 +36,7 @@
 	FROM ADOPT
 	JOIN "MEMBER" USING(MEMBER_NO)
 	WHERE ADOPT_DEL_FL='N'
+	AND ADOPT_COMPL = 'N'
 	AND BOARD_CODE = 1
 	ORDER BY ADOPT_NO DESC
 	
@@ -115,6 +116,21 @@
 	WHERE ADOPT_NO = #{adoptNo}
  </select>
  
+ <!-- 이메일에 넣을 동물 이름 -->
+ <select id="adoptName">
+ 	SELECT ADOPT_NAME
+ 	FROM ADOPT
+ 	WHERE ADOPT_NO = #{adoptNo}
+ 
+ </select>
+ 
+ <!-- 문의 받을 이메일 -->
+ <select id="toEmail">
+ 	SELECT MEMBER_EMAIL
+ 	FROM MEMBER
+ 	WHERE MEMBER_NO = #{memberNo}
+ </select>
+ 
  <!-- 폼에 제출한 값 저장하기 -->
  <insert id="insertContact">
 	 INSERT INTO CONTACT
@@ -127,7 +143,9 @@
 	 		#{contactTime},
 	 		#{contactAddress},
 	 		#{contactMarry},
-	 		#{contactJob}
+	 		#{contactJob},
+	 		#{memberNo},
+	 		#{adoptNo}
 	 )
  </insert>
  <!-- 검색 조건이 맞는 게시글 수 조회  -->
@@ -217,5 +235,18 @@
 		ORDER BY ADOPT_NO DESC
  </select>
  
-	
+ <!-- 조회수 증가 -->
+ <update id="updateReadCount">
+ 	UPDATE "ADOPT" SET
+ 	READ_COUNT = READ_COUNT + 1
+ 	WHERE ADOPT_NO = #{adoptNo} 
+ </update>
+ 
+ <!-- 조회수 조회 -->
+ <select id="selectReadCount" resultType="_int">
+ 	SELECT READ_COUNT
+ 	FROM ADOPT
+ 	WHERE ADOPT_NO = #{adoptNo}
+ </select>
+ 	
 </mapper>

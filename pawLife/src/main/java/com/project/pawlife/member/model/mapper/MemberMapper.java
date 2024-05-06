@@ -37,5 +37,11 @@ public interface MemberMapper {
 	 */
 	public int checkTel(String memberTel);
 
+	/** 비밀번호 변경
+	 * @param inputMember
+	 * @return
+	 */
+	public int resetPw(Member inputMember);
+
 
 }

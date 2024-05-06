@@ -1,71 +1,79 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<body>
-    <table border="1" style="border-collapse: collapse;" th:object="${adopt}">
-        <tr>
-            <th>
-                신청인 성명
-            </th>
-            <td th:text="*{contactName}">
-                
-            </td>
-        </tr>
-        <tr>
-            <th>
-                성별
-            </th>
-            <td th:text="*{contactGender}">
+<body th:object="${contactInput}">
 
-            </td>
-        </tr>
-        <tr>
-            <th>
-                연령
-            </th>
-            <td th:text="*{contactAge}">
+    <div style="display: flex; flex-direction: column; align-items: center; align-content: center;">
+            
+        <img src="cid:logo" width="150px"><br>
 
-            </td>
-        </tr>
-        <tr>
-            <th>
-                연락처
-            </th>
-            <td th:text="*{contactTel}">
-
-            </td>
-        </tr>
-        <tr>
-            <th>
-                연락 가능 시간
-            </th>
-            <td th:text="*{contactTime}">
-
-            </td>
-        </tr>
-        <tr>
-            <th>
-                거주 지역
-            </th>
-            <td th:text="*{contactAddress}">
-
-            </td>
-        </tr>
-        <tr>
-            <th>
-                결혼 여부
-            </th>
-            <td th:text="*{contactMarry}">
-
-            </td>
-        </tr>
-        <tr>
-            <th>
-                신청인 직업
-            </th>
-            <td th:text="*{contactJob}">
-
-            </td>
-        </tr>
-    </table>
+        문의 들어온 동물 : <span th:text="*{adoptName}"  style="font-size: 1.2em; font-weight: bold;"></span><br>
+        문의 받을 이메일 : <span th:text="*{memberEmail}"  style="font-size: 1.2em; font-weight: bold;"></span>
+        <table border="1" style="border-collapse: collapse; text-align: center; margin:20px 0;"  width="500px" height="500px">
+            <tr>
+                <th>
+                    신청인 성명
+                </th>
+                <td th:text="*{contactName}">
+                    
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    성별
+                </th>
+                <td th:text="*{contactGender}">
+    
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    연령
+                </th>
+                <td th:text="*{contactAge}">
+    
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    연락처
+                </th>
+                <td th:text="*{contactTel}">
+    
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    연락 가능 시간
+                </th>
+                <td th:text="*{contactTime}">
+    
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    거주 지역
+                </th>
+                <td th:text="*{contactAddress}">
+    
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    결혼 여부
+                </th>
+                <td th:text="*{contactMarry}">
+    
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    신청인 직업
+                </th>
+                <td th:text="*{contactJob}">
+    
+                </td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>

@@ -160,6 +160,7 @@ public class AdoptionServiceImpl implements AdoptionService {
 		
 		return result;
 	}
+	
 	@Override
 	public int adoptUpdate(Adopt adoptInput,MultipartFile thumnailImg,int statusCheck) {
 	
@@ -219,17 +220,43 @@ public class AdoptionServiceImpl implements AdoptionService {
 		return mapper.writerEmail(adoptNo);
 	}
 	
+	/** 이메일에 작성할 동물 이름
+	 *
+	 */
+	@Override
+	public String adoptName(int adoptNo) {
+		return mapper.adoptName(adoptNo);
+	}
+	
+	@Override
+	public String toEmail(int memberNo) {
+		return mapper.toEmail(memberNo);
+	}
 	
 	/** 이메일 전송
 	 *
 	 */
 	@Override
-	public int sendEmail(Adopt contactInput) {
+	public int sendEmail(String htmlName, Adopt contactInput) {
+		
+		// 기입된 값 DB에 집어넣기
+		int result = mapper.insertContact(contactInput);
+		
+		
+		
 		
 		try {
 			
 			// 제목
-			String subject = "[PAWLIFE] 입양 문의 요청이 도착하였습니다.";
+			String subject =null; 
+			
+			switch(htmlName) {
+			case "adoptionContactMail" :
+				subject = "[PAWLIFE] 입양 문의 요청이 도착하였습니다.";
+				break;
+			}
+			
+			
 			
 			// 메일 보내는 객체
 			MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -243,10 +270,10 @@ public class AdoptionServiceImpl implements AdoptionService {
 			helper.setTo(contactInput.getContactEmail()); // 받는 사람 이메일 지정
 			helper.setSubject(subject); // 이메일 제목 지정
 			
-			helper.setText( loadHtml(subject, contactInput) , true);
+			helper.setText( loadHtml(htmlName, contactInput) , true);
 
 			helper.addInline("logo", 
-					new ClassPathResource("static/images/logo.jpg"));
+					new ClassPathResource("static/images/logo.png"));
 		
 			
 			// 메일 보내기
@@ -258,17 +285,6 @@ public class AdoptionServiceImpl implements AdoptionService {
 		}
 		
 		
-		
-	
-		// 기입된 값 DB에 집어넣기
-		int result = mapper.insertContact(contactInput);
-		
-		if(result==0) {
-			return 0;
-		}
-		
-		
-		
 		return result;
 	
 	
@@ -277,7 +293,7 @@ public class AdoptionServiceImpl implements AdoptionService {
 	
 	
 	// HTML 파일을 읽어와 String으로 변환 (타임리프 적용)
-		public String loadHtml(String adoptionContactMail, Adopt contactInput) {
+		public String loadHtml(String htmlName, Adopt contactInput) {
 			
 			// org.tyhmeleaf.Context 선택!!
 			Context context = new Context();
@@ -287,10 +303,22 @@ public class AdoptionServiceImpl implements AdoptionService {
 			
 			// templates/email 폴더에서 htmlName과 같은 
 			// .html 파일 내용을 읽어와 String으로 변환
-			return templateEngine.process("adopt/" + adoptionContactMail, context);
+			return templateEngine.process("adoption/" + htmlName, context);
 			
 		}
 	
+		
+		
+		
+		
+		
+		
+		
+		
+	
+	/** 검색 기능
+	 *
+	 */
 	@Override
 	public Map<String, Object> searchList(Map<String, Object> paramMap, int cp) {
 
@@ -317,6 +345,25 @@ public class AdoptionServiceImpl implements AdoptionService {
 		
 		
 	}
+
 	
+	
+	/** 조회수 증가
+	 *
+	 */
+	@Override
+	public int updateReadCount(int adoptNo) {
+		
+		// 조회수 1 증가
+		int result = mapper.updateReadCount(adoptNo);
+		
+		// 현재 조회 수 조회
+		if(result>0) {
+			return mapper.selectReadCount(adoptNo);
+		}
+		
+		
+		return 0;
+	}
 	
 }

@@ -23,7 +23,7 @@
 	
 	<!-- 게시글 상세 조회 -->
 	<select id="selectOneReview">
-		SELECT REVIEW_NO, REVIEW_TITLE, REVIEW_CONTENT, READ_COUNT, MEMBER_NO, MEMBER_NICKNAME, PROFILE_IMG,
+		SELECT REVIEW_NO, REVIEW_TITLE, REVIEW_CONTENT, THUMNAIL, READ_COUNT, MEMBER_NO, MEMBER_NICKNAME, PROFILE_IMG,
 				TO_CHAR(REVIEW_WRITE_DATE,'YYYY-MM-DD HH24:MI:SS') REVIEW_WRITE_DATE,
 				TO_CHAR(REVIEW_UPDATE_DATE,'YYYY-MM-DD HH24:MI:SS') REVIEW_UPDATE_DATE
 		FROM "REVIEW"
@@ -48,4 +48,80 @@
 	UPDATE "REVIEW" SET REVIEW_DEL_FL = 'Y'
 	WHERE REVIEW_NO = #{reviewNo}
 	</update>
+	
+	<!-- 게시글 검색(개수) -->
+	 <select id="searchListCount">
+ 		SELECT COUNT(*) FROM "REVIEW"
+		
+		<if test='key == "w"'>
+			JOIN "MEMBER" USING (MEMBER_NO) 
+		</if>
+		
+		WHERE REVIEW_DEL_FL = 'N'
+		
+		<choose>
+			<when test='key == "t"'>
+				AND REVIEW_TITLE LIKE '%' || #{query} || '%'
+			</when>
+			
+			<when test='key == "c"'>
+				AND REVIEW_CONTENT LIKE '%' || #{query} || '%'
+			</when>
+			
+			<when test='key == "tc"'>
+				AND ( 
+					REVIEW_TITLE   LIKE '%' || #{query} || '%'
+					OR  
+					REVIEW_CONTENT LIKE '%' || #{query} || '%'
+				)
+			</when>
+			
+			<otherwise>
+				AND MEMBER_NICKNAME LIKE '%' || #{query} || '%'
+			</otherwise>
+		</choose>
+	 </select>
+	 
+	 <!-- 게시글 검색(목록) -->
+	 <select id="searchReviewList">
+ 		SELECT REVIEW_NO, REVIEW_TITLE, THUMNAIL FROM "REVIEW"
+		JOIN "MEMBER" USING (MEMBER_NO) 
+		WHERE REVIEW_DEL_FL = 'N'
+		
+		<choose>
+			<when test='key == "t"'>
+				AND REVIEW_TITLE LIKE '%' || #{query} || '%'
+			</when>
+			
+			<when test='key == "c"'>
+				AND REVIEW_CONTENT LIKE '%' || #{query} || '%'
+			</when>
+			
+			<when test='key == "tc"'>
+				AND ( 
+					REVIEW_TITLE   LIKE '%' || #{query} || '%'
+					OR  
+					REVIEW_CONTENT LIKE '%' || #{query} || '%'
+				)
+			</when>
+			
+			<otherwise>
+				AND MEMBER_NICKNAME LIKE '%' || #{query} || '%'
+			</otherwise>
+		</choose>
+		ORDER BY REVIEW_NO DESC
+	 </select>
+
+	<!-- 조회수 증가 -->
+	<update id="updateReadCount">
+		UPDATE "REVIEW" SET READ_COUNT = READ_COUNT + 1
+		WHERE REVIEW_NO = #{reviewNo}	
+	</update>
+	
+	<!-- 조회수 조회-->
+	<select id="selectReadCount">
+		SELECT READ_COUNT FROM "REVIEW"
+		WHERE REVIEW_NO = #{reviewNo}	
+	</select>
+	
 </mapper>

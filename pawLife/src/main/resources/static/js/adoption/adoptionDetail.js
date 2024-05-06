@@ -95,6 +95,11 @@ const contactBtn = document.querySelector("#contactBtn")
 
 contactBtn.addEventListener("click",()=>{
 
+    if(loginMemberNo==null){
+        alert("로그인 이후 이용해주세요!")
+        return;
+    }
+
     location.href =  location.pathname.replace('adoptionList', 'contactAdopt')
                     + location.search;
 

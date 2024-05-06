@@ -15,48 +15,48 @@
        
         <section class="board" th:object="${review}">
 
-
+            <!-- 게시글 제목, 수정/삭제 버튼 -->
             <div class="title-area">
                 <h1 th:text="*{reviewTitle}">제목</h1>
-                <div class="btn-area" th:if="${session.loginMember?.memberNo==review.memberNo}">>
+                <div class="btn-area" th:if="${session.loginMember?.memberNo==review.memberNo}">
                     <button class="update-btn">수정</button>
                     <button class="delete-btn">삭제</button>
                 </div>
             </div>
 
-
+            <!-- 게시글 정보 -->
             <div class="info-bar">
                 <div class="info">
-                <img th:src="*{profileImg}" id="profile">
-                <th:block th:text="*{memberNickname}">회원명</th:block>
-            </div>
-
-            <div class="right-bar">
-                <div class="view-count">
-                    <i class="fa-regular fa-eye"></i>
-                    <th:block th:text="*{readCount}">조회수</th:block>
+                    <img th:src="*{profileImg}" id="profile">
+                    <th:block th:text="*{memberNickname}">회원명</th:block>
                 </div>
-                <div class="view-count">
-                    <th:block>작성일</th:block>
-                    <th:block th:text="*{reviewWriteDate}">yyyy-mm-dd</th:block>
+
+                <div class="right-bar">
+                    <div class="view-count">
+                        <i class="fa-regular fa-eye"></i>
+                        <th:block th:text="*{readCount}">조회수</th:block>
+                    </div>
+
+                    <div class="view-count">
+                        <th:block>작성일</th:block>
+                        <th:block th:text="*{reviewWriteDate}">yyyy-mm-dd</th:block>
+                    </div>
                 </div>
             </div>
-
-            </div>
-
 
             <hr>
 
-
+            <!-- 게시글 본문 -->
             <section class="board-box">
                 <div class="info-box">
-                    <!-- <img th:src="*{thumnail}" class="reviewion-img"> -->
+                    <img th:src="*{thumnail}" class="review-img">
+                    
                 </div>
                 <th:block class="reviewContent" th:utext="*{reviewContent}"></th:block>
             </section>
 
 
-            <!-- 댓글 영역-->
+            <!-- 댓글 -->
             <section class="comment-box">
                 <th:block th:replace="~{review/comment}"></th:block>
             </section>

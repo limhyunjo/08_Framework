@@ -47,6 +47,7 @@ public class FileConfig implements WebMvcConfigurer{
 	@Value("${my.board.resource-location}")
 	private String boardResourceLocation;
 	
+	// 입양 게시판
 	// 게시글 이미지 요청 주소
 	@Value("${my.adopt.resource-handler}")
 	private String adoptResourceHandler; 
@@ -54,6 +55,15 @@ public class FileConfig implements WebMvcConfigurer{
 	// 게시글 이미지 요청 시 연결할 서버 폴더 경로
 	@Value("${my.adopt.resource-location}")
 	private String adoptResourceLocation;
+	
+	// 리뷰 게시판
+	// 게시글 이미지 요청 주소
+	@Value("${my.review.resource-handler}")
+	private String reviewResourceHandler; 
+	
+	// 게시글 이미지 요청 시 연결할 서버 폴더 경로
+	@Value("${my.review.resource-location}")
+	private String reviewResourceLocation;
 	
 	
 	
@@ -82,9 +92,10 @@ public class FileConfig implements WebMvcConfigurer{
 		.addResourceHandler(adoptResourceHandler) 
 		.addResourceLocations(adoptResourceLocation);
 		
-		//
-		
-		
+		// 리뷰 게시글
+		registry
+		.addResourceHandler(reviewResourceHandler) 
+		.addResourceLocations(reviewResourceLocation);
 		
 	}
 	

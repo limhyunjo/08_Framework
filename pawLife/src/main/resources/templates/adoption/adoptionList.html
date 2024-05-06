@@ -12,7 +12,7 @@
     <main>
         <th:block th:replace="~{common/header}"></th:block>
         <div class="tag">
-            <h3>입양 게시판</h3>
+            <h3>입양하기</h3>
             <button id="writeBtn" th:if="${session.loginMember}">글쓰기</button>
         </div>
         
@@ -33,7 +33,7 @@
                 th:object="${adopt}"
                 th:href="@{/adoption/adoptionList/{adoptNo} (adoptNo=*{adoptNo},cp=${pagination.currentPage})}">
                     <img class="card-img" th:src="*{thumnail}" id="card">
-                    <span class="card-title" th:text="*{adoptTitle}">예쁜 강아지</span>
+                    <span class="card-title" th:text="*{adoptTitle}">게시글 제목</span>
                 </a>
             </div>
 

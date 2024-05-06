@@ -1,7 +1,11 @@
 :root{
     --main-color : rgb(204, 204, 204);
     --title-background-color : rgb(238, 236, 236);
-    /* --hover-color : #e9ae2f; */
+    
+    --main-color : #e2dbc9 ;
+    --hover-color : #b1ab9a;
+    --point-color : #ffbe0c;
+    --submit-color : #b92828;
  }
 
  
@@ -19,10 +23,13 @@
     width: 1140px;
     flex-grow: 1;           /* 중심축 방향으로 팽창 */
     height: auto;
-   
-
  }
 
+ .board-name{
+  margin: 50px 0;
+  margin-left: 50px;
+ }
+ 
 /* 게시판 이름 ( 마이페이지 ) */
   main .myPage-content .boardTitle-area{
     text-align: center;
@@ -39,11 +46,11 @@
     display: inline-block;
     width: 100px;
     height: 40px;
-    background: black;
-    color: white;
+    background: var(--main-color);
+    color: black;
    
     font-size: 11px;
-    border: 1px solid black;
+    border: 1px solid var(--main-color);
     border-radius: 35px;
     margin: 10px 8px; /* 버튼 간격 */
 
@@ -58,7 +65,8 @@
 /* 선택된 버튼의 배경 색상 설정 */
 .listbtn-area button:hover {
     background-color: white; 
-    color: black;
+    color: var(--hover-color);
+    border: var(--hover-color);
     transition: 0.2s;
 }
 
@@ -68,6 +76,7 @@
   /* 최소 크기 넣나 */
   .myPage-main {
     width: 80%;
+    height: 990px;
     border: 1px solid var(--main-color);
     border-radius: 10px;
     margin: 50px auto;
@@ -132,8 +141,8 @@
 #profileUpdateBtn{
   
     cursor: pointer;
-    border:1px solid black;
-    background-color: black;
+    border:1px solid var(--submit-color);
+    background-color: var(--submit-color);
     color: white;
     height: 30px;
     width: 200px;
@@ -149,6 +158,39 @@
 
 
 /* ********************************************************** */
+/* 페이지네이션 */
+
+.pagination{
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  min-width: 800px;
+}
+
+.pagination li{
+  width: 20px;
+  margin: 0 5px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.pagination span{
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.current{
+  font-weight: bold;
+  background-color: #b92828 ;
+  border-radius: 50%;
+  color: white !important;
+  letter-spacing: 0 !important;
+}
+
+
+/* ************************************************************* */
 
 
 /* 입양 리스트 */
@@ -259,9 +301,11 @@
 
     width: 80%;
    
+    margin: auto;
     border: 1px solid var(--main-color);/* 나중에 안 보이게 하기 */
     border-radius: 10px;
-    margin: 80px auto;
+    margin-top: 80px;
+    margin-bottom: 50px;
     padding: 16px;  
 
 }
@@ -283,9 +327,65 @@
 }
 
 .profile-updatecontainer > *{
-
+ display: flex;
+ flex-direction: column;
   margin-bottom: 50px;
 }
+#updateOneBtn{
+
+  width: 300px;
+    height: 30px;
+    background-color: #b92828;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 1.01em;
+    margin-top: 20px;
+    cursor: pointer;
+
+}
+#updateOneBtn:hover{
+  background-color: white;
+    color: #b92828;
+    border: 1px solid #b92828;
+
+}
+#changePwBtn{
+  width: 300px;
+  height: 30px;
+  background-color: #b92828;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1.01em;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+#changePwBtn:hover{
+  background-color: white;
+    color: #b92828;
+    border: 1px solid #b92828;
+
+}
+
+/* 목록으로 버튼 */
+#listBtn{
+  border: 1px solid gray;
+  background-color: #fff;
+  width: 100px;
+  height: 40px;
+  color: gray;
+  margin-bottom: 100px;
+  cursor: pointer;
+}
+
+#listBtn:hover{
+  background-color: #ddd;
+}
+
 
 /* 프로필 닉네임 공간 */
 .profileNickNamebox{
@@ -316,6 +416,16 @@
   
 }
 
+.myPage-row{
+  min-width: 439px;
+}
+
+#changePwForm{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .profile-updatebox >*{
 
 margin-top: 10px;
@@ -332,6 +442,11 @@ margin-top: 10px;
     align-items: center;
  
    
+  }
+
+  #profileUpdateForm{
+    display: flex;
+
   }
 
   .signup-updatebox{
@@ -406,17 +521,18 @@ margin-top: 10px;
 .profileUpdateBtn-area{
   display: flex;
   justify-content: center;
-  margin: 100px;
+  margin: 10px;
 }
 
 #profileCompeleteBtn{
    
-    border:1px solid black;
-    background-color: black;
+    border:1px solid var(--submit-color);
+    background-color: var(--submit-color);
     color: white;
     height: 30px;
     width: 200px;
     border-radius: 15px;
+
 
     
 }
@@ -435,6 +551,8 @@ margin-top: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
+   
+    margin: 20px;
   }
   
   /* 프로필 이미지 */
@@ -452,6 +570,8 @@ margin-top: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 50px;
+    
   }
   
   #deleteImage{
@@ -464,7 +584,6 @@ margin-top: 10px;
   /* 이미지 버튼 영역 */
   .profile-btn-area{
     width: 230px;
-    margin: 20px 0;
   
     display: flex;
     justify-content: center;
@@ -476,7 +595,7 @@ margin-top: 10px;
     height: 30px;
     padding: 5px 10px;
   
-    border: 1px solid black;
+    border: 1px solid var(--main-color);
     border-radius: 15px;
     background-color: white;
     font-size: 14px;
@@ -484,12 +603,26 @@ margin-top: 10px;
     text-align: center;
   }
   
+  .profile-btn-area > label {
+    color: black;
+  }
+  .profile-btn-area > label:hover{
+    background-color: var(--main-color);
+    border: 1px solid var(--main-color);
+    color : black;
+  }  
+
   #imageInput{ display: none;}
   
   .profile-btn-area > button{
-    background-color: black;
-    color : white;
+    background-color: var(--main-color);
+    color : black;
     margin-left: 2px;
+  }  
+
+  .profile-btn-area > button:hover{
+    border: 1px solid var(--hover-color);
+    background : var(--hover-color);
   }
 
 
@@ -497,4 +630,83 @@ margin-top: 10px;
 #thumbnailP{
   width: 100px;
   height: 80px;
+}
+
+/* 마이페이지 메뉴 버튼 */
+.listbtn-area > button {
+  font-size: 12px;
+}
+/* 콘텐트 영역 */
+#profileContainer {
+  height: 520px;
+  align-items: center;
+}
+.myPage-content {
+  margin: 30px 0px;
+}
+/* 프로필 */
+.profileNickName {
+  padding: 10px;
+  padding-top: 10px;
+  width: 180px;
+  border-bottom: 1px solid grey;
+  margin-bottom: 10px;
+
+}
+
+/* 테이블 */
+table {
+  width: 80%;
+  border-collapse: collapse;
+  margin: 100px 50px;
+}
+th {
+  border-bottom: 1px solid var(--main-color);
+  padding: 16px;
+}
+td {
+  height: 70px;
+}
+
+/* 탈퇴 버튼 */
+.memberDelete-area {
+  margin: 0;
+}
+#memberDelBtn {
+  cursor: pointer;
+  border: 1px solid var(--main-color);
+  background-color: var(--main-color);
+  color: black;
+  height: 30px;
+  width: 100px;
+  border-radius: 15px;
+  margin-top: 100px;
+}
+/* 입양게시판 버튼 */
+td > button {
+  width: 50px;
+  height: 26px;
+  background: var(--main-color);
+  cursor: pointer;
+  /* font-size: 11px; */
+  border: 1px solid var(--main-color);
+  border-radius: 35px;
+}
+td > button:hover {
+  background: var(--hover-color);
+  border: 1px solid var(--hover-color);
+  color: black;
+}
+
+/*********************************************/
+
+input{
+  outline: none;
+    border:none;
+    border-bottom: 1px solid gray;
+    margin: 20px 0;
+    padding: 10px 5px;
+    font-size: 18px;
+    font-weight: bold;
+    width: 100%;
 }

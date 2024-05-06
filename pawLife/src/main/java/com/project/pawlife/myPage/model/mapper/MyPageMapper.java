@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.session.RowBounds;
 
 import com.project.pawlife.adoption.model.dto.Adopt;
 import com.project.pawlife.member.model.dto.Member;
@@ -14,26 +15,29 @@ public interface MyPageMapper {
 	
 	/** 로그인한 회원이 작성한 입양 게시글 조회
 	 * @param memberNo
+	 * @param rowBounds 
 	 * @return adoptList
 	 */
-	List<Adopt> selectAdopt(int memberNo);
+	List<Adopt> selectAdopt(int memberNo, RowBounds rowBounds);
 
 	/** 로그인한 회원이 작성한 후기 게시글 조회
 	 * @return
 	 */
-	List<Review> selectReview(int memberNo);
+	List<Review> selectReview(int memberNo, RowBounds rowBounds);
 
 	/** 로그인한 회원이 작성한 댓글 조회
 	 * @param memberNo
+	 * @param rowBounds 
 	 * @return
 	 */
-	List<Review> selectComment(int memberNo);
+	List<Review> selectComment(int memberNo, RowBounds rowBounds);
 	
 	/** 로그인한 회원이 북마크한 게시물 조회
 	 * @param memberNo
+	 * @param rowBounds 
 	 * @return bookmarkList
 	 */
-	List<Adopt> selectBookMark(int memberNo);
+	List<Adopt> selectBookMark(int memberNo, RowBounds rowBounds);
 	
 	/** 프로필 이미지 변경
 	 * @param mem
@@ -77,6 +81,38 @@ public interface MyPageMapper {
 	 * @return
 	 */
 	int adoptDel(int memberNo);
+
+	/** 로그인한 회원이 작성한 입양 게시글 완료 여부 변경
+	 * @param adopt
+	 * @param memberNo 
+	 * @return
+	 */
+	int changeAdoptComplete(Adopt adopt);
+
+	/** 회원 입양 게시글 수 
+	 * @param memberNo 
+	 * @return
+	 */
+	int memberListCount(int memberNo);
+
+	/** 회원 후기 게시글 수
+	 * @param memberNo
+	 * @return
+	 */
+	int reviewListCount(int memberNo);
+
+	/** 회원이 작성한 댓글 수
+	 * @param memberNo
+	 * @return
+	 */
+	int commentListCount(int memberNo);
+
+	/** 회원이 북마크한 게시글 수
+	 * @param memberNo
+	 * @return
+	 */
+	int bookmarkListCount(int memberNo);
+
 
 
 }

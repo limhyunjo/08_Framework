@@ -91,19 +91,21 @@
 
             <form action="changePw" method="POST" name="changePwForm" id="changePwForm">
 
+            <div class="input-area">
               <div class="myPage-row">
-                <label>현재 비밀번호</label>
-                <input type="password" name="currentPw" id="currentPw" maxlength="30" >              
-            </div>
-
-            <div class="myPage-row">
-                <label>새 비밀번호</label>
-                <input type="password" name="newPw" id="newPw" maxlength="30">              
-            </div>
-
-            <div class="myPage-row">
-                <label>새 비밀번호 확인</label>
-                <input type="password" name="newPwConfirm" id="newPwConfirm" maxlength="30">              
+                  <label>현재 비밀번호</label>
+                  <input type="password" name="currentPw" id="currentPw" maxlength="30" >              
+              </div>
+  
+              <div class="myPage-row">
+                  <label>새 비밀번호</label>
+                  <input type="password" name="newPw" id="newPw" maxlength="30">              
+              </div>
+  
+              <div class="myPage-row">
+                  <label>새 비밀번호 확인</label>
+                  <input type="password" name="newPwConfirm" id="newPwConfirm" maxlength="30">              
+              </div>
             </div>
 
              
@@ -116,19 +118,19 @@
 
           </div>
       
-  
-     
+   
       </section>
       
+
+<!-- 다시 프로필로 보내는 버튼 -->
+<div class="profileUpdateBtn-area">
+  <button id="listBtn" onclick="location.href='/myPage/first'">목록으로</button>
+</div>
 
 
     </section>
       
-    <!-- 다시 프로필로 보내는 버튼 -->
-        <div class="profileUpdateBtn-area">
-          <button id="profileCompeleteBtn">개인정보 수정 완료</button>
-        </div>
-
+   
 
 
 

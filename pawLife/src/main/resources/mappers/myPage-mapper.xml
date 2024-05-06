@@ -6,39 +6,40 @@
    <!-- 로그인한 회원이 작성한 입양 게시글 조회 -->
    <select id="selectAdopt" resultType="adopt">
      SELECT MEMBER_NO, ADOPT_NO,THUMNAIL , ADOPT_NAME , ADOPT_AGE, 
-     ADOPT_TYPE , ADOPT_ADDRESS , ADOPT_DEL_FL
+     ADOPT_TYPE , ADOPT_ADDRESS , ADOPT_DEL_FL, ADOPT_COMPL
      FROM "ADOPT"
      WHERE MEMBER_NO =#{memberNo}
+     AND ADOPT_DEL_FL='N'
      ORDER BY ADOPT_NO DESC
    </select>
   
-  <!-- 로그인한 회원이 작성한 입양 게시글 입양 완료 여부 바꾸기 버튼 누름 -->
-   <select id="adoptDel" >
-        UPDATE "ADOPT" SET
-        MEMBER_DEL_FL ='Y'
-        WHERE MEMBER_NO = #{memberNo}
-   </select>
+  
   
   <!-- 로그인한 회원이 작성한 후기 게시글 조회 -->
     <select id="selectReview" resultType="review">
      SELECT REVIEW_TITLE, READ_COUNT, REVIEW_NO,
-       TO_CHAR(REVIEW_WRITE_DATE, 'YYYY-MM-DD DAY') AS "REVIEW_WRITE_DATE"
+       TO_CHAR(REVIEW_WRITE_DATE, 'YYYY-MM-DD') AS "REVIEW_WRITE_DATE"
      
      FROM "REVIEW"
      WHERE MEMBER_No=#{memberNo}
+      AND REVIEW_DEL_FL='N'
+      
       ORDER BY REVIEW_NO DESC
     </select>
     
      <!-- 로그인한 회원이 작성한 댓글 조회 -->
     <select id="selectComment" parameterType="int" resultType="review">
      SELECT C.REVIEW_NO, C.MEMBER_NO, R.REVIEW_TITLE, C.COMMENT_CONTENT, 
-    TO_CHAR(C.COMMENT_WRITE_DATE, 'YYYY-MM-DD DAY') AS "COMMENT_WRITE_DATE"
+    TO_CHAR(C.COMMENT_WRITE_DATE, 'YYYY-MM-DD') AS "COMMENT_WRITE_DATE"
     FROM "REVIEW" R
     JOIN "COMMENT" C ON R.REVIEW_NO = C.REVIEW_NO
     WHERE C.COMMENT_NO IN (
     SELECT COMMENT_NO 
     FROM "COMMENT"
     WHERE MEMBER_NO = #{memberNo})
+    AND COMMENT_DEL_FL ='N'
+    
+    ORDER BY COMMENT_NO DESC
 
     </select>
     
@@ -49,6 +50,8 @@
        FROM "BOOKMARK" B
        JOIN "ADOPT" A ON (A.ADOPT_NO = B.ADOPT_NO)
        WHERE B."MEMBER_NO" = #{memberNo}
+       
+       ORDER BY ADOPT_NO DESC
     </select>
     
     
@@ -116,6 +119,43 @@
 		AND BOARD_CODE=1
 		AND ADOPT_NO=#{adoptNo}
 	</select>
-      
-  
+	
+	
+	<!-- 로그인한 회원이 작성한 입양 게시글 완료 여부 변경 -->
+      <update id="changeAdoptComplete" parameterType="Adopt">
+	  	UPDATE "ADOPT"
+	    SET ADOPT_COMPL = #{adoptCompl}
+	    WHERE ADOPT_NO = #{adoptNo}
+	    AND MEMBER_NO = #{memberNo}
+	  </update>
+	  
+	  
+	  <!-- 회원 게시글 수 조회 -->
+	   <select id="memberListCount">
+	     SELECT COUNT(*) FROM "ADOPT"
+	     WHERE MEMBER_NO= #{memberNo}
+	   </select>
+	
+	  <!-- 회원 게시글 수 조회 -->
+	   <select id="reviewListCount">
+	     SELECT COUNT(*) FROM "REVIEW"
+	     WHERE MEMBER_NO= #{memberNo}
+	   </select>
+	   
+	  <!-- 회원 게시글 수 조회 -->
+	   <select id="commentListCount">
+	     SELECT COUNT(*) FROM "COMMENT"
+	     WHERE MEMBER_NO= #{memberNo}
+	   </select>
+	   
+	
+	  <!-- 회원이 북마크한 게시글 수 조회 -->
+	   <select id="bookmarkListCount">
+	     SELECT COUNT(*) FROM "BOOKMARK"
+	     WHERE MEMBER_NO= #{memberNo}
+	   </select>
+	   
+	
+	   
+	
 </mapper>

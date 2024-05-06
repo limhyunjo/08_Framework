@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -67,34 +69,36 @@ public class MyPageController {
    //로그인한 회원이 올린 입양 게시글 전체 조회
    @ResponseBody
    @GetMapping("selectAdoptList")
-   public List<Adopt> selectAdopt(
-		   @SessionAttribute("loginMember")Member loginMember
-		   ){
+   public  Map<String, Object> selectAdopt(
+		   @SessionAttribute("loginMember")Member loginMember,
+		  @RequestParam(value="cp", required=false, defaultValue = "1") int cp ){
 	   
 	   
 	   int memberNo = loginMember.getMemberNo();
 	   
-	List<Adopt> adoptList = service.selectAdopt(memberNo);
+	   Map<String, Object> map = service.selectAdopt(memberNo,cp);
 	
 	
 	   
-	   return adoptList;
+	   return map;
    }
 
 
    // 로그인한 회원이 작성한 후기 게시글 전체 조회
    @ResponseBody
    @GetMapping("selectReview")
-   public List<Review> selectReview(
-		@SessionAttribute("loginMember")Member loginMember){
+   public Map<String, Object> selectReview(
+		@SessionAttribute("loginMember")Member loginMember,
+		@RequestParam(value="cp", required=false, defaultValue = "1") int cp 
+		   ){
 
 	   int memberNo = loginMember.getMemberNo();
 	   
-	List<Review> reviewList = service.selectReview(memberNo);
+	   Map<String, Object> map = service.selectReview(memberNo,cp);
 	
 	
 	
-	return reviewList;
+	return map;
    }
    
 	   /** 로그인한 회원이 작성한 댓글 전체 조회
@@ -104,14 +108,15 @@ public class MyPageController {
 	 */
     @ResponseBody
 	@GetMapping("selectComment")
-	public List<Review> selectComment(@SessionAttribute("loginMember") Member loginMember,
+	public Map<String, Object> selectComment(@SessionAttribute("loginMember") Member loginMember,
+			@RequestParam(value="cp", required=false, defaultValue = "1") int cp,
 			RedirectAttributes ra) {
 
 		int memberNo = loginMember.getMemberNo();
 
-		List<Review> commentList = service.selectComment(memberNo);
+		Map<String, Object> map = service.selectComment(memberNo,cp);
 
-		return commentList;
+		return map;
 	}
 
    
@@ -122,16 +127,17 @@ public class MyPageController {
      */
     @ResponseBody
     @GetMapping("selectBookMark")
-    public List<Adopt> selectBookMark(
+    public Map<String, Object> selectBookMark(
     	@SessionAttribute("loginMember") Member loginMember, 
+    	@RequestParam(value="cp", required=false, defaultValue = "1") int cp,
     	RedirectAttributes ra
     		){
     	int memberNo = loginMember.getMemberNo();
 
-    	List<Adopt> bookmarkList = service.selectBookMark(memberNo);
+    	Map<String, Object> map = service.selectBookMark(memberNo,cp);
     	
     	
-    	return bookmarkList;
+    	return map;
     }
     
     
@@ -209,29 +215,7 @@ public class MyPageController {
 		 return "redirect:" +path;
    }
 
- @PostMapping("adoptDelButton")
-  public String adoptDel(
-		  @SessionAttribute("loginMember") Member loginMember,		
-		   RedirectAttributes ra
-		  ) {
-	   int memberNo = loginMember.getMemberNo();
-	   int result = service.adoptDel(memberNo);
-	   
-	   String path = null;
-	   String message = null;
-	   
-	   if(result > 0) {
-		   message = "입양 완료 되었습니다";
-		   path="/myPage/myPage-first";
-	   }else {
-		   message = "입양 미완료 되었습니다";
-		   path = "/myPage/myPage-first";
-	   }
-	   
-	   ra.addFlashAttribute("message",message);
-	   return "redirect:" + path;
- }
-   
+
    /** 회원 탈퇴
  * @param loginMember
  * @param status
@@ -353,8 +337,24 @@ public String profile(
 		
 		return path;
 	}
-		     
+	
 
 
+	/** 입양완료 여부 변경
+	 * @param adopt
+	 * @return result
+	 */
+	@ResponseBody
+	@PutMapping("adoptDelComplete")
+	public int changeAdoptComplete(@RequestBody Adopt adopt,
+			 @SessionAttribute("loginMember") Member loginMember,		
+			   RedirectAttributes ra) {
+		
+		   int memberNo = loginMember.getMemberNo();
+		   int result = service.changeAdoptComplete(memberNo, adopt);
+		   
+		
+		return result;
+	}
 
 }

@@ -1,6 +1,10 @@
 package com.project.pawlife.review.controller;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +24,9 @@ import com.project.pawlife.member.model.dto.Member;
 import com.project.pawlife.review.model.dto.Review;
 import com.project.pawlife.review.model.service.ReviewService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,10 +43,18 @@ public class ReviewController {
 	
 	// 리뷰 게시판 리스트로 이동
 	@GetMapping("reviewList")
-	public String reviewPage(@RequestParam(value="cp",required=false, defaultValue="1") int cp, Model model) { 
+	public String reviewPage(@RequestParam(value="cp",required=false, defaultValue="1") int cp, Model model, @RequestParam Map<String, Object> paramMap) { 
 		
-		Map<String, Object> map = service.selectReviewList(cp);
+		Map<String, Object> map = null;
 		
+		
+		if(paramMap.get("key") == null) { // 검색이 아닌 경우
+			map = service.selectReviewList(cp);
+			
+		} else {
+			map = service.selectReviewList(paramMap, cp);
+		}
+
 		model.addAttribute("pagination", map.get("pagination"));
 		model.addAttribute("reviewList", map.get("reviewList"));
 		
@@ -56,9 +71,11 @@ public class ReviewController {
 	
 	/** 리뷰 게시글 상세 조회
 	 * @return
+	 * @throws ParseException 
 	 */
 	@GetMapping("reviewList/{reviewNo:[0-9]+}")
-	public String reviewDetail(@PathVariable("reviewNo") int reviewNo, Model model, RedirectAttributes ra) {
+	public String reviewDetail(@PathVariable("reviewNo") int reviewNo, @SessionAttribute(value="loginMember", required = false) Member loginMember, 
+			Model model, RedirectAttributes ra, HttpServletRequest req, HttpServletResponse resp) throws ParseException {
 		
 		Map<String, Integer> map = new HashMap<>();
 		map.put("reviewNo",reviewNo);
@@ -73,9 +90,98 @@ public class ReviewController {
 			ra.addFlashAttribute("message","게시글이 존재하지 않습니다.");
 		}
 		else {
+
+			/* 조회수 증가 */
+			if(loginMember == null || loginMember.getMemberNo() != review.getMemberNo()) {
+				
+				Cookie[] cookies = req.getCookies();
+				
+				Cookie c = null;
+				if(cookies!=null ) {
+					for(Cookie temp : cookies) {
+						if(temp.getName().equals("readReviewNo")) {
+							c=temp;
+							break;
+						}
+					}
+				}
+				
+				int result = 0;
+				
+				if(c==null) {
+					c=new Cookie("readReviewNo","["+reviewNo+"]");
+					result = service.updateReadCount(reviewNo);
+				}else {
+					
+					if(c.getValue().indexOf("["+reviewNo+"]")== -1) {
+						
+						c.setValue(c.getValue()+"["+reviewNo+"]");
+						result = service.updateReadCount(reviewNo);
+						
+					}
+					
+				}
+				
+				
+				if(result>0) {
+					
+					review.setReadCount(result);
+					
+					c.setPath("/");
+					
+					// 수명 지정
+					Calendar cal = Calendar.getInstance(); // 싱글톤 패턴
+					cal.add(cal.DATE, 1);
+
+					// 날짜 표기법 변경 객체 (DB의 TO_CHAR()와 비슷)
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+					// java.util.Date
+					Date a = new Date(); // 현재 시간
+
+					Date temp = new Date(cal.getTimeInMillis()); // 다음날 (24시간 후)
+					// 2024-04-16 12:30:10
+
+					Date b = sdf.parse(sdf.format(temp)); // 다음날 0시 0분 0초
+
+					// 다음날 0시 0분 0초 - 현재 시간
+					long diff = (b.getTime() - a.getTime()) / 1000;
+					// -> 다음날 0시 0분 0초까지 남은 시간을 초단위로 반환
+
+					log.debug("diff {}", diff);
+					
+					c.setMaxAge((int) diff); // 수명 설정
+
+					resp.addCookie(c); // 응답 객체를 이용해서 클라이언트에게 전달
+				}
+			}
+			
 			path = "review/reviewDetail";
 			model.addAttribute("review", review);
 		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		return path;
 	}
@@ -226,10 +332,14 @@ public class ReviewController {
 			message="삭제 실패.";
 		}
 		
-		ra.addFlashAttribute("message",message);
+		ra.addFlashAttribute("message", message);
 		
-		return "redirect:/"+path;
+		return "redirect:/" + path;
 	}
 	
-	
+	@GetMapping("path")
+	public String getMethodName(@RequestParam String param) {
+		return new String();
+	}
+
 }

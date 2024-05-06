@@ -19,7 +19,7 @@ function showSlides() {
    let index = slideIndex - 1;
    slides[index].style.display = "block";
    dots[slideIndex-1].className += " active";
-   setTimeout(showSlides, 2000); // 슬라이드 이미지 변경 시간 지정(2초)
+   setTimeout(showSlides, 5000); // 슬라이드 이미지 변경 시간 지정(2초)
 };
 
 

@@ -15,24 +15,22 @@
             <section class="board">
                 <section class="board-box">
 
-                <!-- 에디터 -->
-                <h1><input type="text" placeholder="제목" name="reviewTitle" id="reviewTitle"></h1>
+                    <!-- 제목 -->
+                    <h1><input type="text" class="inputTitle" placeholder="제목" name="reviewTitle" id="reviewTitle"></h1>
+                    
+                    <!-- 에디터 -->
+                    <textarea name="reviewContent" id="reviewContent" cols="100" rows="10" placeholder="내용을 입력해주세요."></textarea>
                 
-
-                <textarea name="reviewContent" id="reviewContent" cols="100" rows="10" placeholder="내용을 입력해주세요."></textarea>
-               
-                <!-- 이미지 -->
-                <div class="info-img">
-                    <label for="thumnail">
-                        <img class="preview" src="" id="preview">
-                    </label>
-                    <input type="file" class="review-img" id="thumnail" name="thumnailImg" accept="image/*">
-                    <span class="delete-image">&times;</span>
-                </div>
-                    
-                    
-                    
-                    <button>글작성</button>
+                    <!-- 이미지 -->
+                    <div class="info-img">
+                        <label for="thumnail">
+                            <img class="preview" src="" id="preview">
+                        </label>
+                        <input type="file" class="review-img" id="thumnail" name="thumnailImg" accept="image/*">
+                        <span class="delete-image">&times;</span>
+                    </div>
+                        
+                    <button id="writeBtn">글작성</button>
 
                 </section>
             </section>

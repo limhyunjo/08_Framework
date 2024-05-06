@@ -1,5 +1,5 @@
 :root {
-   --main-color : #cccccc;
+   --main-color : #b1ab9a ;
    /* --hover-color : #e9ae2f; */
 }
 * {
@@ -7,6 +7,7 @@
    box-sizing: border-box;
    padding: 0;
    margin: 0;
+   font-family: 'Pretendard-Regular';
 }
 body {
    display: flex;
@@ -28,6 +29,26 @@ a {
    text-decoration: none;
    color : black;
 }
+
+@font-face {
+   font-family: 'SBAggroB';
+   src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroB.woff') format('woff');
+   font-weight: normal;
+   font-style: normal;
+}
+
+@font-face {
+   font-family: 'Pretendard-Regular';
+   src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+   font-weight: 400;
+   font-style: normal;
+}
+
+#memberProfile{
+
+   border-radius: 50%;
+
+}
 /* ------------------ */
 /* ***** header ***** */
 /* ------------------ */
@@ -36,24 +57,50 @@ header {
    height: 130px;
    display: flex;
    flex-direction: column; 
+
    
 }
 
 .login-area{
-   width: 300px;
+   width: 350px;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: flex-end;
+  
+}
+
+.login-area a{
+   color: #717171;
+   display: flex;
+   align-items: center;
 }
 
 .login-box{
-   width: 25px;
+   display: flex;
+   width: 350px;
    height: 25px;
+   align-content: center;
+   justify-content: flex-end;
 }
 #memberProfile{
 
 width: 25px;
 height: 25px;
+}
+
+#nickname{
+   font-weight: bold;
+}
+
+.profileArea{
+   display: flex;
+   align-content: center;
+   align-items: center;
+   justify-content: center;
+}
+.profileArea>a{
+   display: flex;
+   align-items: center;
 }
 
 
@@ -71,26 +118,31 @@ height: 25px;
    width: 100%;
    height: 80px;
    display: flex;
-   align-items: center;
+   align-items: flex-end;
    justify-content: center;
+   margin-bottom: 15px;
 }
 .home-logo-area > div > a {
    margin: 10px;
 }
 #homeLogoImage {
    width: 60px;
+   margin-right: 10px;
 }
 #homeLogoTitle {
    font-size: 46px;
    font-weight: bold;
+   color: #b92828;
+   font-family: 'SBAggroB';
 }
 /* 네비게이션 바 */
 nav {
-   border-top: 1px solid var(--main-color);
+   border-top: 1px solid #b1ab9a;
    height: 50px;
    position: sticky;
    z-index: 1000;
-   border-bottom: 1px solid var(--main-color); 
+   border-bottom: 1px solid #b1ab9a; 
+   margin-bottom: 15px;
 }
 nav>ul {
    display: flex;
@@ -111,6 +163,7 @@ nav a {
    display: block;
    text-align: center;
    height: 100%;
+   width: 280px;
 }
 /* ------------------ */
 /* ***** footer ***** */
@@ -139,18 +192,21 @@ footer span {
 /* ***  carousel  *** */
 /* ------------------ */
 .slideshow-container {
+
+   margin-top: 15px;
    height: 300px;
    position: relative;
    margin: auto;
 }
 .mySlides {
    display: none;
+   margin-top: 30px;
  }
 .mySlides>img {
    vertical-align: middle;
    object-fit: cover;
    width: 100%;
-   height: 300px;
+   height: 310px;
 }
 /* 이미지 순서 */
 .dot {
@@ -184,24 +240,29 @@ footer span {
 
 /* 레이아웃용 빈 공간 */
 .content1 {
+   min-width: 1000;
    width: 100%;
-   height: 100px;
+   height: 80px;
    display: flex;
    flex-direction: column;
    justify-content: flex-end;
-   padding: 10px 20px;
+   padding: 10px;
+}
+.content1 >h2{
+   min-width: 1000;
 }
 /* 게시판 영역 */
 .content2 {
    display: flex;
    flex-direction: column;
+   margin-bottom: 120px;
 }
 /* 게시판 미리보기 */
 .card-container {
    width: 100%;
-   border: 1px solid var(--main-color);
+   border: 1px solid #b1ab9a;
    border-radius: 10px;
-   margin: 30px auto;
+   margin: 40px auto;
    padding: 16px;
 }
 .card-container > span {
@@ -223,8 +284,10 @@ footer span {
    display: flex;
    justify-content: space-around;
    margin: 10px;
+   padding-bottom: 20px;
 }
-.card {
+.card{
+   max-width: 270px;
    width: 100%;
    height: 240px;
    flex: 1 1 0;
@@ -232,16 +295,32 @@ footer span {
    flex-direction: column;
    align-items: center;
    position: relative;
+   margin : 10px 0;
 }
-.card > img {
-   width: 70%;
-   height: 100%;
+
+.card>img{
+   width: 190px;
+   min-width: 190px;
+   max-width: 190px;
+
+   height: 210px;
+   min-height: 210px;
+   max-height: 210px;
    object-fit: cover;
-   margin: 20px 30px;
-   border-radius: 10px;
+   margin: 5px 30px;
+   border-radius: 5px;
 }
 .card > img:hover{
    transform: scale(1.02);
    transition: 0.3s;
 }
 
+/* 게시글 제목 */
+.card-title {
+   width: 250px;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   padding: 0 15%;
+   text-align: center;
+}

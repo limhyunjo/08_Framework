@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.project.pawlife.main.model.mapper.MainMapper">
-	
+
+	<!-- 입양 게시글 조회 -->
 	<select id="selectMainAdopt" resultType="adopt">
-		SELECT THUMNAIL, ADOPT_TITLE 
+		SELECT THUMNAIL, ADOPT_TITLE, ADOPT_NO
 		FROM ADOPT
+		WHERE ADOPT_DEL_FL = 'N'
 		ORDER BY ADOPT_NO DESC
 	</select>
-
 </mapper>

@@ -46,7 +46,7 @@ public interface AdoptionService {
 	 * @param contactInput
 	 * @return
 	 */
-	int sendEmail(Adopt contactInput);
+	int sendEmail(String htmlName, Adopt contactInput);
 
 	/** 작성자 이메일 찾기
 	 * @param adoptNo
@@ -59,5 +59,23 @@ public interface AdoptionService {
 	 * @return
 	 */
 	Map<String, Object> searchList(Map<String, Object> paramMap, int cp);
+
+	/** 이메일에 넣을 동물 이름 적용
+	 * @param adoptNo
+	 * @return
+	 */
+	String adoptName(int adoptNo);
+
+	/** 문의 받을 이메일
+	 * @param memberNo
+	 * @return
+	 */
+	String toEmail(int memberNo);
+
+	/** 조회수 증가
+	 * @param adoptNo
+	 * @return
+	 */
+	int updateReadCount(int adoptNo);
 
 }

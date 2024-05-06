@@ -19,4 +19,5 @@ public class Comment {
 	
 	// 댓글 조회시 회원 프로필, 닉네임
 	private String memberNickname;
+	private String profileImg;
 }

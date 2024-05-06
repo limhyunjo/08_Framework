@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.pawlife.adoption.model.dto.Adopt;
+import com.project.pawlife.common.util.Pagination;
 import com.project.pawlife.common.util.Utility;
 import com.project.pawlife.member.model.dto.Member;
 import com.project.pawlife.myPage.model.mapper.MyPageMapper;
@@ -42,32 +44,106 @@ public class MyPageServiceImpl implements MyPageService{
 	
 	// 로그인한 회원이 작성한 입양 게시글 리스트 조회
 	@Override
-	public List<Adopt> selectAdopt(int memberNo) {
+	public Map<String, Object> selectAdopt(int memberNo, int cp) {
+	
+		int listCount = mapper.memberListCount(memberNo);
 		
-		return mapper.selectAdopt(memberNo);
+		// Pagination 객체 생성
+		Pagination pagination = new Pagination(cp, listCount);
+		
+		int limit = pagination.getLimit();
+		int offset = (cp-1)*limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<Adopt> adoptList = mapper.selectAdopt(memberNo, rowBounds);
+		
+	    Map<String, Object> map = new HashMap<>();
+		
+		map.put("pagination", pagination);
+		map.put("adoptList", adoptList);
+		
+		
+		return map;
+		
 	}
-
+	
 
 	// 로그인한 회원이 작성한 후기 게시글 리스트 조회
 	@Override
-	public List<Review> selectReview(int memberNo) {
+	public Map<String, Object> selectReview(int memberNo, int cp) {
 		
-		return mapper.selectReview(memberNo);
+	   int listCount = mapper.reviewListCount(memberNo);
+		
+		// Pagination 객체 생성
+		Pagination pagination = new Pagination(cp, listCount);
+		
+		int limit = pagination.getLimit();
+		int offset = (cp-1)*limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<Review> reviewList = mapper.selectReview(memberNo, rowBounds);
+	    Map<String, Object> map = new HashMap<>();
+		
+		map.put("pagination", pagination);
+		map.put("reviewList", reviewList);
+		
+			
+			
+			return map;
+		
 	}
 	
 
 	// 로그인한 회원이 작성한 댓글 리스트 조회
 	@Override
-	public List<Review> selectComment(int memberNo) {
+	public Map<String, Object> selectComment(int memberNo, int cp) {
 		
-		return mapper.selectComment(memberNo);
+		  int listCount = mapper.commentListCount(memberNo);
+			
+			// Pagination 객체 생성
+			Pagination pagination = new Pagination(cp, listCount);
+			
+			int limit = pagination.getLimit();
+			int offset = (cp-1)*limit;
+			RowBounds rowBounds = new RowBounds(offset, limit);
+			
+			List<Review> commentList = mapper.selectComment(memberNo, rowBounds);
+			
+		    Map<String, Object> map = new HashMap<>();
+			
+			map.put("pagination", pagination);
+			map.put("commentList", commentList);
+			
+				
+				
+		return map;
 	}
 	
 	// 로그인한 회원이 북마크한 게시물 조회
 	@Override
-	public List<Adopt> selectBookMark(int memberNo) {
-	
-		return mapper.selectBookMark(memberNo);
+	public Map<String, Object> selectBookMark(int memberNo, int cp) {
+		
+		
+		int listCount = mapper.bookmarkListCount(memberNo);
+			
+			// Pagination 객체 생성
+			Pagination pagination = new Pagination(cp, listCount);
+			
+			int limit = pagination.getLimit();
+			int offset = (cp-1)*limit;
+			RowBounds rowBounds = new RowBounds(offset, limit);
+			
+			List<Adopt> bookmarkList = mapper.selectBookMark(memberNo, rowBounds);
+			
+		    Map<String, Object> map = new HashMap<>();
+			
+			map.put("pagination", pagination);
+			map.put("bookmarkList", bookmarkList);
+			
+				
+				
+		return map;
+
 	}
 	
 	// 개인 정보 수정(닉네임/전화번호)
@@ -192,12 +268,15 @@ public class MyPageServiceImpl implements MyPageService{
 	}
 
 
+	// 로그인한 회원이 작성한 입양 게시글 완료 여부 변경
+	@Override
+	public int changeAdoptComplete(int memberNo, Adopt adopt) {
+		adopt.setMemberNo(memberNo);
+		return mapper.changeAdoptComplete(adopt);
+	}
 
-	
 
-
-
-
+ 
 
 
 

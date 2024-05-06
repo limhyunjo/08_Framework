@@ -1,9 +1,12 @@
 package com.project.pawlife.member.controller;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.project.pawlife.email.model.service.EmailService;
 import com.project.pawlife.member.model.dto.Member;
 import com.project.pawlife.member.model.service.MemberService;
 
@@ -27,7 +31,8 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberController {
 
 	private final MemberService service;
-
+	
+	private final EmailService emailService;
 
 	 
 	 /** 로그인 페이지 이동
@@ -65,7 +70,7 @@ public class MemberController {
 			  
 			  if(result >0 ) { 
 				  message = inputMember.getMemberNickname() + "님의 가입 환영합니다.";
-				  path= "/";
+				  path= "/member/login";
 			  }else {
 				  message = "회원 가입을 실패했습니다";
 				  path= "/signup";
@@ -203,7 +208,68 @@ public class MemberController {
 			return "redirect:/";
 		}
 
-
+		
+		/** 비밀번호 찾기 화면 이동
+		 * @return
+		 */
+		@GetMapping("resetPw")
+		public String resetPw() {
+			
+			return "member/resetPw";
+		}
+		
+		/** 비밀번호 찾기 이메일 발송
+		 * @param email
+		 * @param model
+		 * @return
+		 */
+		@ResponseBody
+		@PostMapping("")
+		public int postMethodName(@RequestBody String email, Model model) {
+			
+			String authKey = emailService.sendEmail("resetPw", email);
+			
+			if(authKey != null) {
+				return 1;
+			}
+			
+			return 0;
+		}
+		
+		/** 비밀번호 찾기
+		 * @param inputMember
+		 * @param ra
+		 * @return
+		 */
+		@PostMapping("resetPw")
+		   public String resetPw(Member inputMember, RedirectAttributes ra) {
+			 
+			  int result = service.resetPw(inputMember);
+			  
+			  // 가입 성공하면 메인으로 보내고 실패하면 회원 가입 페이지로 redirect
+			  String path = null;
+			  String message = null;
+			  
+			  if(result >0 ) { 
+				  message = "비밀번호가 변경되었습니다.";
+				  path= "member/login";
+			  }else {
+				  message = "비밀번호 변경 실패";
+				  path= "member/resetPw";
+			  }
+			 
+			  ra.addFlashAttribute("message", message);
+			  
+			  return "redirect:/" + path;
+		}
+		
+		
+		
+		
+		
+		
+		
+		
 
 
 }

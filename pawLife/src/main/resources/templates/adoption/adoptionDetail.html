@@ -39,7 +39,7 @@
                     <th:block th:text="*{adoptWriteDate}">yyyy-mm-dd</th:block>
                 </div>
 
-                <div class="bookmark" th:if="${session.loginMember}">
+                <div class="bookmark" th:if="${session.loginMember != null and session.loginMember?.memberNo!=adopt.memberNo}">
                         <i class="fa-regular fa-bookmark" id="bookmarkCheck"
                         th:classappend="*{bookmark == 1} ? fa-solid : fa-regular"></i>
                          
@@ -89,7 +89,7 @@
                 </div>
                 <th:block th:utext="*{adoptContent}">내용</th:block>
     
-                <button id="contactBtn">문의하기</button>
+                <button id="contactBtn" th:if="${session.loginMember?.memberNo!=adopt.memberNo and session.loginMember!=null}">문의하기</button>
 
                 <button id="listBtn" onclick="location.href='/adoption/adoptionList'">목록으로</button>
             </section>

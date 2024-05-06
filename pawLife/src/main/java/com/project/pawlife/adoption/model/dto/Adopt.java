@@ -57,4 +57,5 @@ public class Adopt {
 	private String contactAddress;
 	private String contactMarry;
 	private String contactJob;
+	private String memberEmail;
 }

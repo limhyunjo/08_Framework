@@ -3,7 +3,7 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>메인</title>
+   <title>PAWLIFE</title>
 
 
    <!-- templetes/common/common.html  조각 추가 -->
@@ -19,14 +19,11 @@
       <div class="slideshow-container">
 
          <div class="mySlides fade">
-            <img src="/images/dog1.jpg">
+            <img src="/images/image01.png">
          </div>
          
          <div class="mySlides fade">
-            <img src="/images/dog2.jpg">
-         </div>
-         <div class="mySlides fade">
-            <img src="/images/dog3.jpg">
+            <img src="/images/image02.png">
          </div>
       </div>
          
@@ -40,9 +37,7 @@
       <!-- 레이아웃용 빈공간, 빠른 도구 영역 -->
       <section class="content1">
          <h2>Pawlife에서 새로운 가족을 찾아보세요!</h2>
-         <h3>빠른 로그인</h3>
-         <button class="quickLogin">member01@kh.or.kr</button>
-         <button class="quickLogin">member02@kh.or.kr</button>
+         
       </section>
 
       <!-- 게시판 영역 -->
@@ -50,8 +45,7 @@
       
          <!-- 입양 게시판 -->
          <div class="card-container">
-            <a href="/adoption/adoptionList">입양 게시판<i class="fa-solid fa-chevron-right"></i></a>
-
+            <a href="/adoption/adoptionList">입양하기<i class="fa-solid fa-chevron-right"></i></a>
 
             <!-- 게시글 미존재시 -->
             <th:block th:if="${#lists.isEmpty(adoptList)}">
@@ -80,7 +74,14 @@
 
          <!-- 후기 게시판 -->
          <div class="card-container">
-            <a href="/review/reviewList">입양 후기 게시판<i class="fa-solid fa-chevron-right"></i></a>
+            <a href="/review/reviewList">입양 후 이야기<i class="fa-solid fa-chevron-right"></i></a>
+
+            <!-- 게시글 미존재시 -->
+            <th:block th:if="${#lists.isEmpty(reviewList)}">
+                <tr>
+                    <th colspan="6">게시글이 존재하지 않습니다.</th>
+                </tr>
+            </th:block>
 
             <!-- 게시글 존재시 -->
             <div class="card-row">
@@ -99,20 +100,7 @@
                </a>
             </div>
          </div>
-
-
-
-
-
-            <!-- <div class="card-row">
-               <a class="card" th:each="review : ${reviewList}" th:object="${review}" th:if="${adoptStat.index} lt 4"
-                  th:href="@{/review/reviewList/{reviewNo} (reviewNo=*{reviewNo})}">
-                    <img class="card-img" src="/images/logo.png" id="card">
-                    <span class="card-title" th:text="*{reviewTitle}">예쁜 강아지</span>
-               </a>
-            </div> -->
-
-         </div>
+         
       </section>
 
 

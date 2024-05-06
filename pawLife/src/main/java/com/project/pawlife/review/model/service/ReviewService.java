@@ -40,6 +40,19 @@ public interface ReviewService {
 	 */
 	int reviewDelete(Map<String, Integer> map);
 
+	/** 게시글 검색
+	 * @param paramMap
+	 * @param cp
+	 * @return
+	 */
+	Map<String, Object> selectReviewList(Map<String, Object> paramMap, int cp);
+
+	/** 조회수 증가
+	 * @param reviewNo
+	 * @return
+	 */
+	int updateReadCount(int reviewNo);
+
 
 
 

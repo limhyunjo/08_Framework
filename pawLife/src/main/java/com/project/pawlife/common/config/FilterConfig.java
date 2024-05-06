@@ -28,8 +28,7 @@ public class FilterConfig {
 		String[] filteringURL = {"/myPage/*",
 								"/adoption/adoptionWrite/*",
 								"/adoption/editAdoption/*",
-								"/adoption/adoptionContact/*",
-								"/adoption/contactAdopt/*"};
+								"/adoption/adoptionContact/*"};
 		
 		// 필터가 동작할 URL 세팅
 		

@@ -24,6 +24,13 @@ body{
     min-height: 100vh;      /* 최소 높이를 화면 비율 100% */
  }
 
+ @font-face {
+    font-family: 'SBAggroB';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroB.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 /* ********************************************************************* */
 .title-area{
     display: flex;
@@ -33,11 +40,16 @@ body{
 .btn-area>button{
     width: 60px;
     height: 30px;
-    background-color: #000;
+    background-color: #b92828;
     color: white;
     border: none;
     border-radius: 20px;
     cursor: pointer;
+}
+.btn-area>button:hover{
+    background-color: white;
+    color: #b92828;
+    border: 1px solid #b92828;
 }
 
 
@@ -64,6 +76,7 @@ body{
 }
 
 .right-bar{
+    text-align: right;
     padding: 10px 0;
 }
 
@@ -82,7 +95,7 @@ body{
     cursor: pointer;
 }
 #bookmarkCheck{
-    color: #0c8aff;
+    color: #ffbe0c;
 }
 
 .view-count{
@@ -138,15 +151,23 @@ td{
 #contactBtn{
     width: 300px;
     height: 40px;
-    background-color: #000;
+    background-color: #b92828;
     color: white;
     border: none;
     border-radius: 20px;
     font-size: 1.1em;
     font-weight: bold;
     margin-top: 100px;
-    margin-bottom: 100px;
     cursor: pointer;
+}
+#contactBtn:hover{
+    background-color: white;
+    color: #b92828;
+    border: 1px solid #b92828;
+}
+
+th{
+    background-color: #e2dbc9;
 }
 
 /* 목록으로 버튼 */
@@ -156,6 +177,7 @@ td{
     width: 100px;
     height: 40px;
     color: gray;
+    margin-top: 100px;
     margin-bottom: 100px;
     cursor: pointer;
 }

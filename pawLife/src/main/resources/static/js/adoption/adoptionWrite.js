@@ -210,8 +210,7 @@ submitPost.addEventListener("submit", e => {
     }
     /* 나이 숫자 여부 */
     if(isNaN(Number(infoAge.value))==true){
-        alert("나이를 숫자 형식으로 작성해주세요")
-        infoAge.innerText="";
+        alert("나이는 숫자만 기입 가능합니다.")
         infoAge.focus();
         e.preventDefault();
         return;

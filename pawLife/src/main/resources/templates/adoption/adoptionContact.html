@@ -14,8 +14,8 @@
 
             <div class="content">
                 
-                <form th:action="@{/contactAdopt/{adoptNo}/contact (adoptNo=${adoptNo})}" method="POST">
-
+                <form th:action="@{/adoption/contactAdopt/{adoptNo}/contact (adoptNo=${adoptNo})}" method="POST" id="contactFrm">
+                        
                     <p>* 다음 양식을 채워주세요</p>
 
                     <table class="formBox">
@@ -30,7 +30,7 @@
                                 
                                 <td>
                                     <label for="adoptGenderM">
-                                        <input type="radio" name="contactGender" id="adoptGenderM" value="M">M
+                                        <input type="radio" name="contactGender" id="adoptGenderM" value="M" checked>M
                                     </label> 
                                     
                                     <label for="adoptGenderW">
@@ -64,7 +64,7 @@
                                 
                                 <td>
                                     <label for="adoptMarr">
-                                        <input type="radio" name="contactMarry" id="adoptMarr" value="Y">Y
+                                        <input type="radio" name="contactMarry" id="adoptMarr" value="Y" checked>Y
                                     </label>          
                                     <label for="adoptMarrN">
                                         <input type="radio" name="contactMarry" id="adoptMarrN" value="N">N
@@ -91,7 +91,7 @@
 
     </main>
     <th:block th:replace="~{common/footer}"></th:block> 
-    <script src="/js/adoption/adoptionContact.js"></script>
+    <script src="/js/adoption/adoptContact.js"></script>
     
 </body>
 </html>

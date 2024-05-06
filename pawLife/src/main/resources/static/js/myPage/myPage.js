@@ -1,9 +1,9 @@
 // 마이 페이지 -> 개인 정보 수정 페이지로 보내는 동작
-const profileUpdateBtn= document.querySelector("#profileUpdateBtn");
+const profileUpdateBtn = document.querySelector("#profileUpdateBtn");
 
 profileUpdateBtn.addEventListener("click", () => {
-  location.href = "myPage-profileupdate"; 
-  
+  location.href = "myPage-profileupdate";
+
 });
 
 //------------------------------------------------------------------
@@ -38,192 +38,261 @@ const bookListBtn = document.querySelector("#bookListBtn");
 // 비동기로 내용 불러올 공간
 const profilebox = document.querySelector("#profileContainer");
 
-// 내가 값을 출력할id를 가져와서 
 
-//  이전 내용 삭제하고 조회 및 출력하는  코드
+
 
 //--------------------------------------------------------------------
 
+const newEl = (tagName, attr) => {
+
+  const tag = document.createElement(tagName);
+
+  for(let key in attr){
+    tag.setAttribute(key, attr[key]);
+  }
+
+  return tag;
+}
+
+
 /* 내가 입양한 리스트 비동기로 조회하기 */
 
-const selectAdoptBoard=()=>{
+const selectAdoptBoard = (cp) => {
 
-  fetch("/myPage/selectAdoptList")
+  fetch("/myPage/selectAdoptList?cp=" + cp)
 
-  .then(resp => resp.json())
+    .then(resp => resp.json())
 
-  .then(adoptList =>{
+    .then(map => {
+      const adoptList = map.adoptList;
+      const pg = map.pagination;
 
-    console.log(adoptList);
+      console.log(adoptList);
 
-    profilebox.innerHTML="";
-
-
-    
-    if (adoptList == null || adoptList.length === 0) {
-      // bookmarkList null이거나 빈 배열인 경우
-      // HTML 화면에 내용이 없다는 메시지를 표시하는 코드 추가
+      profilebox.innerHTML = "";
 
 
-    
 
-          // 없다면 새로운 메시지 요소를 생성합니다.
-         let message = document.createElement("div");
-          message.id = "noCommentMessage";
-          message.innerText = "아직 작성된 입양 게시물이 없습니다";
-          
-          // 그리고 해당 메시지를 보여줄 컨테이너에 추가합니다. (profilebox라고 가정합니다)
-          const profilebox = document.querySelector("#profileContainer");
-          profilebox.append(message);
-        
-      
+      if (adoptList == null || adoptList.length === 0) {
+        // bookmarkList null이거나 빈 배열인 경우
+        // HTML 화면에 내용이 없다는 메시지를 표시하는 코드 추가
 
 
-  } else {
-      // bookmarkList 값이 있는 경우
-      // 댓글을 화면에 표시하는 코드 추가
 
-      const table = document.createElement("table");
-      table.id="adoptkBox"
-      const tbody = document.createElement("tbody");
-      tbody.id="myAdoptList"
-      const thead=document.createElement("thead");
-      const tr = document.createElement("tr");
 
-            
-      /* 테이블 헤더 만들기 */
-      const headers=["","이름","나이","종","발견장소",""];
-      for(let head of headers){
-        
-        const th = document.createElement("th");
-        th.innerText = head;
-        tr.append(th);
-       
-      }
-      
-      thead.append(tr);
+        // 없다면 새로운 메시지 요소를 생성합니다.
+        let message = document.createElement("div");
+        message.id = "noCommentMessage";
+        message.innerText = "아직 작성된 입양 게시물이 없습니다";
 
-      table.append(thead);
-   
-    for(let adopt of adoptList){
-   
+        // 그리고 해당 메시지를 보여줄 컨테이너에 추가합니다. (profilebox라고 가정합니다)
+        const profilebox = document.querySelector("#profileContainer");
+        profilebox.append(message);
 
-      const arr = ['thumnail','adoptName','adoptAge','adoptType','adoptAddress'];
-      const tr= document.createElement("tr");
-      for(let key of arr){
-        const td = document.createElement("td");
-        
-        // 제목인 경우
-         if(key== 'thumnail'){
-          const img= document.createElement("img");
-          
-          img.src = adopt[key];
-          img.id="thumbnailP";
 
-          const a= document.createElement("a");
-         
-          a.href="/adoption/adoptionList/" + adopt.adoptNo;
-          
-          a.append(img); // 이미지를 링크(a) 태그에 추가
 
-          td.append(a);
-        
-         }else{
-  
-          td.innerHTML = adopt[key];
-         }
+      } else {
+        // bookmarkList 값이 있는 경우
+        // 댓글을 화면에 표시하는 코드 추가
 
-        tr.append(td);
-      }
+        const table = document.createElement("table");
+        table.id = "adoptkBox"
+        const tbody = document.createElement("tbody");
+        tbody.id = "myAdoptList"
+        const thead = document.createElement("thead");
+        const tr = document.createElement("tr");
 
-    // 수정 버튼
-        const editButton = document.createElement("button");
-        editButton.innerText = "수정";
-        editButton.addEventListener("click", () => {
+
+        /* 테이블 헤더 만들기 */
+        const headers = ["", "이름", "나이", "종", "발견장소", "입양완료여부"];
+        for (let head of headers) {
+
+          const th = document.createElement("th");
+          th.innerText = head;
+          tr.append(th);
+
+        }
+
+        thead.append(tr);
+
+        table.append(thead);
+
+        for (let adopt of adoptList) {
+
+
+          const arr = ['thumnail', 'adoptName', 'adoptAge', 'adoptType', 'adoptAddress'];
+          const tr = document.createElement("tr");
+          for (let key of arr) {
+            const td = document.createElement("td");
+
+            // 제목인 경우
+            if (key == 'thumnail') {
+              const img = document.createElement("img");
+              img.classList.add("adopt-img"); // 이미지에 클래스 추가
+
+              img.src = adopt[key];
+              img.id = "thumbnailP";
+
+              const a = document.createElement("a");
+
+              a.href = "/adoption/adoptionList/" + adopt.adoptNo;
+
+              a.append(img); // 이미지를 링크(a) 태그에 추가
+
+              td.append(a);
+
+            } else {
+
+              td.innerHTML = adopt[key];
+            }
+
+            tr.append(td);
+          }
+
+          // 수정 버튼
+          const editButton = document.createElement("button");
+          editButton.innerText = "수정";
+          editButton.addEventListener("click", () => {
             // 로그인한 회원이 작성한 입양게시글의 수정 페이지로 보내기
-            location.href = location.pathname.replace('myPage/first', 'adoption/editAdoption') 
-            + "/"+ adopt.adoptNo
-            + "/update?";
+            location.href = location.pathname.replace('myPage/first', 'adoption/editAdoption')
+              + "/" + adopt.adoptNo
+              + "/update?";
+
+          });
+          const editCell = document.createElement("td");
+          editCell.append(editButton);
+          tr.append(editCell);
+
+          // 입양완료 버튼
+          const adoptComFlButton = document.createElement("button");
+          adoptComFlButton.name = "adoptComFlButton"
+          adoptComFlButton.innerHTML = adopt.adoptCompl;
+
+          editCell.append(adoptComFlButton);
+
+          adoptComFlButton.addEventListener("click", () => {
+            // 변경할 입양 게시글 번호, 입양 완료 여부 (Y<->N)
+            let adoptCompl = adoptComFlButton.innerHTML === 'Y' ? 'N' : 'Y';
             
-        });
-        const editCell = document.createElement("td");
-        editCell.append(editButton);
-        tr.append(editCell);
+            
 
-        // 입양완료 버튼
-        const adoptDelButton = document.createElement("button");
-        adoptDelButton.name="adoptDelButton"
-        adoptDelButton.innerText = "입양 완료 수정";
-        adoptDelButton.addEventListener("click", () => {
-            // 입양 완료 버튼 클릭 시 해당 게시글의 adoptDelFl 'Y'로 바꾸기
-            // 입양 완료 버튼 누르면 이미 입양 완료된 애는 이미 입양 완료 되었다고 뜨고
-            // 
-               
+           if (adoptCompl === 'Y') {
+            
+              if (!confirm("입양 완료 하시겠습니까?")) {
                 
-                if (adopt.adoptDelFl == 'N') {
-                  // 확인 다이얼로그 표시
-                  if (!confirm("입양 완료 하시겠습니까?")) {
-                      // 취소를 선택한 경우 알림 표시 및 기본 이벤트 중지
-                      alert("취소되었습니다");
-                      return; // 함수 종료
-                  }
-          
-                }else{
-
-
-                  fetch("adoptDelButton")
-
-                  .then(resp => resp.json())
+                alert("취소되었습니다");
+                return; 
                 
-                  .then(result =>{
+              }
+            } 
+            if (adoptCompl === 'N') {
+            
+            
+            
+              if (!confirm("입양 완료를 취소 하시겠습니까?")) {
+                
+                alert("취소되었습니다");
+                return; 
+                
+              }
+            
+            } 
+            
+            const obj = { "adoptNo": adopt.adoptNo, "adoptCompl": adoptCompl };
 
-                    if(result > 0){
-                      alert("입양 완료 되었습니다");
-                    }
-                    
-                    
-                  });
+            fetch("adoptDelComplete", {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(obj) // obj를 JSON으로 변경
+            })
+              .then(resp => resp.text())
+              .then(result => {
+                if (result > 0) {
+                  alert("입양 상태가 변경 되었습니다");
+                  adoptComFlButton.innerText = adoptCompl;
+                } else {
+                  alert("입양 완료 변경이 실패하였습니다")
                 }
+              });
+          });
 
 
-                  
-                
+          tbody.append(tr);
 
+        }
 
-
-
-                
+        table.append(tbody);
+        profilebox.append(table);
         
-                
-           });
+
+
+        // -------------------------------------------------------------------
+        
+      
+        /* pagination */
+        const div = newEl("div", {"class" : "pagination-area"});
+        div.class="pageBox";
+        const ul = newEl("ul", {"class" : "pagination"});
+
+        div.append(ul);
+        
+        /* 앞쪽 화살표 */
+        const startList = newEl("li") 
+        const startSpan = newEl("span");
+        startSpan.id="stP";
+        startSpan.innerHTML = '&lt;&lt;'
+        
+        startList.append(startSpan);
+        ul.append(startList);
        
-        editCell.append(adoptDelButton);
-        tr.append(editCell);
-        // tbody의 자식으로 tr( 한 줄 ) 추가
-        tbody.append(tr);
-        
-     }
-
-     table.append(tbody);
-     profilebox.append(table);
      
+        startSpan.addEventListener("click", () => selectAdoptBoard(pg.startPage) )
+        
+        
+        /* 숫자 부분 */
+        for(let i=pg.startPage ; i <= pg.endPage ; i ++){
+          const li = newEl("li")
+          li.class="current";
+          const span = newEl("span");
+          span.innerText = i;
+          li.append(span);
+          ul.append(li);
 
+          // 현재 페이지인 경우
+          if(i == pg.currentPage) span.classList.add("current");
+          else{
+            span.addEventListener("click", () => selectAdoptBoard(i) )
+          }
 
+        }
 
-    }
+       /* 뒤쪽 화살표 */
+       
+       const endList = newEl("li") 
+        const endSpan = newEl("span");
+        
+        endSpan.innerHTML = '&gt;&gt;';
+        
+        endList.append(endSpan);
+        ul.append(endList);
+        endSpan.addEventListener("click", () => selectAdoptBoard(pg.endPage) )
+        
+        
 
+        profilebox.append(div);
+      }
 
-  });
-
+    });
 
 }
 
-adoptionListBtn.addEventListener('click',()=>{
- 
-  selectAdoptBoard();
 
+
+adoptionListBtn.addEventListener('click', () => {
+  selectAdoptBoard(1);
 
 });
+
 
 
 
@@ -231,113 +300,167 @@ adoptionListBtn.addEventListener('click',()=>{
 /* 내가 쓴 후기 게시글 비동기로 조회하기 */
 
 // 함수 만들기
-const selectMyReviewBoard = () =>{
-
- 
-  fetch("/myPage/selectReview")
-
-  .then(response => response.json())
-
-  .then(reviewList=>{
-     // list를 담아오자
-    
-     // list 확인
-     console.log(reviewList);
-
-   
-     profilebox.innerHTML =""; // 기존 내용 지우기
+const selectMyReviewBoard = (cp) => {
 
 
-     if (reviewList == null || reviewList.length === 0) {
-      // commentList가 null이거나 빈 배열인 경우
-      // HTML 화면에 내용이 없다는 메시지를 표시하는 코드 추가
+  fetch("/myPage/selectReview?cp=" + cp)
 
-     // 기존 요소 지우기
+    .then(response => response.json())
+
+    .then( map => {
+      
+      const reviewList = map.reviewList;
+      const pg = map.pagination;
+
+      console.log(reviewList);
+
+
+      profilebox.innerHTML = ""; // 기존 내용 지우기
+
+
+      if (reviewList == null || reviewList.length === 0) {
+        // commentList가 null이거나 빈 배열인 경우
+        // HTML 화면에 내용이 없다는 메시지를 표시하는 코드 추가
+
+        // 기존 요소 지우기
         // 없다면 새로운 메시지 요소를 생성합니다.
         let message = document.createElement("div");
         message.id = "noCommentMessage";
         message.innerText = "아직 작성된 후기 게시글이 없습니다";
-        
+
         // 그리고 해당 메시지를 보여줄 컨테이너에 추가합니다. (profilebox라고 가정합니다)
         const profilebox = document.querySelector("#profileContainer");
         profilebox.append(message);
-      
-    
-   
 
 
-  } else {
 
-     const table = document.createElement("table");
-     table.id='reviewbox'
-     const tbody = document.createElement("tbody");
-     tbody.id='reviewList'
-      const thead=document.createElement("thead");
-      const tr = document.createElement("tr");
 
-      
-      /* 테이블 헤더 만들기 */
-      const headers=["게시글 제목", "조회수","게시글 작성일"];
-      for(let head of headers){
-        const th = document.createElement("th");
-        th.innerText = head;
-        tr.append(th);
-      }
-      
-      thead.append(tr);
 
-      table.append(thead);
-   
-    for(let review of reviewList){
-   
+      } else {
 
-      const arr = ['reviewTitle', 'readCount', 'reviewWriteDate'];
-      const tr= document.createElement("tr");
+        const table = document.createElement("table");
+        table.id = 'reviewbox'
+        const tbody = document.createElement("tbody");
+        tbody.id = 'reviewList'
+        const thead = document.createElement("thead");
+        const tr = document.createElement("tr");
 
-      for(let key of arr){
-        const td = document.createElement("td");
 
-        // 제목인 경우
-         if(key== 'reviewTitle'){
-          const a= document.createElement("a");
-          a.innerText = review[key]; // 제목을 a 태그 내용으로 대입
-          a.href="/review/reviewList/" + review.reviewNo;
-          td.append(a);
+        /* 테이블 헤더 만들기 */
+        const headers = ["게시글 제목", "조회수", "게시글 작성일"];
+        for (let head of headers) {
+          const th = document.createElement("th");
+          th.innerText = head;
+          tr.append(th);
+        }
+
+        thead.append(tr);
+
+        table.append(thead);
+
+
+        for (let review of reviewList) {
+
+
+          const arr = ['reviewTitle', 'readCount', 'reviewWriteDate'];
+          const tr = document.createElement("tr");
+
+          for (let key of arr) {
+            const td = document.createElement("td");
+
+            // 제목인 경우
+            if (key == 'reviewTitle') {
+              const a = document.createElement("a");
+              a.innerText = review[key]; // 제목을 a 태그 내용으로 대입
+              a.href = "/review/reviewList/" + review.reviewNo;
+              td.append(a);
+
+            } else {
+
+              td.innerText = review[key];
+            }
+
+            tr.append(td);
+          }
+          // tbody의 자식으로 tr( 한 줄 ) 추가
+          tbody.append(tr);
+
+        }
+
+        table.append(tbody);
+
+        profilebox.append(table);
         
-         }else{
-  
-          td.innerText = review[key];
+         //---------------------- 후기 게시글 페이지네이션-----------------------------
+         /* pagination */
+         const div = newEl("div", {"class" : "pagination-area"});
+         div.class="pageBox";
+         const ul = newEl("ul", {"class" : "pagination"});
+ 
+         div.append(ul);
+         
+         /* 앞쪽 화살표 */
+         const startList = newEl("li") 
+         const startSpan = newEl("span");
+         startSpan.id="stP";
+         startSpan.innerHTML = '&lt;&lt;'
+         
+         startList.append(startSpan);
+         ul.append(startList);
+        
+      
+         startSpan.addEventListener("click", () => selectMyReviewBoard(pg.startPage) )
+         
+         
+         /* 숫자 부분 */
+         for(let i=pg.startPage ; i <= pg.endPage ; i ++){
+           const li = newEl("li")
+           li.class="current";
+           const span = newEl("span");
+           span.innerText = i;
+           li.append(span);
+           ul.append(li);
+ 
+           // 현재 페이지인 경우
+           if(i == pg.currentPage) span.classList.add("current");
+           else{
+             span.addEventListener("click", () => selectMyReviewBoard(i) )
+           }
+ 
          }
-
-        tr.append(td);
-      }
-        // tbody의 자식으로 tr( 한 줄 ) 추가
-        tbody.append(tr);
+ 
+        /* 뒤쪽 화살표 */
         
-     }
+        const endList = newEl("li") 
+         const endSpan = newEl("span");
+         
+         endSpan.innerHTML = '&gt;&gt;';
+         
+         endList.append(endSpan);
+         ul.append(endList);
+         endSpan.addEventListener("click", () => selectMyReviewBoard(pg.endPage) )
+         
+         
+         profilebox.append(div);
 
-     table.append(tbody);
-     profilebox.append(table);
-     
+      }
 
-    }
-   
-  });
+    });
 }
 
 
 // button 클릭시 작동하게 하기
 // 버튼 클릭시 profileContainer 내부 비우고 위에서 만든 전체 조회 함수 호출
-boardListBtn.addEventListener('click',()=>{
+boardListBtn.addEventListener('click', () => {
 
   // 화면 비워주고
   // myPage의 section 내부 -> 여기 내부를 비우고 다른 화면을 부르는 코드를 쓴다
 
   // 다른 화면이 보이는 코드
-    // profilecontainer가 reviewList로 바꿔어야 함
-   /*  getInnerHTML(); */
-   selectMyReviewBoard();
-   showMessage();
+  // profilecontainer가 reviewList로 바꿔어야 함
+  /*  getInnerHTML(); */
+  selectMyReviewBoard(1);
+ 
 
 
 });
@@ -352,117 +475,169 @@ boardListBtn.addEventListener('click',()=>{
 /* ---- 내가 쓴 댓글 비동기로 조회하기 ---- */
 
 // 함수 만들기
-const selectMyCommentBoard = () =>{
-
- 
-  fetch("/myPage/selectComment")
-
-  .then(resp => resp.json())
-
-  .then(commentList=>{
-     // list를 담아오자
-    console.log(commentList);
-
-     profilebox.innerHTML =""; // 기존 내용 지우기
+const selectMyCommentBoard = (cp) => {
 
 
-     if (commentList == null || commentList.length === 0) {
-      // commentList가 null이거나 빈 배열인 경우
-      // HTML 화면에 내용이 없다는 메시지를 표시하는 코드 추가
+  fetch("/myPage/selectComment?cp=" + cp)
 
-     // 기존 요소 지우기
+    .then(resp => resp.json())
+
+    .then(map => {
+
+      const commentList = map.commentList;
+      const pg = map.pagination;
+      // list를 담아오자
+      console.log(commentList);
+
+      profilebox.innerHTML = ""; // 기존 내용 지우기
+
+
+      if (commentList == null || commentList.length === 0) {
+        // commentList가 null이거나 빈 배열인 경우
+        // HTML 화면에 내용이 없다는 메시지를 표시하는 코드 추가
+
+        // 기존 요소 지우기
         // 없다면 새로운 메시지 요소를 생성합니다.
         let message = document.createElement("div");
         message.id = "noCommentMessage";
         message.innerText = "아직 작성된 댓글이 없습니다";
-        
+
         // 그리고 해당 메시지를 보여줄 컨테이너에 추가합니다. (profilebox라고 가정합니다)
         const profilebox = document.querySelector("#profileContainer");
         profilebox.append(message);
+
+
+
+
+
+      } else {
+        // commentList에 값이 있는 경우
+        // 댓글을 화면에 표시하는 코드 추가
+
+        const table = document.createElement("table");
+        table.id = "commentBox"
+        const tbody = document.createElement("tbody");
+        tbody.id = "commentList"
+        const thead = document.createElement("thead");
+        const tr = document.createElement("tr");
+
+
+        /* 테이블 헤더 만들기 */
+        const headers = ["게시글 제목", "댓글", "댓글 작성일"];
+        for (let head of headers) {
+
+          const th = document.createElement("th");
+          th.innerText = head;
+          tr.append(th);
+
+        }
+
+        thead.append(tr);
+
+        table.append(thead);
+
+        for (let com of commentList) {
+
+
+          const arr = ['reviewTitle', 'commentContent', 'commentWriteDate'];
+          const tr = document.createElement("tr");
+
+          for (let key of arr) {
+            const td = document.createElement("td");
+
+            // 제목인 경우
+            if (key == 'reviewTitle') {
+              const a = document.createElement("a");
+              a.innerText = com[key]; // 제목을 a 태그 내용으로 대입
+              a.href = "/review/reviewList/" + com.reviewNo;
+
+              td.append(a);
+
+            } else {
+
+              td.innerText = com[key];
+            }
+
+            tr.append(td);
+          }
+          // tbody의 자식으로 tr( 한 줄 ) 추가
+          tbody.append(tr);
+
+        }
+
+        table.append(tbody);
+        profilebox.append(table);
+
+
+         /* pagination */
+         const div = newEl("div", {"class" : "pagination-area"});
+         div.class="pageBox";
+         const ul = newEl("ul", {"class" : "pagination"});
+ 
+         div.append(ul);
+         
+         /* 앞쪽 화살표 */
+         const startList = newEl("li") 
+         const startSpan = newEl("span");
+         startSpan.id="stP";
+         startSpan.innerHTML = '&lt;&lt;'
+         
+         startList.append(startSpan);
+         ul.append(startList);
+        
       
-    
-   
-
-
-  } else {
-      // commentList에 값이 있는 경우
-      // 댓글을 화면에 표시하는 코드 추가
-
-      const table = document.createElement("table");
-      table.id="commentBox"
-      const tbody = document.createElement("tbody");
-      tbody.id="commentList"
-      const thead=document.createElement("thead");
-      const tr = document.createElement("tr");
-
-            
-      /* 테이블 헤더 만들기 */
-      const headers=["게시글 제목","댓글","댓글 작성일"];
-      for(let head of headers){
-        
-        const th = document.createElement("th");
-        th.innerText = head;
-        tr.append(th);
-       
-      }
-      
-      thead.append(tr);
-
-      table.append(thead);
-   
-    for(let com of commentList){
-   
-
-      const arr = ['reviewTitle', 'commentContent', 'commentWriteDate'];
-      const tr = document.createElement("tr"); 
-
-      for(let key of arr){
-        const td = document.createElement("td");
-        
-        // 제목인 경우
-         if(key== 'reviewTitle'){
-          const a= document.createElement("a");
-          a.innerText = com[key]; // 제목을 a 태그 내용으로 대입
-          a.href="/review/reviewList/" + com.reviewNo;
-          
-          td.append(a);
-        
-         }else{
-  
-          td.innerText = com[key];
+         startSpan.addEventListener("click", () => selectMyCommentBoard(pg.startPage) )
+         
+         
+         /* 숫자 부분 */
+         for(let i=pg.startPage ; i <= pg.endPage ; i ++){
+           const li = newEl("li")
+           li.class="current";
+           const span = newEl("span");
+           span.innerText = i;
+           li.append(span);
+           ul.append(li);
+ 
+           // 현재 페이지인 경우
+           if(i == pg.currentPage) span.classList.add("current");
+           else{
+             span.addEventListener("click", () => selectMyCommentBoard(i) )
+           }
+ 
          }
-
-        tr.append(td);
-      }
-        // tbody의 자식으로 tr( 한 줄 ) 추가
-        tbody.append(tr);
+ 
+        /* 뒤쪽 화살표 */
         
-     }
+        const endList = newEl("li") 
+         const endSpan = newEl("span");
+         
+         endSpan.innerHTML = '&gt;&gt;';
+         
+         endList.append(endSpan);
+         ul.append(endList);
+         endSpan.addEventListener("click", () => selectMyCommentBoard(pg.endPage) )
+      
 
-     table.append(tbody);
-     profilebox.append(table);
-     
+         profilebox.append(div);
+
+      }
 
 
-
-  }
-
-
-  });
+    });
 }
 
 
 // button 클릭시 작동하게 하기
 // 버튼 클릭시 profileContainer 내부 비우고 위에서 만든 전체 조회 함수 호출
-commentListBtn.addEventListener('click',()=>{
+commentListBtn.addEventListener('click', () => {
 
-  
+
 
   // 다른 화면이 보이는 코드
-    // profilecontainer가 reviewList로 바꿔어야 함
-   /*  getInnerHTML(); */
-   selectMyCommentBoard();
-   showMessage();
+  // profilecontainer가 reviewList로 바꿔어야 함
+  /*  getInnerHTML(); */
+  selectMyCommentBoard(1);
+
 
 
 });
@@ -471,185 +646,210 @@ commentListBtn.addEventListener('click',()=>{
 
 /* 내가 북마크한 게시물 비동기로 조회하기 */
 
-const selectMyBookMark=()=>{
+const selectMyBookMark = (cp) => {
 
-  fetch("/myPage/selectBookMark")
+  fetch("/myPage/selectBookMark?cp=" + cp)
 
-  .then(resp => resp.json())
-
-  .then(bookmarkList =>{
-
-    console.log(bookmarkList);
-
-    profilebox.innerHTML="";
+    .then(resp => resp.json())
 
 
-    
-    if (bookmarkList == null || bookmarkList.length === 0) {
-      // bookmarkList null이거나 빈 배열인 경우
-      // HTML 화면에 내용이 없다는 메시지를 표시하는 코드 추가
+    .then(map => {
 
-     // 기존 요소 지우기
-       // 없다면 새로운 메시지 요소를 생성합니다.
-       let message = document.createElement("div");
-       message.id = "noCommentMessage";
-       message.innerText = "아직 북마크한 게시물이 없습니다";
-       
-       // 그리고 해당 메시지를 보여줄 컨테이너에 추가합니다. (profilebox라고 가정합니다)
-       const profilebox = document.querySelector("#profileContainer");
-       profilebox.append(message);
-     
-   
-   
-
-
-  } else {
-      // bookmarkList 값이 있는 경우
-      // 댓글을 화면에 표시하는 코드 추가
-
-      const table = document.createElement("table");
-      table.id="bookMarkBox"
-      const tbody = document.createElement("tbody");
-      tbody.id="bookMarkList"
-      const thead=document.createElement("thead");
-      const tr = document.createElement("tr");
-
-            
-      /* 테이블 헤더 만들기 */
-      const headers=["게시글 제목","입양 상태"];
-      for(let head of headers){
-        
-        const th = document.createElement("th");
-        th.innerText = head;
-        tr.append(th);
-       
-      }
       
-      thead.append(tr);
+      const bookmarkList= map.bookmarkList;
+      const pg = map.pagination;
 
-      table.append(thead);
-   
-    for(let mark of bookmarkList){
-   
+      console.log(bookmarkList);
 
-      const arr = ['adoptTitle', 'adoptCompl'];
-      const tr= document.createElement("tr");
-      for(let key of arr){
-        const td = document.createElement("td");
+      profilebox.innerHTML = "";
+
+
+
+      if (bookmarkList == null || bookmarkList.length === 0) {
+        // bookmarkList null이거나 빈 배열인 경우
+        // HTML 화면에 내용이 없다는 메시지를 표시하는 코드 추가
+
+        // 기존 요소 지우기
+        // 없다면 새로운 메시지 요소를 생성합니다.
+        let message = document.createElement("div");
+        message.id = "noCommentMessage";
+        message.innerText = "아직 북마크한 게시물이 없습니다";
+
+        // 그리고 해당 메시지를 보여줄 컨테이너에 추가합니다. (profilebox라고 가정합니다)
+        const profilebox = document.querySelector("#profileContainer");
+        profilebox.append(message);
+
+
+
+
+
+      } else {
+        // bookmarkList 값이 있는 경우
+        // 댓글을 화면에 표시하는 코드 추가
+
+        const table = document.createElement("table");
+        table.id = "bookMarkBox"
+        const tbody = document.createElement("tbody");
+        tbody.id = "bookMarkList"
+        const thead = document.createElement("thead");
+        const tr = document.createElement("tr");
+
+
+        /* 테이블 헤더 만들기 */
+        const headers = ["게시글 제목", "입양 상태"];
+        for (let head of headers) {
+
+          const th = document.createElement("th");
+          th.innerText = head;
+          tr.append(th);
+
+        }
+
+        thead.append(tr);
+
+        table.append(thead);
+
+        for (let mark of bookmarkList) {
+
+
+          const arr = ['adoptTitle', 'adoptCompl'];
+          const tr = document.createElement("tr");
+          for (let key of arr) {
+            const td = document.createElement("td");
+
+            // 제목인 경우
+            if (key == 'adoptTitle') {
+              const a = document.createElement("a");
+              a.innerText = mark[key]; // 제목을 a 태그 내용으로 대입
+              a.href = "/adoption/adoptionList/" + mark.adoptNo;
+              td.append(a);
+
+            } else {
+
+              td.innerHTML = mark[key];
+
+              if (mark[key] == 'N') {
+                td.innerText = '미입양';
+              } else {
+                td.innerText = '입양완료';
+              }
+
+            }
+
+            tr.append(td);
+          }
+          // tbody의 자식으로 tr( 한 줄 ) 추가
+          tbody.append(tr);
+
+        }
+
+        table.append(tbody);
+        profilebox.append(table);
+
+
         
-        // 제목인 경우
-         if(key== 'adoptTitle'){
-          const a= document.createElement("a");
-          a.innerText = mark[key]; // 제목을 a 태그 내용으로 대입
-          a.href="/adoption/adoptionList/" + mark.adoptNo;
-          td.append(a);
+         /* pagination */
+         const div = newEl("div", {"class" : "pagination-area"});
+         div.class="pageBox";
+         const ul = newEl("ul", {"class" : "pagination"});
+ 
+         div.append(ul);
+         
+         /* 앞쪽 화살표 */
+         const startList = newEl("li") 
+         const startSpan = newEl("span");
+         startSpan.id="stP";
+         startSpan.innerHTML = '&lt;&lt;'
+         
+         startList.append(startSpan);
+         ul.append(startList);
         
-         }else{
-  
-          td.innerHTML = mark[key];
+      
+         startSpan.addEventListener("click", () => selectMyBookMark(pg.startPage) )
+         
+         
+         /* 숫자 부분 */
+         for(let i=pg.startPage ; i <= pg.endPage ; i ++){
+           const li = newEl("li")
+           li.class="current";
+           const span = newEl("span");
+           span.innerText = i;
+           li.append(span);
+           ul.append(li);
+ 
+           // 현재 페이지인 경우
+           if(i == pg.currentPage) span.classList.add("current");
+           else{
+             span.addEventListener("click", () => selectMyBookMark(i) )
+           }
+ 
          }
-
-        tr.append(td);
-      }
-        // tbody의 자식으로 tr( 한 줄 ) 추가
-        tbody.append(tr);
+ 
+        /* 뒤쪽 화살표 */
         
-     }
+        const endList = newEl("li") 
+         const endSpan = newEl("span");
+         
+         endSpan.innerHTML = '&gt;&gt;';
+         
+         endList.append(endSpan);
+         ul.append(endList);
+         endSpan.addEventListener("click", () => selectMyBookMark(pg.endPage) )
+      
 
-     table.append(tbody);
-     profilebox.append(table);
-     
+         profilebox.append(div);
+
+      }
 
 
-
-    }
-
-
-  });
-
-
+    });
 }
 
-bookListBtn.addEventListener('click',()=>{
- 
-  selectMyBookMark();
+
+
+bookListBtn.addEventListener('click', () => {
+
+  selectMyBookMark(1);
 
 
 });
 
 
-
-
 // ---------------------------------------------------------- ----------
 
-/* 첫 화면에서 프로필 페이지 바로 ajax로 연결 + 프로필 수정 */
 
-/* 프로필 첫 화면 만들기 */
+/* 프로필 버튼 클릭시 첫화면으로 보내주기 */
 
-// 함수 만들기
-const selectMyProfile = () =>{
-
- 
-  fetch("/myPage/selectProfile")
-
-  .then(response => response.json())
-
-  .then(profileList=>{
-     // list를 담아오자
-    
-     // list 확인
-     console.log(profileList);
-
-   
-     profilebox.innerHTML =""; // 기존 내용 지우기
-
-    let formData = new FormData();
-
-
-    formData.append('statusCheck', '-1');
-    formData.append('imageInput', 'blob', 'fileName');
-       
-
-
-  });
-}
 
 
 // button 클릭시 작동하게 하기
-// 버튼 클릭시 profileContainer 내부 비우고 위에서 만든 전체 조회 함수 호출
-profileListBtn.addEventListener('click',()=>{
 
-  // 화면 비워주고
-  // myPage의 section 내부 -> 여기 내부를 비우고 다른 화면을 부르는 코드를 쓴다
+profileListBtn.addEventListener('click', () => {
 
-  // 다른 화면이 보이는 코드
-    
-   /*  getInnerHTML(); */
-   selectMyProfile();
-
+  location.href = "myPage-first";
 
 
 });
 
 
 //---------------------------------------------------------------------------------
-/* 마이페이지 프로필  */ 
+/* 마이페이지 프로필  */
 
 
 /* 회원 탈퇴 */
 
 const memberDel = document.querySelector("#memberDel");
 
-if(memberDel !=null){
+if (memberDel != null) {
 
-  memberDel.addEventListener("submit", e=>{
+  memberDel.addEventListener("submit", e => {
 
-    if( !confirm("정말 탈퇴하시겠습니까?")){ 
+    if (!confirm("정말 탈퇴하시겠습니까?")) {
 
       alert("취소되었습니다");
       e.preventDefault();
       return;
-     }
+    }
 
 
   })

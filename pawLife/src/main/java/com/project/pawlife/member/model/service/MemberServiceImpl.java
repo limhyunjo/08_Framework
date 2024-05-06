@@ -102,5 +102,17 @@ public Member login(Member inputMember) {
 		
 		return mapper.checkTel(memberTel);
 	}
+
+	// 비밀번호 변경
+	@Override
+	public int resetPw(Member inputMember) {
+		
+		// 입력된 비밀 번호를 암호화 하여 inputMember에 세팅
+		String encPw= bcrypt.encode(inputMember.getMemberPw());
+		
+		inputMember.setMemberPw(encPw);
+		
+		return mapper.resetPw(inputMember);
+	}
 		
 }

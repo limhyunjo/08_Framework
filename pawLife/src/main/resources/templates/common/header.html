@@ -6,13 +6,36 @@
     <!-- 로그인, 회원가입 -->
     <section class="header-top-menu">
         <div class="login-area">
-            <th:block th:if="${session.loginMember != null}">
+
+            <!-- 로그인, 프로필이미지/닉네임/로그이웃 -->
+            <div class="login-box" th:if="${session.loginMember != null}">
+                <div class="profileArea">
+                    <a href="/myPage/first">
+                        <img th:with="user=#{user.default.image}" 
+                        th:src="${session.loginMember.profileImg ?:user}"  
+                          id="memberProfile">&nbsp;
+                        <span th:text="${session.loginMember.memberNickname}" id="nickname">닉네임</span>&nbsp;<span>님</span>
+                    </a>
+                </div>
+                <a href="/member/logout" id="logoutBtn">로그아웃</a>
+            </div>
+
+            <!-- 미로그인, 로그인/회원가입 -->
+            <div class="login-area" th:if="${session.loginMember == null}">
+                <a href="/member/login">로그인</a>|<a href="/member/signup">회원가입</a>
+            </div>
+
+
+
+
+
+
+            <!-- <th:block th:if="${session.loginMember != null}">
             <div class="login-box">
                 <a href="/myPage/first">
                     <img th:with="user=#{user.default.image}" 
                     th:src="${session.loginMember.profileImg ?:user}"  
-                      id="memberProfile"
-                      alt="프로필 이미지">
+                      id="memberProfile">
                 </a>
             </div>
 
@@ -26,7 +49,7 @@
                     <a href="/member/logout" id="logoutBtn">로그아웃</a>
                 </th:block>
 
-            </div>
+            </div> -->
         </div>
     </section>
 
@@ -41,8 +64,8 @@
         <nav>
             <ul>
                 <li><a href="/">홈</a></li>
-                <li><a href="/adoption/adoptionList">입양</a></li>
-                <li><a href="/review/reviewList">후기</a></li>
+                <li><a href="/adoption/adoptionList">입양하기</a></li>
+                <li><a href="/review/reviewList">입양 후 이야기</a></li>
                 <li><a href="/myPage/first">마이페이지</a></li>
             </ul>
         </nav>

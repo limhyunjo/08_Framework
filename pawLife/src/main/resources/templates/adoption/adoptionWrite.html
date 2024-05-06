@@ -14,7 +14,7 @@
         
         <form action="/adoption/adoptionInsert" method="POST" id="submitPost" enctype="multipart/form-data">
             <section class="board">
-                <h1><input type="text" placeholder="제목" id="adoptTitle" name="adoptTitle"></h1>
+                <h1><input type="text" placeholder="제목" id="adoptTitle" name="adoptTitle" class="inputTitle"></h1>
                 <section class="board-box">
                     <div class="info-box">
                         <!-- 이미지 칸 -->
@@ -40,7 +40,7 @@
                     <textarea name="adoptContent" id="adoptContent" cols="100" rows="10" placeholder="내용을 입력해주세요."></textarea>
                    
                    
-                    <button>글작성</button>
+                    <button id="writeBtn">글작성</button>
 
                     <!-- onclick="submitPost()" -->
     

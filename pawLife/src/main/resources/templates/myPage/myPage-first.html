@@ -37,10 +37,10 @@
               <button type="button" class= "button" id="profileListBtn">프로필</button>
             
             
-              <button type="button" class= "button" id="adoptionListBtn">입양 리스트</button>
+              <button type="button" class= "button" id="adoptionListBtn">입양하기</button>
            
             
-              <button type="button" class= "button" id="boardListBtn">내가 쓴 게시글</button>
+              <button type="button" class= "button" id="boardListBtn">입양 후 이야기</button>
             
             
               <button type="button" class= "button" id="commentListBtn">내가 쓴 댓글</button>
@@ -114,6 +114,8 @@
                   </form>
 
               </div>
+
+              
             
         </div>
                     
@@ -128,9 +130,7 @@
     <!-- 푸터 추가 -->
     <th:block th:replace="~{common/footer}"></th:block>
 
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+   
       <!-- 타임리프 코드를 JS 코드로 해석해줌 -->
     <script th:inline="javascript">
       const loginMemberProfileImg = /* [[${session.loginMember.profileImg}]] */"회원 프로필 이미지";

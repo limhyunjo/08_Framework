@@ -35,8 +35,12 @@ public class EmailServiceImpl implements EmailService{
 		String subject = null;
 		
 		switch (htmlName) {
+		
 		case "sendEmail": 
 			subject = "[PAWLIFE] 회원가입 인증번호 입니다."; break;
+		
+		case "resetPw": 
+			subject = "[PAWLIFE] 비밀번호 변경 인증번호 입니다."; break;
 		}
 
 		// 인증 메일 발송

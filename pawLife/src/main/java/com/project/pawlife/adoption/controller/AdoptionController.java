@@ -2,6 +2,10 @@ package com.project.pawlife.adoption.controller;
 
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +27,9 @@ import com.project.pawlife.adoption.model.dto.Adopt;
 import com.project.pawlife.adoption.model.service.AdoptionService;
 import com.project.pawlife.member.model.dto.Member;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -69,14 +76,17 @@ public class AdoptionController {
 	
 	/** 입양 상세 조회
 	 * @return
+	 * @throws ParseException 
 	 */
 	@GetMapping("adoptionList/{adoptNo:[0-9]+}")
 	public String adoptionDetail(
 			@PathVariable("adoptNo") int adoptNo,
 			Model model,
 			RedirectAttributes ra,
-			@SessionAttribute(value="loginMember", required = false) Member loginMember
-			) {
+			@SessionAttribute(value="loginMember", required = false) Member loginMember,
+			HttpServletRequest req,  // 요청에 담긴 쿠키 얻어오기
+			HttpServletResponse resp // 새로운 쿠키를 만들어 응답하기
+			) throws ParseException {
 		
 		Map<String, Integer> map = new HashMap<>();
 		if(loginMember!=null) {
@@ -98,8 +108,85 @@ public class AdoptionController {
 			
 		}
 		else {
+			
+			
+			/* 쿠키를 이용한 조회수 증가 */
+			
+			if(loginMember == null || loginMember.getMemberNo() != adopt.getMemberNo()) {
+				
+				
+				Cookie[] cookies = req.getCookies();
+				
+				
+				Cookie c = null;
+				if(cookies!=null ) {
+					for(Cookie temp : cookies) {
+						if(temp.getName().equals("readAdoptNo")) {
+							c=temp;
+							break;
+						}
+					}
+				}
+				
+				int result = 0;
+				
+				if(c==null) {
+					c=new Cookie("readAdoptNo","["+adoptNo+"]");
+					result = service.updateReadCount(adoptNo);
+				}else {
+					
+					if(c.getValue().indexOf("["+adoptNo+"]")== -1) {
+						
+						c.setValue(c.getValue()+"["+adoptNo+"]");
+						result = service.updateReadCount(adoptNo);
+						
+					}
+					
+				}
+				
+				
+				if(result>0) {
+					
+					adopt.setReadCount(result);
+					
+					c.setPath("/");
+					
+					// 수명 지정
+					Calendar cal = Calendar.getInstance(); // 싱글톤 패턴
+					cal.add(cal.DATE, 1);
+
+					// 날짜 표기법 변경 객체 (DB의 TO_CHAR()와 비슷)
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+					// java.util.Date
+					Date a = new Date(); // 현재 시간
+
+					Date temp = new Date(cal.getTimeInMillis()); // 다음날 (24시간 후)
+					// 2024-04-16 12:30:10
+
+					Date b = sdf.parse(sdf.format(temp)); // 다음날 0시 0분 0초
+
+					// 다음날 0시 0분 0초 - 현재 시간
+					long diff = (b.getTime() - a.getTime()) / 1000;
+					// -> 다음날 0시 0분 0초까지 남은 시간을 초단위로 반환
+
+					log.debug("diff {}", diff);
+					
+					c.setMaxAge((int) diff); // 수명 설정
+
+					resp.addCookie(c); // 응답 객체를 이용해서 클라이언트에게 전달
+					
+				}
+				
+				
+			}
+			
+			
 			path = "adoption/adoptionDetail";
 			model.addAttribute("adopt",adopt);
+			
+			
+			
 		}
 		
 		return path;
@@ -155,14 +242,13 @@ public class AdoptionController {
 	
 	
 	
-	
-	
-	
 	/** 입양문의
 	 * @return
 	 */
 	@GetMapping("adoptionContact")
 	public String contact() { return "adoption/adoptionContact"; }
+	
+	
 	
 	
 	/** 입양 수정 화면 전환
@@ -311,6 +397,8 @@ public class AdoptionController {
 	}
 	
 	
+	
+	
 	/** 문의 페이지 이동
 	 * @return
 	 */
@@ -318,6 +406,8 @@ public class AdoptionController {
 	public String contactAdopt(@PathVariable("adoptNo") int adoptNo) {
 		return "adoption/adoptionContact";
 	}
+	
+	
 	
 	
 	/** 문의 내용 이메일 전송
@@ -337,13 +427,25 @@ public class AdoptionController {
 		
 		String email = service.writerEmail(adoptNo);
 		
+		String adoptName = service.adoptName(adoptNo);
 		
+		
+		int memberNo=loginMember.getMemberNo();
+		
+		String toEmail = service.toEmail(memberNo);
+		contactInput.setMemberEmail(toEmail);
+		
+		contactInput.setAdoptName(adoptName);
+		
+		contactInput.setMemberNo(memberNo);
 		
 		contactInput.setContactEmail(email);
 		
 		contactInput.setAdoptNo(adoptNo);
 		
-		int result = service.sendEmail(contactInput);
+		
+		
+		int result = service.sendEmail("adoptionContactMail",contactInput);
 		
 		model.addAttribute(contactInput);
 		
@@ -351,11 +453,14 @@ public class AdoptionController {
 		String message = null;
 		
 		if(result>0) {
-			path = "/adoption/adoptionList"+adoptNo;
+			path = "/adoption/adoptionList/"+adoptNo;
 			message="문의가 발송되었습니다.";
+			
 		}else {
-			path = "/contactAdopt/"+adoptNo;
+			
+			path = "/adoption/contactAdopt/"+adoptNo;
 			message="문의 발송 실패.";
+			
 		}
 		
 		ra.addFlashAttribute("message",message);

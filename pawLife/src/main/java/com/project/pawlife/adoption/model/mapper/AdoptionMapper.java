@@ -83,5 +83,29 @@ public interface AdoptionMapper {
 	 * @return
 	 */
 	List<Adopt> selectSearchList(Map<String, Object> paramMap, RowBounds rowBounds);
+
+	/** 이메일에 넣을 동물 이름
+	 * @param contactInput
+	 * @return
+	 */
+	String adoptName(int adoptNo);
+
+	/** 문의 받을 이메일
+	 * @param memberNo
+	 * @return
+	 */
+	String toEmail(int memberNo);
+
+	/** 조회수 1 증가
+	 * @param adoptNo
+	 * @return
+	 */
+	int updateReadCount(int adoptNo);
+
+	/** 조회수 조회
+	 * @param adoptNo
+	 * @return
+	 */
+	int selectReadCount(int adoptNo);
 	
 }

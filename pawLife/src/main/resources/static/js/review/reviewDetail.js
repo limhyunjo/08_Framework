@@ -71,9 +71,10 @@ const selectCommentList = () => {
 
             // p태그 하위 요소
             const profileImg = document.createElement("img");
+
             // 이미지 추가할것
-            // if(comment.profileImg == null)  profileImg.src = userDefaultImage;
-            // else    profileImg.src = comment.profileImg;
+            if(comment.profileImg == null)  profileImg.src = userDefaultImage;
+            else    profileImg.src = comment.profileImg;
 
             const nickname = document.createElement("span");
             nickname.innerText = comment.memberNickname;

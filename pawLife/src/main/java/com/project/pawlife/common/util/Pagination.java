@@ -1,5 +1,7 @@
 package com.project.pawlife.common.util;
 
+import java.util.Map;
+
 /* Pagination 뜻 : 목록을 일정 페이지로 분할해서 
  * 				   원하는 페이지를 볼 수 있게 하는 것
  * 				 	== 페이징 처리
@@ -44,6 +46,8 @@ public class Pagination {
 		
 		calculate(); // 필드 계산 메서드 호출
 	}
+
+
 
 
 	public int getCurrentPage() {

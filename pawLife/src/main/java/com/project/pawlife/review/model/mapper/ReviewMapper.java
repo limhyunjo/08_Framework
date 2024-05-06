@@ -46,5 +46,30 @@ public interface ReviewMapper {
 	 */
 	int reviewDelete(Map<String, Integer> map);
 
+	/** 게시글 검색 (개수)
+	 * @param paramMap
+	 * @return
+	 */
+	int searchListCount(Map<String, Object> paramMap);
+
+	/** 게시글 검색 (목록)
+	 * @param paramMap
+	 * @param rowBounds
+	 * @return
+	 */
+	List<Review> searchReviewList(Map<String, Object> paramMap, RowBounds rowBounds);
+
+	/** 조회수 증가
+	 * @param reviewNo
+	 * @return
+	 */
+	int updateReadCount(int reviewNo);
+
+	/** 조회수 조회
+	 * @param reviewNo
+	 * @return
+	 */
+	int selectReadCount(int reviewNo);
+
 	
 }

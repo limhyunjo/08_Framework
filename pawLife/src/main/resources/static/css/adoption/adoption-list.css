@@ -28,14 +28,14 @@ main{
     width: 100px;
     min-width: 100px;
     height: 30px;
-    background-color: #000;
+    background-color: #b92828;
     color: white;
     border-radius: 50px;
     border: none;
 }
 #writeBtn:hover{
     background-color: #fff;
-    color: black;
+    color: #b92828;
     border: 1px solid #ddd;
 }
 
@@ -72,16 +72,19 @@ main{
     align-items: center;
     position: relative;
     margin : 10px 0;
-
  }
+
  .card>img{
-    width: 70%;
-    height: 100%;
+    width: 190px;
+    min-width: 190px;
+    max-width: 190px;
+
+    height: 210px;
+    min-height: 210px;
+    max-height: 210px;
     object-fit: cover;
     margin: 5px 30px;
     border-radius: 5px;
-
-    min-width: 160px;
  }
 
  .card>img:hover{
@@ -95,7 +98,15 @@ main{
     z-index: 2;
     width: 100%;
  }
- 
+ /* 게시글 제목 */
+ .card-title {
+    width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 15%;
+    text-align: center;
+ }
 
 /* 검색 */
 .search-container{
@@ -160,6 +171,7 @@ main{
     width: 20px;
     margin: 0 5px;
     text-align: center;
+    cursor: pointer;
 }
 
 .pagination a{
@@ -170,7 +182,7 @@ main{
 
 .current{
     font-weight: bold;
-    background-color: black;
+    background-color: #b92828;
     border-radius: 50%;
     color: white !important;
     letter-spacing: 0 !important;

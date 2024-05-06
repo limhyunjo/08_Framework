@@ -40,5 +40,12 @@ public interface MemberService {
 	 */
 	int checkTel(String memberTel);
 
+	/** 비밀번호 변경
+	 * @param inputMember
+	 * @return
+	 */
+	int resetPw(Member inputMember);
+
+
 	
 }

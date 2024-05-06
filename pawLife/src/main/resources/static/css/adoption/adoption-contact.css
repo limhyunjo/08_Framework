@@ -12,9 +12,10 @@ form {
    flex-direction: column;
    align-content: space-between;
    align-items: center;
-   border: 1px solid grey;
+   border: 1px solid #b1ab9a;
    border-radius: 5px;
    padding: 60px;
+   margin-top: 50px;
    margin-bottom: 100px;
 }
 
@@ -55,6 +56,9 @@ td{
    padding-left: 10px;
    margin-left: 10px;
    outline: none;
+
+   border:none;
+   border-bottom: 1px solid #e2dbc9;
 }
 .radio-input > label {
    padding-right: 10px;
@@ -62,6 +66,25 @@ td{
 .radio-input input{
    margin: 0 5px;
 }
+
+[type='radio']{
+   vertical-align: middle;
+   appearance: none;
+   border: max(2px, 0.1em) solid #b1ab9a;
+   border-radius: 50%;
+   width: 1.25em;
+   height: 1.25em;
+}
+
+[type='radio']:checked{
+   border: 0.4em solid #b1ab9a;
+}
+
+[type="radio"]:focus-visible {
+   outline: max(2px, 0.1em) dotted #b1ab9a;
+   outline-offset: max(2px, 0.1em);
+ }
+
 .btn-area{
    display: flex;
    justify-content: center;
@@ -80,11 +103,12 @@ td{
    margin: 10px;
    background-color: white;
    border-radius: 5px;
-   border: 1px solid black;
+   border: 1px solid #b92828;
    align-items: center;
+   color: #b92828;
 }
 .btn > button:hover {
-   background-color: black;
+   background-color: #b92828;
    color: white;
 }
 

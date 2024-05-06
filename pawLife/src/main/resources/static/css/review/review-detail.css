@@ -33,13 +33,17 @@ body{
 .btn-area>button{
     width: 60px;
     height: 30px;
-    background-color: #000;
+    background-color: #b92828 ;
     color: white;
     border: none;
     border-radius: 20px;
     cursor: pointer;
 }
-
+.btn-area>button:hover{
+    background-color: white;
+    color: #b92828;
+    border: 1px solid #b92828;
+}
 
 /* ********************************************************************* */
 
@@ -55,6 +59,10 @@ body{
     display: flex;
     align-items: center;
     padding: 20px;
+}
+
+.right-bar{
+    padding: 10px 0;
 }
 /* 프로필 이미지 */
 #profile{
@@ -107,7 +115,7 @@ body{
 }
 
 /* 이미지 */
-.adoption-img{
+.review-img{
     width: 60%;
     height: 100%;
     object-fit: cover;

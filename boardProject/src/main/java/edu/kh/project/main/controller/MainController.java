@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -21,7 +22,8 @@ public class MainController {
 	private final MainService service;
 	
 	@RequestMapping("/") // "/" 요청 매핑 (method 가리지 않음)
-	public String mainPage() {
+	public String mainPage(
+			 ) {
 		
 		
 		return "common/main"; // common의 main 파일로 forward한다

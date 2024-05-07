@@ -429,4 +429,6 @@ public class MyPageController {
 		
 		return "redirect:profile";
 	}
+	
+
 }

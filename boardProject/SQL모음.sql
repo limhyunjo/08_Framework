@@ -898,6 +898,15 @@ AND BOARD_CODE = 1
 ORDER BY BOARD_NO DESC;
 
 
+-- 프로필 이미지, 게시글 이미지 조회 /  UNION시 자료형이 같아야 함 
+SELECT  SUBSTR(PROFILE_IMG, INSTR(PROFILE_IMG, '/', -1)+1) "FILE_NAME"
+FROM "MEMBER"
+WHERE PROFILE_IMG IS NOT NULL
+
+UNION
+
+SELECT IMG_RENAME "FILE_NAME"
+FROM "BOARD_IMG";
 
 -----------------------------------------------------------------------------------------------
 

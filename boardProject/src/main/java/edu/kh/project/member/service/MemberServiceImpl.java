@@ -113,7 +113,7 @@ public class MemberServiceImpl implements MemberService{
 		return mapper.checkNickname(memberNickname);
 	}
 	
-	
+	@Transactional
 	// 빠른 로그인
 	// -> 일반 로그인에서 비밀번호 비교만 제외
 	@Override
@@ -126,7 +126,13 @@ public class MemberServiceImpl implements MemberService{
 		
 		// 조회된 비밀 번호 null로 변경
 		loginMember.setMemberPw(null);
-		 
+		
+		int temp = 1;
+		if(temp ==1) {
+			throw new RuntimeException("예외 던지기 테스트");
+			
+		}
+	 
 		return loginMember;
 	}
 	

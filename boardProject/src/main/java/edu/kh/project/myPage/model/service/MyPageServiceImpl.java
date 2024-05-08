@@ -290,6 +290,7 @@ public class MyPageServiceImpl implements MyPageService {
 		return result1 + result2;
 	}
 	
+	// 프로필 이미지 수정
 	@Override
 	public int profile(MultipartFile profileImg, Member loginMember) throws IllegalStateException, IOException{
 		
@@ -334,7 +335,8 @@ public class MyPageServiceImpl implements MyPageService {
 			}
 			// 세션 회원 정보에서 프로필 이미지 경로를 
 			// 업데이트한 경로로 변경
-			loginMember.setProfileImg(updatePath);
+			loginMember.setProfileImg(updatePath);			
+			
 		}
 		return result;
 	}

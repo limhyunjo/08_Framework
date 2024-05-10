@@ -127,11 +127,11 @@ public class MemberServiceImpl implements MemberService{
 		// 조회된 비밀 번호 null로 변경
 		loginMember.setMemberPw(null);
 		
-		int temp = 1;
-		if(temp ==1) {
-			throw new RuntimeException("예외 던지기 테스트");
-			
-		}
+//		int temp = 1;
+//		if(temp ==1) {
+//			throw new RuntimeException("예외 던지기 테스트");
+//			
+//		}
 	 
 		return loginMember;
 	}

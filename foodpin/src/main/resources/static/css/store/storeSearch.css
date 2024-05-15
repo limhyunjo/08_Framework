@@ -1,0 +1,9 @@
+/* .map_wrap {position:relative;width:100%;height:350px;} */
+#map{
+    display: flex;
+    user-select: none;
+    height: 100vh;
+}
+
+
+/* 화면 전체에 100wh userselect none 주고 그 안의 map에 flex 11auto */

@@ -135,11 +135,16 @@
 /* ************************************************** */
 
 /* 지도 컨테이너 */
-.store-map{
+
+
+
+#detailMap{
+    display: flex;
     height: 250px;
     width: 800px;
     border: 1px solid var(--main-color);
     border-radius: 15px;
+    user-select: none;
 }
 
 

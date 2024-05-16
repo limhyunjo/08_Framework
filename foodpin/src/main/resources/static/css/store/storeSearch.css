@@ -16,7 +16,7 @@ body{
  
 }
 .map_wrap{
- width: 80%;
+ width: 100%;
 }
 
 #map{
@@ -33,11 +33,34 @@ body{
    flex-direction: row;
    
 }
-.storeSearch-sidemenu{
-   flex: 0 0 20%; /* Set the width of the side menu */
-   background-color: #f1f1f1; /* Optional: Add a background color */
-   padding: 20px; /* Optional: Add some padding */
+.storeSearch-header{
+   flex: 0 0 63px; 
+   background-color: #f1f1f1; 
+  
    
 }
 
-/* 화면 전체에 100wh userselect none 주고 그 안의 map에 flex 11auto */
+#searchHeader{
+
+   width: 63px;
+
+}
+.search-logobox{
+   width: 63px;
+   height: 76px;
+
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+#searchLogo{
+   width: 41px;
+   height: 41px;
+ 
+}
+
+
+/* nav */
+.search-navbar li{
+   height: 66px;
+}

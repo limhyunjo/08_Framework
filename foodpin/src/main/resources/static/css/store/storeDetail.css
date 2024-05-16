@@ -38,15 +38,15 @@
 
 /* 가게 대표 이미지 */
 .storedetail-thumbnail {
-
-    width: 600px;
-    height: 400px;
+    width: 500px;
+    height: 350px;
     display: flex;
     justify-content: center;
     margin: 50px auto;
     border-radius: 5px;
-   
+    margin-top: 70px;
 }
+
 
 /********** 가게 내용 1 ************/
 

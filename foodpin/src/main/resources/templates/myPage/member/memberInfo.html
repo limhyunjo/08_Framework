@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 정보 수정</title>
+    <th:block th:replace="~{common/common}"></th:block>
+    <link rel="stylesheet" href="/css/myPage/myPage-style.css">
+</head>
+<body>
+    <main>
+        <th:block th:replace="~{common/header}"></th:block>
+
+        <div class="myPage-container">
+
+            <!-- templetes/myPage/store/storeSide.html  조각 추가 -->
+            <th:block th:replace="~{myPage/member/memberSide}"></th:block>
+            
+            <hr>
+      
+            <!-- 마이페이지 본문 -->
+            <section class="content-container">
+      
+               <!-- 타이틀 영역 -->
+               <div class="myPage-title-container">
+                  <section class="myPage-title">회원 정보 수정</section>
+         
+                  <!-- 서브타이틀 버튼 -->
+                  <section class="myPage-sub-title">
+                     <button class="sub-title-btn" id="infoBtn">기본 정보</button>
+                     <button class="sub-title-btn" id="menuBtn">비밀번호 변경</button>
+                  </section>
+         
+               </div>
+      
+            </section>
+      
+        </div>
+
+    </main>
+
+    <script th:inline="javascript">
+        const loginMember = /*[[${session.loginMember}]]*/ "로그인 회원 정보";
+    </script>
+
+    <th:block th:replace="~{common/footer}"></th:block> 
+
+    <script src="/js/main.js"></script>
+</body>
+</html>

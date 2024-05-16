@@ -8,6 +8,9 @@
      <!-- templetes/common/common.html  조각 추가 -->
      <th:block th:replace="~{common/common}"></th:block>
 
+     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c0a61513c1f514ea458fa903130cb59a&libraries=services,clusterer,drawing"></script>
+
+
      <link rel="stylesheet" href="/css/store/storeDetail.css">
 
 </head>
@@ -17,15 +20,13 @@
     <!-- templetes/common/header.html  조각 추가 -->
      <th:block th:replace="~{common/header}"></th:block>
 
-    
-
 
 
      <!-- section 1 가게 상세 -->
      <!-- 가게 사진 , 식당 이름, 북마크, 지역, 카테고리, 별점, 지도, 가게 정보,  -->
 
        <!-- 공간 나누는 칸 ex) 가게 정보랑 지도 나눔 -->
-       <section class="store-detail"> 
+       <section class="store-detail">   
          
 
             <!--회색 실선 박스 -->
@@ -39,9 +40,19 @@
 
                     <!-- main에 들어가는 가게 대표 이미지 
                    (가게 이미지 조회) -->
-                    <img class="storedetail-thumbnail" 
-                    src="/images/storeDetail/store.jpg" alt="가게 기본 이미지">
-                
+
+                    <div class="storedetail-thumbnailbox" >
+
+                        <button>좌</button>
+
+                        <img class="storedetail-thumbnail" 
+                        src="/images/storeDetail/store.jpg" alt="가게 기본 이미지">
+                    
+
+                        <button>우</button>
+
+                    </div>
+                  
                 
                    <!-- ************* 가게 내용 ************ -->
 
@@ -123,7 +134,6 @@
                                 </div>
 
 
-                                 
                                 <!-- 문의(채팅) 페이지로 이동-->
                                 <a href="#">문의하기</a>
 
@@ -167,8 +177,12 @@
      <!-- section 2 지도 -->
      <section class="store-detail">
         <!-- 지도 들어갈 자리 -->
-        <img class="store-map" 
-        src="/images/storeDetail/mapimage.png" alt="가게 지도 이미지">
+
+        <div id="detailMapBox">
+            <div id="detailMap"></div> 
+        </div>
+       
+       
      </section>
 
 
@@ -319,13 +333,14 @@
 
         <div class="storedetail-box">
 
-        
-        <div class="detail-images">
-
             <div class="storeLookText">
                 <span>식당 사진</span>
             </div>
               
+        
+        <div class="detail-images">
+
+         
             <img class="store-look" src="/images/storeDetail/hotdog.jpg">
             <img class="store-look" src="/images/storeDetail/cooking.jpg">
             <img class="store-look" src="/images/storeDetail/counter2.jpg">
@@ -357,11 +372,63 @@
         <div class="storedetail-box">
 
             <div class="storereview-container">
+                <h3 class="review-title">방문자 리뷰</h3>
+                
+                <div class="reiview-avgScore">
+                    <span>⭐⭐⭐⭐⭐ 평균 점수</span>
+                </div>
 
-                <span>댓글 들어갈 자리</span>
+                <div class="storereview-top">
+
+                    <div class="storereview-top-left">
+                        <img class="review-member-profile" src="/images/storeDetail/hotdog.jpg" alt="회원 프로필 이미지">
+                        <div class="review-info">
+                            <span>닉네임</span>
+                            <span>⭐⭐⭐⭐⭐ 점수</span>
+                        </div>
+                    </div>
+    
+                    <div class="storereview-top-right">
+                        <a href="#">🚨신고하기</a>
+                        <span>2024-05-13</span> 
+                    </div>
+                </div>
+                
+                <div class="storereview-mid">
+                    <p>리뷰 내용</p>
+                </div>
+
+                <div class="storereview-bottom">
+                    <p>주문 내역</p>
+                    <div class="storereview-image">
+                        <img class="store-look" src="/images/storeDetail/counter2.jpg">
+                        <img class="store-look" src="/images/storeDetail/counter3.jpg">
+                        <img class="store-look" src="/images/storeDetail/counter.jpg">
+                    </div>
+                    <p>해시태그</p>
+                    <span>#해시태그</span>
+                    <span>#해시태그</span>
+                    <span>#해시태그</span>
+                </div>
+
+                <div class="store-reply">
+                    <img class="review-store-profile" src="/images/storeDetail/store.jpg" alt="가게 프로필 이미지">
+
+                    <p class="reply-content-bubble">
+                        사장님 답글
+                    </p>
+
+                </div>
+                
+                <div class="review-more-button">
+                    <button id="reviewMoreButton">리뷰 더보기</button>
+                </div>
+
+                <a href="/review/insertReview">리뷰쓰기</a>
+
+
+
             </div>
-       
-            
         </div>
      </div>
     </section>
@@ -373,6 +440,7 @@
        <!-- templetes/common/footer.html  조각 추가 -->
    <th:block th:replace="~{common/footer}"></th:block> 
 
+   <script src="/js/reservation/reservationDetail.js"></script>
    <script src="/js/store/storeDetail.js"></script>
 
 </body>

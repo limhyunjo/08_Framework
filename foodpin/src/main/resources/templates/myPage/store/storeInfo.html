@@ -10,13 +10,14 @@
    
    <link rel="stylesheet" href="/css/myPage/myPage-style.css">
    <link rel="stylesheet" href="/css/myPage/store-myPage.css">
+
 </head>
 <body>
 
    <main>
 
    <!-- templetes/common/header.html  조각 추가 -->
-   <th:block th:replace="~{common/header}"></th:block>
+   <th:block th:replace="~{common/header}"></th:block> 
 
    <div class="myPage-container">
 
@@ -38,22 +39,14 @@
                <button class="sub-title-btn" id="menuBtn">메뉴 정보</button>
                <button class="sub-title-btn" id="dayoffBtn">휴무일</button>
             </section>
-   
          </div>
          
-         <!-- 본문 (휴무일) -->
+         <!-- 본문 (기본 정보) -->
          <div class="myPage-content-container">
             
-
-
-
          </div>
       </section>
    </div>  
-
-      
-
-
    </main>
 
 
@@ -62,8 +55,15 @@
 
    <!-- 다음 주소 API 추가 -->
    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+   
+   <!-- 풀캘린더 추가 -->
+   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
 
    <!-- 마이페이지 JS 추가 -->
-   <script src="/js/myPage/storeMyPage.js"></script>
+   <script src="/js/myPage/store/storeMyPage.js"></script>
+
+   <!-- 마이페이지 JS 추가 -->
+   <script src="/js/myPage/store/storeOff.js"></script>
+
 </body>
 </html>

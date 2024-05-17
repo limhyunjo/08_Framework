@@ -20,9 +20,10 @@ function currentlocation(){
         center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
         /* 지금은 현재 위치인데 나중에 가게 위치로 바꾸기 */
         /* 클릭 시 마커 설명 뜨는 이벤트도 추가/ 사진 없이 가게 이름만 */
-        
-        /* draggable: false, */ /* 드래그 막기 */
-        /* zoomable:false,  */
+        /* 
+        draggable: false, 
+        zoomable:false, 
+        disableDoubleClickZoom: true, */
 
         level: 2 // 지도의 확대 레벨 
     }; 
@@ -112,3 +113,40 @@ var targetID; */
     this.parentNode.parentNode.style.display = 'none';
   });
 } */
+
+
+
+
+
+/* ***************** 팝업 ****************** */
+const popupClose = document.querySelector("#popupClose");
+const popupLayer = document.querySelector("#popupLayer");
+const reviewReportForm = document.querySelector("#reviewReportForm");
+const reviewReport = document.querySelector("#reviewReport");
+
+popupClose.addEventListener("click", () => {
+  reviewReportForm.classList.add("popup-hidden");
+});
+
+reviewReport.addEventListener("click", ()=>{
+  reviewReportForm.classList.remove("popup-hidden");
+});
+
+/* ******************************************************** */
+
+/* 리뷰> 클릭 시 아래 리뷰 페이지로 이동 */
+
+const showReview = document.querySelector("#showReview");
+/* const scrollPosition = targetElement.offsetTop; */
+
+showReview.addEventListener("click", ()=>{
+
+ 
+  window.scrollTo({
+    
+    left:0,
+    top:3000,
+    behavior:'smooth'
+  })
+})
+

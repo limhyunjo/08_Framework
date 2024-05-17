@@ -22,5 +22,20 @@ public class StoreMyPageController {
 		return "myPage/store/storeInfo";
 	}
 	
+	@GetMapping("reservation")
+	public String reservation() {
+		return "myPage/store/reservation";
+	}
+	
+	@GetMapping("review")
+	public String review() {
+		return "myPage/store/review";
+	}
+	
+	@GetMapping("ceoInfo")
+	public String ceoInfo() {
+		return "myPage/store/ceoInfo";
+	}
+	
 	
 }

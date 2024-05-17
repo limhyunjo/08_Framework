@@ -1,5 +1,20 @@
 
-/* 본문 */
+/* 사이드 메뉴 */
+.left-side{
+   width: 20%;
+   margin: 50px 0;
+
+   display: flex;
+   justify-content: center;
+}
+/* 마이페이지 본문 */
+.content-container{
+   width: 80%;
+   padding: 50px;
+}
+
+
+/* 공용 영역 본문 */
 .myPage-content-container{
    display: flex;
    flex-direction: column;
@@ -7,23 +22,22 @@
    padding-top: 30px;
    margin: 15px;
 }
-
+/* -----           ----- */
+/* ----- 기본 정보 ----- */
+/* -----           ----- */
 /* 프로필 수정 폼 */
 #profileEditFrm{
    display: flex;
    flex-direction: column;
+   align-items: center;
    padding: 20px;
 }
-.profile-input-area{
+.address-input-area, .time-input-area, .profile-input-area{
+   width: 60%;
    margin: 10px;
    display: flex;
    align-items: center;
-   justify-content: space-between;
-}
-.address-input-area, .time-input-area{
-   margin: 10px;
-   display: flex;
-   justify-content: space-between;
+   justify-content: space-evenly;
 }
 .align-right{
    display: flex;
@@ -39,26 +53,32 @@
    margin: 40px auto;
 
 }
+.profile-img > img {
+   width: 149px;
+   height: 149px;
+   border: 1px solid grey;
+   border-radius: 75px;
+   margin: auto;
+}
 
 /* label */
 #profileEditFrm label{
-   width: 110px;
+   width: 25%;
    font-size: 16px;
 }
 
 /* input */
 .profile-input-area > input, .align-right > input{
-   width: 240px;
+   width: 50%;
    height: 26px;
    outline: none;
    padding-left: 5px;
 }
 #postcode{
-   width: 150px;
+   width: 28%;
    height: 26px;
    outline: none;
    padding-left: 5px;
-   margin-right: 5px;
 }
 .time-input-area > span{
    padding: 0 15px;
@@ -66,12 +86,13 @@
 
 /* 가게 소개 */
 #storeInfo{
+   width: 70%;
    margin: 10px;
 }
 
 /* 버튼 */
 #searchAddress{
-   width: 70px;
+   width: 15%;
    height: 26px;
    background: lightgray;
    border: 1px solid lightgray;
@@ -89,15 +110,14 @@
 #withdraw{
    font-size: 14px;
    color: grey;
+   cursor: pointer;
 }
 
-/* ----------------------------------------------- */
-*{
-   /* border: 1px solid grey; */
-}
-/* ------------------------------------------------ */
+/* -----          ----- */
+/* ----- 메뉴 정보 ----- */
+/* -----          ----- */
 
-/* 본문 */
+/* 영역 */
 .menu-container{
    width: 80%;
    display: flex;
@@ -106,7 +126,6 @@
    border-radius: 20px;
    background: lightgoldenrodyellow;
    padding: 50px 20px;
-
 }
 
 /* 메뉴 */
@@ -146,4 +165,301 @@
    border: 1px solid lightgray;
    border-radius: 10px;
    cursor: pointer;
+}
+
+/* -----        ----- */
+/* ----- 휴무일 ----- */
+/* -----       ----- */
+
+/* 휴무일 전체 영역 */
+.section-title{
+   font-size: 18px;
+   padding: 10px;
+   font-weight: bold;
+}
+.off-container, .calendar-container{
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   padding: 20px;
+}
+.week-row{
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   padding: 10px 20px;
+}
+.week-btn{
+   width: 100px;
+   margin: 10px;
+   height: 26px;
+   background: lightgray;
+   border: 1px solid lightgray;
+   border-radius: 15px;
+   cursor: pointer;
+}
+.checked{
+   background: white;
+   border: 1px solid lightgray;
+}
+.update-btn{
+   width: 140px;
+   margin: 20px;
+   height: 26px;
+   background: lightgray;
+   border: 1px solid lightgray;
+   border-radius: 15px;
+   cursor: pointer;
+}
+
+/* full calendar */
+#calendar{
+   width: 100%;
+   /* height: 410px; */
+   margin-bottom: 20px;
+   padding: 15px;
+
+}
+/* 월 */
+.fc .fc-toolbar-title {
+   font-size: 18px;
+   margin: 0px;
+}
+
+/* 일 */
+.fc table {
+   font-size: 14px;
+}
+.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
+   max-height: 50px;
+}
+/* 버튼 (today / < / >) */
+.fc .fc-button {
+font-size: 14px;
+}
+
+/* -----           ----- */
+/* ----- 예약 관리 ----- */
+/* -----          ----- */
+
+/* 서브 타이틀 버튼 */
+.content-sub-title{
+   padding: 10px;
+   margin: 30px 0;
+   display: flex;
+   justify-content: center;
+}
+
+/* 예약 목록 */
+#reservListContainer{
+   padding: 15px;
+}
+/* 목록 1행 */
+.reserv-card{
+   padding: 10px 20px;
+   border: 1px solid lightgray;
+   border-radius: 20px;
+   background: lightgray;
+   margin: 15px;
+}
+.list-title-area{
+   margin: 10px 5px;
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: center;
+}
+.list-title{
+   font-weight: bold;
+}
+.fa-circle{
+   font-size: 5px;
+   color: red;
+}
+.list-content{
+   display: flex;
+   flex-direction: column;
+}
+.row{
+   display: flex;
+   flex-direction: row;
+}
+.list-content > p{
+   margin: 5px;
+}
+.row > p{
+   margin: 5px;
+}
+.row > p:first-of-type {
+   width: 65%;
+}
+/* 버튼 */
+.list-btn-area{
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+}
+.list-btn{
+   width: 100px;
+   height: 22px;
+   background: white;
+   border: 1px solid white;
+   border-radius: 15px;
+   cursor: pointer;
+   margin: 10px 15px;
+}
+
+/* -----           ----- */
+/* ----- 리뷰 관리 ----- */
+/* -----          ----- */
+/* 예약 목록 */
+#reviewListContainer{
+   padding: 15px;
+}
+/* 목록 1행 */
+.review-card{
+   padding: 10px 20px;
+   border: 1px solid grey;
+   border-radius: 20px;
+   /* background: lightgray; */
+   margin: 15px;
+}
+.list-profile-area{
+   margin: 10px 5px;
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+}
+/* 프로필 이미지 */ 
+.review-profile-img{
+   width: 49px;
+   height: 49px;
+   border: 1px solid grey;
+   border-radius: 25px;
+   background: white;
+}
+.list-profile-area > span{
+   margin: 0 20px;
+}
+
+/* 리뷰 이미지 */
+.img-container{
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   margin: 15px 0;
+   position: relative;
+}
+.review-img{
+   position: relative;
+   width: 25%;
+   object-fit: cover;
+   padding: 5px;
+   border-radius: 15px;
+}
+.review-img > img{
+   object-fit: cover;
+   padding: 5px;
+   border-radius: 15px;
+}
+.review-img > div{
+   background: black;
+   opacity: 0.5;
+   width: 25%;
+   object-fit: cover;
+   padding: 5px;
+   border-radius: 15px;
+}
+.imgs{
+   background: black;
+   color: white;
+   text-align: center;
+   width: 25%;
+   object-fit: cover;
+   padding: 10px;
+   border-radius: 15px;
+   margin: 5px;
+   position: absolute;
+   right: 0px;
+   opacity: 0.5;
+}
+
+
+
+/* 내용 */
+.review-content{
+   padding: 10px;
+}
+.review-content .fa-solid{
+   margin: 20px 10px;
+}
+/* 사장님 댓글 */
+.reply-content-bubble {
+   width: 80%;
+   position:relative;
+   margin-top: 23px;
+   margin-left: 10px;
+   padding: 20px;
+   max-width: 480px;
+   background:#666;
+   color: #fff;
+   border-radius: 10px;
+   display: flex;
+   justify-content: space-between;
+}
+.reply-content-bubble:after {
+   border-top:15px solid #666;
+   border-left: 16px solid transparent;
+   border-right: 0px solid transparent;
+   border-bottom: 0px solid transparent;
+   content:"";
+   position:absolute;
+   top:17px;
+   left:-15px;
+}
+.review-comment{
+   width: 80%;
+   background-color: #666;
+   outline: none;
+   border: 1px solid #666;
+   height: 26px;
+}
+#commentBtn{
+   width: 60px;
+   height: 26px;
+   background: white;
+   border: 1px solid grey;
+   border-radius: 13px;
+}
+
+
+/* 사장님 정보 수정 폼 */
+#ceoInfoEditFrm{
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   padding: 20px;
+}
+.ceoInfo-input-area{
+   width: 60%;
+   margin: 20px;
+   display: flex;
+   align-items: flex-end;
+   justify-content: space-evenly;
+}
+/* label */
+.ceoInfo-input-area label{
+   width: 25%;
+   font-size: 16px;
+}
+
+/* input */
+.ceoInfo-input-area > input{
+   width: 50%;
+   height: 26px;
+   outline: none;
+   padding-left: 5px;
+   border: none;
+   border-bottom: 1px solid grey;
+   font-size: 16px;
 }

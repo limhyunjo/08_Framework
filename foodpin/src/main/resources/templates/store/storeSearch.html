@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>가게 검색 페이지</title>
 
+
+    <!-- font awesome 라이브라리 추가 + key 등록 -->
+    <script src="https://kit.fontawesome.com/8affe1c744.js" crossorigin="anonymous"></script>
+  
+
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c0a61513c1f514ea458fa903130cb59a&libraries=services,clusterer,drawing"></script>
 
     <link rel="stylesheet" href="/css/store/storeSearch.css">
@@ -25,55 +30,57 @@
            자동으로 크기 조절되는 지도 -->
         <section class="store-search">
 
-            <!--  -->
-         <div class="storeSearch-header">
 
-            <div id="searchHeader">
-                <!-- 클릭하면 메인으로 가는 로고 -->
-                <div class="search-logobox">
-                    
-                    <a href="/">
-                        <img src="/images/storeDetail/pizza.jpg" id="searchLogo" alt="메인로고">
-                    </a>
-                </div>
+         <!-- 지도와 더보기 감싸는 div -->
+         
+            <!-- storeHeader 조각 추가 -->
+            <th:block th:replace="~{store/storeHeader}"></th:block>
 
 
-                <!-- 내 찜 목록 비동기로 가게이름, 카테고리, 주소, 사진 -->
-                <nav class="search-navbar">
-                    <ul>
-                        
-                        <li><a href="/">⭐</a></li>
-                        
-                        <li>
-                            <button type="button" class="navbar-button">
-                               <!-- ::before – 실제 내용 바로 앞에서 생성되는 자식요소
-                                    ::after – 실제 내용 바로 뒤에서 생성되는 자식요소​ -->
-                            
-                                <span class="navbar-text">저장</span>
+
+         <div class="storesearch-container">
+
+
+            <!-- 더보기 바 -->
+
+            <div class="search-sidebarbox">
+
+                <div class="sidebar-menu">
+
+                    <!-- 검색하는 창 -->
+                  <div class="search-container">
+                    <div class="search-wrap">
+
+                        <div class="search-box">
+                            <button id="searchButton">
+                                <i class="fa-solid fa-magnifying-glass"></i>
                             </button>
-                        </li>
-                    </ul>
-                </nav>
-              
+
+                            <input type="text" class="input-box" placeholder="장소, 가게 검색">
+                        </div>
+
+                    </div>
+
+
+                    <div class="search-panelContent">
+
+                    </div>
+                    
+                  </div>
+
+                </div>
             </div>
 
-             
 
-            <!-- 여기는 나중에 -->
+               <!-- 여기 map 추가 -->
+            <div class="map_wrap">
+                <div id="map"></div>
             
-         <div class="storeSearch-sidebar">
-
+            </div>
+        
+            
          </div>
-
-         </div>
-
-
-           <!-- 여기 map 추가 -->
-        <div class="map_wrap">
-            <div id="map"></div>
-           
-        </div>
-    
+        
 
         </section>
 

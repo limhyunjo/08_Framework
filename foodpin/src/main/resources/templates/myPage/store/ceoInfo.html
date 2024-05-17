@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>FOODPIN</title>
+
+   <!-- templetes/common/common.html  조각 추가 -->
+   <th:block th:replace="~{common/common}"></th:block>
+   
+   <link rel="stylesheet" href="/css/myPage/myPage-style.css">
+   <link rel="stylesheet" href="/css/myPage/store-myPage.css">
+
+      <!-- 풀캘린더 추가 -->
+      <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+
+      <!-- 마이페이지 JS 추가 -->
+      <script src="/js/myPage/store/storeOff.js"></script>
+</head>
+<body>
+
+   <main>
+
+   <!-- templetes/common/header.html  조각 추가 -->
+   <th:block th:replace="~{common/header}"></th:block>
+
+   <div class="myPage-container">
+
+      <!-- templetes/myPage/store/storeSide.html  조각 추가 -->
+      <th:block th:replace="~{myPage/store/storeSide}"></th:block>
+      
+      <hr>
+
+      <!-- 마이페이지 본문 -->
+      <section class="content-container">
+
+         <!-- 타이틀 영역 -->
+         <div class="myPage-title-container">
+            <section class="myPage-title">사장님 정보 수정</section>
+         </div>
+         
+         <!-- 본문 (기본 정보) -->
+         <div class="myPage-content-container">
+            
+            <!-- 사장님 정보 수정 폼 -->
+            <form action="#" id="ceoInfoEditFrm" method="POST">
+
+               <div class="ceoInfo-input-area">
+                  <label for="memberEmail">이메일</label><input type="text" name="memberEmail" id="memberEmail">
+               </div>
+
+               <div class="ceoInfo-input-area">
+                  <label for="storeTel">전화번호</label><input type="number" name="storeTel" id="storeTel">
+               </div>
+
+               <div class="ceoInfo-input-area">
+                  <label for="memberPw">비밀번호</label><input type="password" name="memberPw" id="memberPw">
+               </div>
+
+               <div class="ceoInfo-input-area">
+                  <label for="memberPwCheck">비밀번호 확인</label><input type="password" name="memberPwCheck" id="memberPwCheck">
+               </div>
+               
+               <button class="update-btn" id="ceoInfoEditBtn">수정</button>
+            </form>
+
+         </div>
+
+
+
+
+         
+      </section>
+   </div>  
+   </main>
+
+
+   <!-- templetes/common/footer.html  조각 추가 -->
+   <th:block th:replace="~{common/footer}"></th:block> 
+
+   <!-- 다음 주소 API 추가 -->
+   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+   
+   <!-- 풀캘린더 추가 -->
+   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+
+   <!-- 마이페이지 JS 추가 -->
+   <script src="/js/myPage/store/storeMyPage.js"></script>
+   <script src="/js/myPage/store/storeOff.js"></script>
+
+</body>
+</html>

@@ -86,13 +86,13 @@ body{
 }
 .search-logobox{
    width: 63px;
-   height: 10%;
+   height: 12%;
 
    display: flex;
    justify-content: center;
    align-items: center;
 
-   border-bottom: 1px solid var(--main-color);
+  /*  border-bottom: 1px solid var(--main-color); */
   
 }
 #searchLogo{
@@ -107,11 +107,15 @@ body{
 .search-navbar{
    
    width: 63px;
-   height: 90%;
+   height: 88%;
    align-items: center;
    justify-content: space-between;
    display: flex;
    flex-direction: column;
+}
+
+.search-navbar ul{
+ border-top: 1px solid var(--main-color);
 }
 
 .search-navbar li{
@@ -155,10 +159,11 @@ body{
    letter-spacing: -0.44px;
 }
 
-.fa-circle-user{
+i{
    font-size: 20px;
    color: rgb(76, 76, 76);
 }
+
 
 
 .navbar-button a{
@@ -169,10 +174,11 @@ body{
   
   color: white;
 }
-.navbar-button:hover .fa-regular{
+.navbar-button:hover i{
   
   color: white;
 }
+
 
 
 .sidebar-menu{
@@ -184,11 +190,9 @@ body{
 }
 
 .search-container{
-   position:absolute;
+   position: absolute;
    z-index: 100;
-   width: 340px;
    padding: 15px 25px;
-  
 }
 
 .search-container .search-wrap{
@@ -199,6 +203,7 @@ body{
 
    position: relative;
    z-index: 110;
+   width: 340px;
    height: 46px;
    border-radius: 5px;
    border: 2px solid var(--main-color);

@@ -3,7 +3,9 @@
    
  }
 
-
+body{
+ overflow-x: hidden;
+}
 /* 고정 바 */
 aside{
     
@@ -223,6 +225,8 @@ aside>a:hover{
 
 /********** 가게 내용 1 ************/
 
+
+
 /* ************************************************** */
 
 /* 지도 컨테이너 */
@@ -253,16 +257,80 @@ aside>a:hover{
     display: flex;
     justify-content: end;
     margin: 20px 0px;
-    font-size: 15px;
-    color: rgb(46, 41, 41);
+   
 }
 /* ***************************************** */
 /* 팝업 영역 */
+
+.popup-store{
+    display: none !important;
+}
+
+
+#storeReportForm {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: 1001;
+    background-color: rgba(116, 116, 116, 0.8);
+    top: 0px;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.popupbox{
+    width: 600px;
+    height: 600px;
+    border-radius: 15px;
+    background-color: #e4e4e4;
+    position: relative;
+}
+
+#p {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    padding: 30px 0 ;
+    padding-left:30px ;
+    color: #393939;
+    font-weight: bold;
+
+    font-size: 24px;
+    margin: 0;
+}
+
+#popupShut {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    position: absolute;
+    padding-top: 4px; /* x 중앙에 위치 */
+    top: 25px;
+    right: 25px;
+    font-size: 20px;
+    user-select: none;
+    cursor: pointer;
+
+    width: 30px;
+    height: 30px;
+    color: #393939;
+    border-radius: 7px;
+}
+
+#popupShut:hover{
+    color: red;
+}
 
 /* ***************************************** */
 #storeReport{
     cursor: pointer;
     border: none;
+    font-size: 15px;
+    color: rgb(46, 41, 41);
     background-color: white;
 }
 

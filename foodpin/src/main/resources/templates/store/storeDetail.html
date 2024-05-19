@@ -210,7 +210,6 @@
 
 <!-- ************************************************************ -->
 
-
    
      <!-- section 3 가게 정보 -->
      <section class="store-detail">
@@ -224,17 +223,9 @@
   
             <div class="storedetail-opencontainer">
 
-                
-                
-
+            
                     <div class="store-reportcontainer">
-                        <button id="storeReport">
-                        <!-- 팝업 -->
-                        <a href="#storeReport" class="btn_open">🚨 폐점 / 가게 정보 정정 신고</a>
-                            
-                            
-                       
-                        </button>
+                        <button type="button" id="storeReport">🚨 폐점 / 가게 정보 정정 신고</button>
                     </div>
 
                    <!-- ************************************************************** -->
@@ -246,7 +237,22 @@
                         -->
                                                 <!-- 처음에 숨겨놓기 -->
                        
-                           
+                        <form action="#" id="storeReportForm" class="popup-store">
+                            <section class="popupbox">
+                            
+                                <p id="p">리뷰 신고하기</p>
+                                <span id="popupShut" class="fa-solid fa-xmark"></span>     
+                            
+                                
+                                <div class="report-button-area">
+                                    <textarea name="reportContent" id="reportContent"></textarea>
+                                    <button>신고하기</button>
+                                </div>
+                            </section>
+                        </form>
+
+
+                                        
 
                    <!-- ************************************************************** -->
                     <div class="store-statuscontainer">
@@ -329,9 +335,11 @@
              <!-- 해시태그(댓글에 달린 해시들) -->
 
             <div class="storedetail-hashtagcontainer">
-                <span>#버거가 친절하고_사장님이 맛있어요</span>
-                <span>#주문 받는 알바가 불친절함</span>
-                <span>#매장 안에 아메바 돌아다닙니다</span>
+                <span>#음식이 맛있어요!</span>
+                <span>#사장님이 친절해요!</span>
+                <span>#재료가 신선해요!</span>
+                <span>#매장이 청결해요!</span>
+                <span>#분위기가 좋아요!</span>
             </div>
 
             
@@ -382,7 +390,7 @@
      
 
 
-<!-- ****************************나중에 합치기*************************** -->
+<!-- **************************** 리뷰 *************************** -->
 
 
      <!-- section 5 가게 리뷰 -->

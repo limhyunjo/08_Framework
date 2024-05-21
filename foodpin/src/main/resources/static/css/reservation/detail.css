@@ -129,7 +129,7 @@
     width:600px;
 }
 
-.nav-item {
+.nav-list>a{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -140,10 +140,11 @@
     background-color:#F5F5F5;
     border-radius: 5px;
     cursor: pointer;
-}
 
-.nav-item:hover{
-    background-color: #4A4848;
+}   
+
+.nav-list>a:hover{
+    background-color: #afafaf;
     color: white !important;
 }
 
@@ -230,7 +231,7 @@
     justify-content: space-around;
 }
 
-#cancelBtn{
+.cancel-btn{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -244,7 +245,16 @@
     cursor: pointer;
 }
 
-#nextBtn{
+.cancel-btn:hover{
+    color: red;
+    border: 1px solid red;
+}
+
+.next-btn:hover{
+    border: 1px solid black;
+}
+
+.next-btn{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -257,13 +267,4 @@
     color: white;
     border-radius: 5px;
     cursor: pointer;
-}
-
-#cancelBtn:hover{
-    color: red;
-    border: 1px solid red;
-}
-
-#nextBtn:hover{
-    border: 1px solid black;
 }

@@ -64,11 +64,13 @@
             <section class="reservation-body-container">
 
                 <div class="check-container">
-                    <h3 class="title">예약자 정보</h3>
-
-                    <span class="span"> 
-                        * 로그인한 회원의 정보로 자동 예약 됩니다.
-                    </span>
+                    <div class="info">
+                        <h3 class="title">예약자 정보</h3>
+    
+                        <span class="span"> 
+                            * 로그인한 회원의 정보로 자동 예약 됩니다.
+                        </span>
+                    </div>
 
                     <form class="reserv-form" method="POST" name="reservForm">
 
@@ -77,7 +79,13 @@
                             <label for="memberName" class="name">예약자</label>
 
                             <div class="input-box">
-                                <input type="text" name="memberName" id="memberName" class="input-name" readonly value="길동이">
+                                <th:block th:if="${session.loginMember?.memberCode==1}">
+                                    <input type="text" name="memberName" id="memberName" class="input-name" readonly th:value="${session.loginMember?.memberName}">
+                                </th:block>
+
+                                <th:block th:unless="${session.loginMember?.memberCode==1}">
+                                    <input type="text" name="memberName" id="memberName" class="input-name" readonly placeholder="현재 로그인 상태로 예약할 수 없습니다.">
+                                </th:block>
                             </div>
                         </div>
 
@@ -85,8 +93,14 @@
                         <div class="reserv-item">
                             <label for="memberTel" class="name">연락처</label>
 
-                            <div class="input-box">
-                                <input type="text" name="memberTel" id="memberTel" class="input-name" readonly value="010-xxxx-xxxx">
+                                <th:block th:if="${session.loginMember?.memberCode==1}">
+                                    <input type="text" name="memberTel" id="memberTel" class="input-name" readonly th:value="${session.loginMember?.memberTel}">
+                                </th:block>
+
+                                <th:block th:unless="${session.loginMember?.memberCode==1}">
+                                    <input type="text" name="memberName" id="memberName" class="input-name" readonly placeholder="현재 로그인 상태로 예약할 수 없습니다.">
+                                </th:block>
+
                             </div>
                         </div>
 
@@ -95,7 +109,12 @@
                             <label for="memberEmail" class="name">이메일</label>
 
                             <div class="input-box">
-                                <input type="text" name="memberEmail" id="memberEmail " class="input-name" value="xxxxxx@xxxx.xxx">
+                                <th:block th:if="${session.loginMember?.memberCode==1}">
+                                    <input type="text" name="memberEmail" id="memberEmail " class="input-name" th:value="${session.loginMember?.memberEmail}">
+                                </th:block>
+                                <th:block th:unless="${session.loginMember?.memberCode==1}">
+                                    <input type="text" name="memberName" id="memberName" class="input-name" readonly placeholder="현재 로그인 상태로 예약할 수 없습니다.">
+                                </th:block>
                             </div>
                         </div>
 
@@ -104,7 +123,13 @@
                             <label for="reservRequest" class="name">요청사항</label>
 
                             <div class="input-box">
-                                <textarea name="reservReqeust" id="reservReqeust" placeholder="업체에 요청하실 내용을 적어주세요"></textarea>
+                                <th:block th:if="${session.loginMember?.memberCode==1}">
+                                    <textarea name="reservReqeust" id="reservReqeust" placeholder="업체에 요청하실 내용을 적어주세요"></textarea>
+                                </th:block>
+
+                                <th:block th:unless="${session.loginMember?.memberCode==1}">
+                                    <textarea name="reservReqeust" id="reservReqeust" readonly placeholder="현재 로그인 상태로 예약할 수 없습니다."></textarea>
+                                </th:block>
                             </div>
                         </div>
 
@@ -205,16 +230,12 @@
                         <input type="checkbox" name="checkAgree" id="checkAgree"> 
 
                         <!-- 동의 체크 -->
-                        
-
-                        <!-- 체크 클릭 시 채워진 체크버튼 이용 -->
-
-                        <label for="checkAgree"  id="checkContent">
+                        <label for="checkAgree" id="checkContent">
                             <i class="fas fa-check"></i><span class="agree-info">예약 서비스 이용을 위한 개인정보 수집 및 제3자 제공 규정을 확인하였으며 이에 동의합니다.</span>
                         </label>
                     </div>
+
                 </div>
-                
                 
             </section>
             
@@ -223,8 +244,8 @@
             <section class="button-area">
                 
                 <div class="buttons">
-                    <a href="/reservation/reservationDetail"  id="cancelBtn">취소</a>
-                    <a href="/reservation/reservationConfirm" id="nextBtn">다음</a>
+                    <a href="/reservation/reservationDetail" class="cancel-btn">취소</a>
+                    <a href="/reservation/reservationConfirm" class="next-btn" id="confirmBtn">예약하기</a>
                 </div>
                 
             </section>
@@ -235,10 +256,12 @@
 
     <th:block th:replace="~{common/footer}"></th:block> 
 
-    <script th:inline="javascript">
+    <script src="/js/reservation/reservation.js"></script>
 
+    <script th:inline="javascript">
         const loginMember = /*[[${session.loginMember}]]*/ "로그인회원"
 
+        const memberCode = /*[[session.loginMember?.memberCode]]*/ "회원코드"
     </script>
     
 </body>

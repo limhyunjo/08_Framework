@@ -115,7 +115,7 @@ function executeRating(stars, result) {
 }
 
 function printRatingResult(result, num = 0) {
-  result.textContent = `${num} 점`;
+  result.textContent = num;
 }
 
 executeRating(ratingStars, ratingResult);
@@ -132,6 +132,40 @@ keywords.forEach((keyword) => {
       e.preventDefault();
     }
   });
+});
+
+/* ***************************************************************************** */
+
+const menuCheckbox = document.querySelectorAll(".menu-checkbox");
+const selectMenuButton = document.querySelector("selectMenuButton");
+const reviewForm = document.querySelector("#reviewForm");
+const reviewContent = document.querySelector("#reviewContent");
+const ul = document.querySelector("#keywords");
+
+reviewForm.addEventListener("submit", e => {
+  
+  const menuChecked = document.querySelectorAll(".menu-checkbox:checked");
+  if(menuChecked.length == 0){
+    alert("메뉴를 선택해주세요.");
+    selectMenu.focus();
+    e.preventDefault();
+    return;
+  }
+  
+  const hashChecked = document.querySelectorAll(".keyword-checkbox:checked");
+  if(hashChecked.length == 0) {
+    alert("해시태그를 선택해주세요.");
+    ul.focus();
+    e.preventDefault();
+    return;
+  }
+
+  if(reviewContent.value.trim().length == 0 ){
+    alert("리뷰를 작성해주세요")
+    e.preventDefault();
+    return;
+  }
+
 });
 
 

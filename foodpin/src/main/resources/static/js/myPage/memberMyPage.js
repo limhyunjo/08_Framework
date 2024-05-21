@@ -53,12 +53,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
 /* 회원 비밀번호 변경 */
 const memberChangePw = document.querySelector("#memberChangePw");
-const memberChangePwBtn = document.querySelector("#member-changePw-submit");
 
 if(memberChangePw != null) {
     memberChangePw.addEventListener("submit", e => {
 
-        const currentPw = document.querySelector("#currnetPw");
+        const currentPw = document.querySelector("#currentPw");
         const newPw = document.querySelector("#newPw");
         const newPwConfirm = document.querySelector("#newPwConfirm");
 
@@ -90,3 +89,26 @@ if(memberChangePw != null) {
     });
 }
 
+const updateInfo = document.querySelector("#updateInfo");
+
+if(updateInfo != null) {
+    updateInfo.addEventListener("submit", e => {
+        const memberNickname = document.querySelector("#memberNickname");
+        const memberTel = document.querySelector("#memberTel");
+
+        let str;
+
+        if(memberNickname.value.trim().length == 0) str = "닉네임을 입력해 주세요";
+        else if(memberTel.value.trim().length == 0) str = "전화번호를 입력해 주세요";
+
+        if(str != undefined) {
+            alert(str);
+            e.preventDefault();
+            return;
+        }
+
+        // 닉네임, 전번 유효성 추가하세요
+
+
+    })
+}

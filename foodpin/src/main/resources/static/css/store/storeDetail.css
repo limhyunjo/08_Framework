@@ -262,46 +262,65 @@ aside>a:hover{
 /* ***************************************** */
 /* 팝업 영역 */
 
-.popup-store{
+.popup-storereport{
     display: none !important;
 }
 
+#popupShut:hover{
+    color: rgb(87, 214, 41);
+}
+
+
 
 #storeReportForm {
+   
     width: 100vw;
     height: 100vh;
     position: fixed;
-    z-index: 1001;
-    background-color: rgba(116, 116, 116, 0.8);
+    z-index: 2001;
+    background-color: rgba(0, 0, 0, 0.5);
     top: 0px;
     left: 0;
     display: flex;
     justify-content: center;
     align-items: center;
+   
 }
 
 
 .popupbox{
-    width: 600px;
-    height: 600px;
-    border-radius: 15px;
-    background-color: #e4e4e4;
+    width: 460px;
+    height: 371px;
+    border-radius: 10px;
+    background-color: #fff;
+    text-align: center;
     position: relative;
+    
 }
 
-#p {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+.popupbox button{
+    cursor: pointer;
+    border: none;
+    margin-top: 30px;
+    font-size: 14px;
 
-    padding: 30px 0 ;
-    padding-left:30px ;
-    color: #393939;
-    font-weight: bold;
-
-    font-size: 24px;
-    margin: 0;
 }
+
+.store-report-text >*{
+    margin-bottom: 20px;
+}
+.popupbox span {
+  color: grey;
+  font-size: 14px;
+  
+}
+
+.store-report-info{
+    padding: 30px;
+    text-align: center;
+    border-bottom: 1px solid var(--main-color);
+}
+
 
 #popupShut {
     display: flex;
@@ -315,14 +334,35 @@ aside>a:hover{
     user-select: none;
     cursor: pointer;
 
+
     width: 30px;
     height: 30px;
     color: #393939;
     border-radius: 7px;
 }
 
-#popupShut:hover{
-    color: red;
+
+#reportStoreContent{
+    resize:none;
+    height: 130px;
+    width: 100%;
+    padding: 10px;
+
+    border:1px solid var(--main-color);
+    color: #383838;
+    font-size: 15px;
+}
+
+#reportStoreContent:focus{
+    outline: none;
+}
+
+.check-store-div{
+ text-align: left;
+}
+
+.check-store-div label {
+  cursor: pointer;
 }
 
 /* ***************************************** */
@@ -334,36 +374,103 @@ aside>a:hover{
     background-color: white;
 }
 
-/* 영업 시간 / 영업 상태 위치 */
-.store-statuscontainer{
+
+/* 영업 시간, 영업 상태 표시 */
+.store-statusbox{
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.store-opentime{
-
-    flex-direction: column;
-    display: flex;
-
-}
-.store-statuscontainer span{
+    margin-bottom: 25px;
     font-size: 20px;
     font-weight: bold;
-    color: rgb(46, 41, 41);
-    margin: 5px 0px;
-
 }
+
+ul{
+    list-style-type: none;
+}
+
+li{
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+    color: rgb(65, 65, 65);
+}
+
+hr{
+  border: 0px;
+  height: 1px; /* hr은 height 속성으로 두께 지정 */
+  background-color:var(--main-color); 
+  margin: 14px 0;
+}
+
 
 #storeStatusText{
     color: rgb(26, 180, 232);
 }
 
-.store-today{
-    margin-bottom: 50px;
-    font-weight: bold;
-    color: rgb(46, 41, 41);
+/* *********************************** */
+
+.store-date{
+   
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+  
+}
+
+.store-statuscontainer{
+    display: flex;
+    flex-direction: column;
+    color:rgb(46, 41, 41); 
+    margin-bottom: 15px;
+    overflow: hidden;
+    
+}
+
+/* 가게 영업 시간 더보기 */
+
+.busi-hours-short{
+    display: none;
+}
+
+.more-schedule-info-box{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    margin-top: 15px;
+}
+
+
+#moreScheduleInfoBtn{
+    cursor: pointer;
+    width: 50px;
+    border: 1px solid var(--main-color);
+    border-radius: 10px;
+    color: rgb(46, 41, 41);  
+    background-color: white; 
+}
+
+#shutScheduleInfoBtn{
+    cursor: pointer;
+    width: 50px;
+    border: 1px solid var(--main-color);
+    border-radius: 10px;
+    color: rgb(46, 41, 41);  
+    background-color: white; 
+    display: none;
+}
+
+/* *********************************** */
+
+
+.date-statusdetail{
+    display: flex;
+    flex-direction: column;  
+    align-items: flex-end;
+}
+
+.date-statusdetail span{
+    margin-bottom: 10px;
 }
 
 .storedetail-opencontainer{
@@ -371,14 +478,21 @@ aside>a:hover{
 }
 
 
+
+
+
+
+
 /* 메뉴 컨테이너 */
 
 .storedetail-menucontainer >*{
     margin: 15px 0px;
+    
 }
 
 .storedetail-menucontainer{
     border-bottom: 1px solid var(--main-color);
+    width: 500px;
 }
 
 #menuInfoTitle{
@@ -394,9 +508,19 @@ aside>a:hover{
     border-radius: 5px;
 }
 
-.menuimage-container{
+.store-menu-list{
+   
+    height: 380px;
+    overflow: hidden;
+}
+
+
+
+.store-menu-list >*{
+    margin: 10px 0px;
+}
+.menu-image-container{
     display: flex;
-    flex-direction: row;
   
 }
 
@@ -429,12 +553,19 @@ aside>a:hover{
     border: 1px solid var(--main-color);
     border-radius: 10px;
     color: rgb(46, 41, 41);  
-    background-color: white;
+    background-color: white; 
 }
 
-#moreMenuImageBtn.hidden{
+#shutMenuImageBtn{
+    cursor: pointer;
+    width: 50px;
+    border: 1px solid var(--main-color);
+    border-radius: 10px;
+    color: rgb(46, 41, 41);  
+    background-color: white; 
     display: none;
 }
+
 
 
 /* 해시태그 컨테이너 */
@@ -519,7 +650,7 @@ aside>a:hover{
 }
 
 .rating__star{
-    color: #ff5500;
+    color: #ff2a00;
 }
 
 .review-member-profile{
@@ -774,8 +905,16 @@ aside>a:hover{
 .report-button-area > textarea{
     width: 500px;
     height: 140px;
+    padding: 10px;
     margin-bottom: 32px;
     border-radius: 10px;
+    font-size: 14px;
+    resize: none;
+
+}
+
+.report-button-area > textarea:focus{
+   outline: none;
 }
 
 .report-button-area > button{

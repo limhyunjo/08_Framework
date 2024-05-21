@@ -1,5 +1,5 @@
  
-
+ 
  
 function storelocation() {
     var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
@@ -10,32 +10,6 @@ function storelocation() {
 
     var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
-
-
-       /* 지도 레벨 변경 */
-
-       function zoomIn() {        
-        // 현재 지도의 레벨을 얻어옵니다
-        var level = map.getLevel();
-        
-        // 지도를 1레벨 내립니다 (지도가 확대됩니다)
-        map.setLevel(level - 1);
-        
-        // 지도 레벨을 표시합니다
-        displayLevel();
-    }    
-    
-    function zoomOut() {    
-        // 현재 지도의 레벨을 얻어옵니다
-        var level = map.getLevel(); 
-        
-        // 지도를 1레벨 올립니다 (지도가 축소됩니다)
-        map.setLevel(level + 1);
-        
-        // 지도 레벨을 표시합니다
-        displayLevel(); 
-    }   
-    
 
 
     function detaillocation(){
@@ -86,7 +60,6 @@ function storelocation() {
     window.addEventListener('resize', function() {
           
     
-       
             
         detaillocation();
        
@@ -139,9 +112,8 @@ function storelocation() {
         map.setCenter(locPosition);      
     }    
 
+    
 
-
- 
 
    
 
@@ -152,7 +124,7 @@ function storelocation() {
 window.onload = function() {
     // currentlocation 함수 실행
     storelocation();
-   /*  detaillocation(); */
+    detaillocation();
    
 };
 

@@ -35,8 +35,9 @@ import net.nurigo.sdk.message.service.DefaultMessageService;
 public class MemberController {
 
 	// 쿨SMS 서비스 
-	private final DefaultMessageService messageService;
-	
+	/*
+	 * private final DefaultMessageService messageService;
+	 */
 	private final MemberService service;
 	
 	/** 로그인 페이지로 이동
@@ -257,9 +258,10 @@ public class MemberController {
         message.setFrom("01026624515");
         message.setTo(memberTel);
         message.setText("인증번호는 ["+authKey+"] 입니다.");
-
-        SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
-
+		/*
+		 * SingleMessageSentResponse response = this.messageService.sendOne(new
+		 * SingleMessageSendingRequest(message));
+		 */
         Map<String, Object> map = new HashMap<>();
         
         map.put("authKey", authKey);

@@ -201,6 +201,36 @@ aside>a:hover{
     background-color: white;
     color: rgb(120, 120, 120);
 }
+
+/* 가게 상세 설명 */
+.store-detail-content{
+ width: 500px;
+ display: flex;
+}
+
+.store-detail-text{
+width: 100%;
+text-overflow: ellipsis;
+overflow: hidden;
+display: -webkit-box;
+-webkit-box-orient: vertical;
+white-space: unset;
+-webkit-line-clamp: 3;
+}
+
+.more-text{
+    float: right;
+    display: flex;
+    align-items: flex-end;
+    height: 100%;
+    shape-outside: inset(calc(100% - 10px) 0 0 0);
+}
+.less-text{
+    display: none;
+}
+
+
+
 /* 예약 버튼 공간 */
 .storedetail-reservationbuttonbox{
     margin: 50px 0px;

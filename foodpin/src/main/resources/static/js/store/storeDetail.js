@@ -7,6 +7,15 @@ storedetailmapbutton.addEventListener("click", () => {
 
 });
 
+
+
+/* 가게 상세 설명 더보기 */
+const storeDetailContent =document.querySelector('.store-detail-content');
+const storeDetailText =document.querySelector('.store-detail-text');
+const moreText =document.querySelector('.more-text');
+const lessText =document.querySelector('.less-text');
+
+
 /* ****************지도******************* */
 
 

@@ -11,9 +11,11 @@ aside{
     
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
     width: 40px;
-    height: 200px;
+    height: 180px;
 
     /* 화면에 고정 */
     position: fixed;
@@ -29,19 +31,19 @@ aside{
     box-shadow: 0px 0px 5px 0px rgb(148, 148, 148);
 
     border-radius: 15px;
+    overflow: hidden;
    
 }
 
-aside>a{
+aside >a{
 
     display: flex;
-    width: 70px;
-    height: 70px;
-    margin: 5px;
+    width: 40px;
+    height: 50px;
     font-size: 20px;
     justify-content: center;
     align-items: center;
-    border-radius: 50px;
+    
     flex-direction: column;
 
 }
@@ -55,18 +57,28 @@ aside p{
 }
 
 /* 위로 이동 */
-.top-button{
+/* .top-button{
     display: flex;
     justify-content: center;
     align-items: center;
     flex-grow: 1;
     user-select: none;
-    color: grey;
+    
     font-weight: bold;
 }
+.bottom-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    user-select: none;
+ 
+    font-weight: bold;
+} */
 aside>a:hover{
-    background-color: #ddd;
+    background-color: #9c9c9c;
     color: #fff;
+   
 }
 
 
@@ -252,7 +264,7 @@ color: rgb(66, 66, 66);
 
 /* 예약 버튼 공간 */
 .storedetail-reservationbuttonbox{
-    margin: 50px 0px;
+    margin-bottom: 60px;
 }
 
 /* 예약 버튼 */
@@ -852,7 +864,7 @@ hr{
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 25px;
+    margin: 30px 0px 60px 0px;
     
 }
 

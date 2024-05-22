@@ -15,6 +15,23 @@ const storeDetailText =document.querySelector('.store-detail-text');
 const moreText =document.querySelector('.more-text');
 const lessText =document.querySelector('.less-text');
 
+moreText.addEventListener("click", () => {
+  
+  moreText.style.display = 'none'; 
+  lessText.style.display = 'block'; 
+  storeDetailText.style.display = 'inline';
+});
+
+
+lessText.addEventListener("click", ()=>{
+ 
+ 
+  
+  lessText.style.display = 'none'; 
+  moreText.style.display = 'flex';
+  storeDetailText.style.display = '-webkit-box'; 
+});
+
 
 /* ****************지도******************* */
 
@@ -176,7 +193,7 @@ moreMenuImageBtn.addEventListener('click',()=>{
   
 
   moreMenuImageBtn.style.display = 'none'; 
-  shutMenuImageBtn.style.display = 'inline-block'; 
+  shutMenuImageBtn.style.display = 'inline'; 
   
   storeMenuList.style.display = 'visible';
  
@@ -186,7 +203,7 @@ shutMenuImageBtn.addEventListener("click",()=>{
 
   
   shutMenuImageBtn.style.display = 'none'; 
-  moreMenuImageBtn.style.display = 'inline-block';
+  moreMenuImageBtn.style.display = 'inline';
   storeMenuList.style.display = 'hidden';
  
 })

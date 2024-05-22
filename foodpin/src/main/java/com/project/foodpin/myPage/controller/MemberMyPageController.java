@@ -16,6 +16,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.project.foodpin.member.model.dto.Member;
 import com.project.foodpin.myPage.model.service.MemberMyPageService;
 import com.project.foodpin.reservation.model.dto.Reservation;
+import com.project.foodpin.review.model.dto.Review;
+import com.project.foodpin.store.model.dto.Store;
 
 import lombok.RequiredArgsConstructor;
 
@@ -87,33 +89,87 @@ public class MemberMyPageController {
 		return "redirect:" + path;
 	}
 	
-	// 회원 예약창 목록조회
-	@GetMapping("memberReservation")
-	public String selectReservation(
-		Model model,
-		@SessionAttribute("loginMember") Member loginMember) {
+	
+	// 예약 확정 조회
+	@GetMapping("reservation/fix")
+	public String reservationFix(
+		@SessionAttribute("loginMember") Member loginMember,
+		Model model) {
+		
 		int memberNo = loginMember.getMemberNo();
-		List<Reservation> reservation = service.selectReservation(memberNo);
+		List<Reservation> reservation = service.reservationFix(memberNo);
 		model.addAttribute("reservation", reservation);
-		return "myPage/member/memberReservation";
+		
+		return "myPage/member/reservation/fix";
 	}
+	
+	// 예약 대기 조회
+	@GetMapping("reservation/wait")
+	public String reservationWait(
+		@SessionAttribute("loginMember") Member loginMember,
+		Model model) {
+		
+		int memberNo = loginMember.getMemberNo();
+		List<Reservation> reservation = service.reservationWait(memberNo);
+		model.addAttribute("reservation", reservation);
+		
+		return "myPage/member/reservation/wait";
+	}
+	
+	// 지난 예약 조회
+	@GetMapping("reservation/last")
+	public String reservationLast(
+			@SessionAttribute("loginMember") Member loginMember,
+			Model model) {
+		
+		int memberNo = loginMember.getMemberNo();
+		List<Reservation> reservation = service.reservationLast(memberNo);
+		model.addAttribute("reservation", reservation);
+		
+		return "myPage/member/reservation/last";
+	}
+	
+	// 취소/노쇼 예약 조회
+	@GetMapping("reservation/cancelNoshow")
+	public String reservationCancelNoshow(
+			@SessionAttribute("loginMember") Member loginMember,
+			Model model) {
+		
+		int memberNo = loginMember.getMemberNo();
+		List<Reservation> reservation = service.reservationCancelNoshow(memberNo);
+		model.addAttribute("reservation", reservation);
+		
+		return "myPage/member/reservation/cancelNoshow";
+	}
+	
+	
 	
 	// 북마크 목록 조회
 	@GetMapping("memberLike")
 	public String memberLikeList(
+		Model model,
 		@SessionAttribute("loginMember") Member loginMember) {
 		
 		int memberNo = loginMember.getMemberNo();
-		service.memberLikeList(memberNo);
+		List<Store> store = service.memberLikeList(memberNo);
+		model.addAttribute("store", store);
 		
 		return "myPage/member/memberLike";
 	}
 	
+	// 리뷰 목록 조회
 	@GetMapping("memberReview")
-	public String memberReview() {
+	public String memberReview(
+		Model model,
+		@SessionAttribute("loginMember") Member loginMember) {
+		
+		int memberNo = loginMember.getMemberNo();
+		List<Review> review = service.selectReviewList(memberNo);
+		model.addAttribute("review", review);
 		return "myPage/member/memberReview";
 	}
 	
+	// 회원 탈퇴 페이지로
 	@GetMapping("memberSecession")
 	public String memberSecession() {
 		return "myPage/member/memberSecession";

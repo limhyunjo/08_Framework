@@ -35,9 +35,8 @@ import net.nurigo.sdk.message.service.DefaultMessageService;
 public class MemberController {
 
 	// 쿨SMS 서비스 
-	/*
-	 * private final DefaultMessageService messageService;
-	 */
+	private final DefaultMessageService messageService;
+	
 	private final MemberService service;
 	
 	/** 로그인 페이지로 이동
@@ -68,9 +67,12 @@ public class MemberController {
 		// 로그인 서비스 호출
 		Member loginMember = service.login(inputMember);
 		
+		String path="";
+		
 		// 로그인 실패 시
 		if(loginMember == null) {
 			ra.addFlashAttribute("message","아이디 또는 비밀번호가 일치하지 않습니다.");
+			path = "/member/login";
 		}
 		
 		// 로그인 성공 시
@@ -97,9 +99,11 @@ public class MemberController {
 			
 			
 			/*************************************************************/
+			path = "/";
+		
 		}
 		
-		return "redirect:/";
+		return "redirect:"+path;
 	}
 	
 	
@@ -204,6 +208,12 @@ public class MemberController {
 		return "redirect:"+path;
 	}
 	
+	/** 가게 사장님 회원가입
+	 * @param inputMember
+	 * @param storeLocation
+	 * @param ra
+	 * @return
+	 */
 	@PostMapping("signupStore")
 	public String signupStore(
 			Member inputMember,
@@ -218,7 +228,7 @@ public class MemberController {
 		
 		if(result>0) {
 			message = inputMember.getMemberName()+" 님의 가입신청이 완료되었습니다.";
-			path = "/member/login";
+			path = "/";
 		}
 		else {
 			message = "회원 가입에 실패했습니다.";
@@ -231,8 +241,8 @@ public class MemberController {
 	}
 	
 	
-	/** 이메일 중복 검사
-	 * @param memberEmail
+	/** 아이디 중복 검사
+	 * @param memberId
 	 * @return 중복 1, 아니면 0
 	 */
 	@ResponseBody // 응답 본문(요청한 fetch())로 돌려보냄
@@ -242,6 +252,20 @@ public class MemberController {
 			) {
 		return service.checkId(memberId);
 	}
+	
+	/** 아이디 중복 검사
+	 * @param memberId
+	 * @return 중복 1, 아니면 0
+	 */
+	@ResponseBody // 응답 본문(요청한 fetch())로 돌려보냄
+	@GetMapping("checkStoreNo")
+	public int checkStoreNo(
+			@RequestParam("storeNo") String storeNo
+			) {
+		return service.checkStoreNo(storeNo);
+	}
+	
+	
 	
 	/** SMS 인증번호 보내기 + DB에 인증번호 저장
 	 * @param memberTel
@@ -258,10 +282,9 @@ public class MemberController {
         message.setFrom("01026624515");
         message.setTo(memberTel);
         message.setText("인증번호는 ["+authKey+"] 입니다.");
-		/*
-		 * SingleMessageSentResponse response = this.messageService.sendOne(new
-		 * SingleMessageSendingRequest(message));
-		 */
+
+        SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
+
         Map<String, Object> map = new HashMap<>();
         
         map.put("authKey", authKey);

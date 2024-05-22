@@ -202,6 +202,7 @@ shutMenuImageBtn.addEventListener("click",()=>{
   
   shutMenuImageBtn.style.display = 'none'; 
   moreMenuImageBtn.style.display = 'inline';
+<<<<<<< HEAD
 
   storeMenuList.style.display = 'flex';
  /*  storeMenuList.style.height = '370px'; */
@@ -209,6 +210,9 @@ shutMenuImageBtn.addEventListener("click",()=>{
   storeMenuList.style.overflow = 'hidden';
 
  
+=======
+  storeMenuList.style.display = 'hidden';
+>>>>>>> origin/main
  
 })
 

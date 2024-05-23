@@ -204,7 +204,6 @@ shutMenuImageBtn.addEventListener("click",()=>{
   moreMenuImageBtn.style.display = 'inline';
 
   storeMenuList.style.display = 'flex';
- /*  storeMenuList.style.height = '370px'; */
 
   storeMenuList.style.overflow = 'hidden';
 

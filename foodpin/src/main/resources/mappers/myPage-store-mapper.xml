@@ -2,20 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.project.foodpin.myPage.model.mapper.StoreMyPageMapper">
 
-	<!-- 회원번호로 사업자번호 조회 -->
-	<select id="selectStoreNo">
-		SELECT STORE_NO
+	<!-- *** 가게 정보 *** -->
+	
+	<!-- 가게 정보 수정 화면 이동 -->
+	<select id="selectstoreInfo">
+		SELECT STORE_NAME, STORE_TEL, STORE_LOCATION, OPEN_HOUR, CLOSE_HOUR, 
+			BREAKTIME_START, BREAKTIME_END, STORE_STATUS, STORE_MAX_NUMBER, 
+			STORE_MAX_TABLE, STORE_INFO 
 		FROM "STORE"
-		JOIN MEMBER USING(MEMBER_NO)
-		WHERE MEMBER_NO = #{memberNo}
+		WHERE STORE_NO = (
+			SELECT STORE_NO
+			FROM "STORE"
+			JOIN MEMBER USING(MEMBER_NO)
+			WHERE MEMBER_NO = #{memberNo}
+		)
 	</select>
+	
 	
 	
 	<!-- *** 예약 *** -->
 	
 	<!-- 전체 예약 조회 -->
 	<select id="reservAll">
-		SELECT MEMBER_NAME, MEMBER_TEL, TO_CHAR(RESERV_DATE, 'YYYY"년" MM"월" DD"일"') RESERV_DATE, RESERV_TIME, RESERV_COUNT, RESERV_REQUEST, RESERV_STATUS_FL
+		SELECT MEMBER_NAME, MEMBER_TEL, TO_CHAR(RESERV_DATE, 'YYYY"년" MM"월" DD"일"') RESERV_DATE, 
+			RESERV_TIME, RESERV_COUNT, RESERV_REQUEST, RESERV_STATUS_FL
 		FROM "RESERVATION"
 		JOIN "MEMBER" USING(MEMBER_NO)
 		WHERE STORE_NO = (
@@ -29,7 +39,8 @@
 	
 	<!-- 확정된 예약 조회 -->
 	<select id="reservConfirm">
-		SELECT MEMBER_NAME, MEMBER_TEL, TO_CHAR(RESERV_DATE, 'YYYY"년" MM"월" DD"일"') RESERV_DATE, RESERV_TIME, RESERV_COUNT, RESERV_REQUEST, RESERV_STATUS_FL
+		SELECT MEMBER_NAME, MEMBER_TEL, TO_CHAR(RESERV_DATE, 'YYYY"년" MM"월" DD"일"') RESERV_DATE, 
+			RESERV_TIME, RESERV_COUNT, RESERV_REQUEST, RESERV_STATUS_FL
 		FROM "RESERVATION"
 		JOIN "MEMBER" USING(MEMBER_NO)
 		WHERE STORE_NO = (
@@ -41,5 +52,21 @@
 		AND RESERV_STATUS_FL = 'Y'
 		ORDER BY RESERV_DATE
 	</select>
+	
+	
+	<!-- *** 사장님 정보 *** -->
+	
+	<!-- 사장님 정보 변경 화면으로 전환 + 기존 정보 조회 -->
+	<select id="selectCeoInfo">
+		SELECT MEMBER_EMAIL, MEMBER_TEL FROM "MEMBER" WHERE MEMBER_NO = #{memberNo}
+	</select>
+	
+	<!-- 사장님 정보 변경 -->
+	<update id="ceoInfoUpdate">
+		UPDATE "MEMBER" SET
+		MEMBER_EMAIL = #{memberEmail}, MEMBER_TEL = #{memberTel}
+		WHERE MEMBER_NO = #{memberNo}
+	</update>
+	
 	
 </mapper>

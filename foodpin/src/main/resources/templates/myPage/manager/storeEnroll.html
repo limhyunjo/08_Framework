@@ -19,7 +19,7 @@
 
             <section class="content-container">
                 <div class="myPage-title-container">
-                    <section class="myPage-title">가게 입점 내역</section>
+                    <section class="myPage-title">입점 신청 내역</section>
 
 
                 </div>
@@ -37,7 +37,7 @@
                     <tbody>
                         <th:block th:if="${#lists.isEmpty(storeMember)}">
                             <tr>
-                                <th colspan="4">입점 내역이 존재하지 않습니다</th>
+                                <th colspan="4">입점 신청 내역이 존재하지 않습니다</th>
                             </tr>
                         </th:block> 
 
@@ -47,8 +47,8 @@
                                 <td th:text="*{member.storeName}">대박고깃집</td>
                                 <td th:text="*{member.enrollDate}">24.05.22</td>
                                 <td>
-                                    <button class="approval" data-memberNo="*{member.memberNo}">승인</button>
-                                    <button class="refuse" data-memberNo="*{member.memberNo}">거절</button>
+                                    <button class="approval" th:data-member-no="${member.memberNo}">승인</button>
+                                    <button class="refuse" th:data-member-no="${member.memberNo}">거절</button>
                                 </td>
                             </tr>
 

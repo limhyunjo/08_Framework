@@ -28,6 +28,13 @@ function approveMember(memberNo) {
     })
     .then(resp => resp.json())
     .then(result => {
+
+        if(!confirm("승인처리 하시겠습니까?")) {
+            alert("취소 되었습니다");
+            this.preventDefault();
+            return;
+        }
+
         if(result.success) {
             alert('승인되었습니다');
             location.reload();
@@ -37,7 +44,7 @@ function approveMember(memberNo) {
     });
 }
 
-// 거절 처리
+// 폐업 처리
 function refuseMember(memberNo) {
     fetch(`/myPage/manager/refuseMember/${memberNo}`, {
         method: 'POST',
@@ -47,37 +54,17 @@ function refuseMember(memberNo) {
     .then(resp => resp.json())
     .then(result => {
 
+        if(!confirm("정말 폐점처리 하시겠습니까?")) {
+            alert("취소 되었습니다");
+            this.preventDefault();
+            return;
+        }
+
         if(result.success) {
-            alert('거절되었습니다');
+            alert('폐점되었습니다');
             location.reload();
         } else {
             alert('거절에 실패했습니다');
         }
     })
 }
-
-
-
-
-
-/* 입점 내역 상세 팝업 */
-const popup = document.querySelector("#popup");
-const openStoreDetail = document.querySelectorAll(".open-storeDetail");
-const closePopup = document.querySelector(".close-popup");
-
-openStoreDetail.forEach(link => {
-    link.addEventListener('click', e => {
-        e.preventDefault();
-        popup.style.display = 'block';
-    });
-});
-
-closePopup.addEventListener('click', () => {
-    popup.style.display = 'none';
-});
-
-window.addEventListener("click", e => {
-    if(e.target == popup) {
-        popup.style.display = 'none';
-    }
-});

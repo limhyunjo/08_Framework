@@ -2,17 +2,150 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.project.foodpin.store.model.mapper.DetailStoreMapper">
 
+
+	
+	<resultMap type="Review" id="review_rm">
+	
+		<id property="reviewNo" column="REVIEW_NO"/>
+		
+		<collection 
+			property="imageList"
+			select = "selectImageList"
+			column = "REVIEW_NO"
+			javaType = "java.util.ArrayList"
+			ofType = "UploadImage"
+		/>
+		
+		<collection 
+			property="hashList"
+			select = "selectHashList"
+			column = "REVIEW_NO"
+			javaType = "java.util.ArrayList"
+			ofType = "ReviewHash"
+		/>
+	</resultMap>
+
+
+
+
+
+<!-- resultMap
+   조회된 컬럼명과 DTO 필드명이 일치하지 않을 때 매핑 시켜줌
+ -->
+<resultMap type="Store" id="store_rm">
+
+  <id property="storeNo" column="STORE_NO"/>
+  
+  <!-- id(PK역할하는 컬럼, 필드를 작성하는 태그)
+       resultMap의 PK로 storeNo를 하겠다고 지정
+   -->
+   
+   
+   <collection property="imageList"
+               select = "selectImageList"
+               column = "STORE_NO"
+               javaType = "java.util.ArrayList"
+               ofType = "UploadImage"
+   />
+   <collection property="menuList"
+               select = "selectMenuList"
+               column = "STORE_NO"
+               javaType = "java.util.ArrayList"
+               ofType = "Menu"
+   />
+
+</resultMap>
+
+
+
 	   <!-- 가게 상세 조회 -->
-   <select id="storeDetail" resultType="store">
-     SELECT S.STORE_NAME, S.STORE_INFO, S.STORE_LOCATION, S.STORE_STATUS,
-       S.STORE_TEL, S.OPEN_HOUR, S.CLOSE_HOUR, S.BREAKTIME_START, S.BREAKTIME_END,
-       S.STORE_CLOSED, S.STORE_IMG, S.TOTAL_RATING, S.MEMBER_NO
-		FROM "STORE" S
-		LEFT JOIN STORE_CATEGORY SC ON S.STORE_NO = SC.STORE_NO
-		LEFT JOIN WEEK_OFF W ON S.STORE_NO = W.STORE_NO
-		LEFT JOIN DAY_OFF D ON S.STORE_NO = D.STORE_NO
-		LEFT JOIN MENU M ON S.STORE_NO = M.STORE_NO
-		WHERE S.STORE_NO = #{storeNo}
+   <select id="storeDetail" resultMap="store_rm">
+   SELECT STORE_NAME, STORE_INFO, STORE_LOCATION, STORE_STATUS,
+       STORE_TEL, OPEN_HOUR, CLOSE_HOUR, BREAKTIME_START, BREAKTIME_END,
+       STORE_CLOSED, STORE_IMG, TOTAL_RATING, MEMBER_NO, STORE_NO,
+       	(SELECT COUNT(*) 
+		 FROM "BOOKMARK"
+		 WHERE STORE_NO = #{storeNo}) LIKE_COUNT,
+		 (SELECT COUNT(*)FROM "BOOKMARK"
+	    WHERE MEMBER_NO = #{memberNo}
+	    AND STORE_NO =#{storeNo}) BOOK_MARK
+		 
+		FROM "STORE" 
+		WHERE STORE_NO = #{storeNo}
+		AND STORE_CLOSED ='N'
+		
    </select>
+   
+   
+   <select id="selectImageList" resultType="UploadImage">
+     SELECT *
+     FROM "UPLOAD_IMAGE"
+     WHERE STORE_NO = #{storeNo}
+     ORDER BY REVIEW_NO DESC
+   </select>
+   
+   <select id="selectMenuList" resultType="Menu">
+     SELECT *
+     FROM "MENU"
+     WHERE STORE_NO = #{storeNo}
+     ORDER BY MENU_NO
+   </select>
+   
+   
+   <!-- 가게 리뷰 상세 조회 -->
+   <select id="reviewDetail" resultMap="review_rm">
+   		SELECT DISTINCT MEMBER_NAME, PROFILE_IMG, REVIEW_NO, REVIEW_RATING, REVIEW_CONTENT,
+			TO_CHAR(REVIEW__REG_DATE, 'YYYY-MM-DD') REVIEW__REG_DATE, REVIEW_DEL_FL,
+			STORE_NO, MEMBER_NO
+		FROM REVIEW
+		JOIN "MEMBER" USING (MEMBER_NO)
+		JOIN "REVIEW_HASH" USING (REVIEW_NO)
+		JOIN "HASH" USING (HASH_NO)
+		WHERE STORE_NO = #{storeNo}
+		AND REVIEW_DEL_FL = 'N'
+		ORDER BY REVIEW_NO DESC
+   </select>
+   
+   <!-- 리뷰 이미지 조회 -->
+   <select id="selectImageList" resultType="UploadImage">
+		SELECT * 
+		FROM UPLOAD_IMAGE
+		WHERE REVIEW_NO = #{reviewNo}
+		ORDER BY IMAGE_ORDER
+	</select>
+	
+	<!-- 리뷰 해시태그 조회 -->
+	<select id="selectHashList" resultType="ReviewHash">
+		SELECT HASH_NO, REVIEW_NO, HASH_TITLE 
+		FROM REVIEW_HASH
+		JOIN HASH USING (HASH_NO)
+		WHERE REVIEW_NO = #{reviewNo}
+	</select>
+   
+   
+   
+   
+   
+   
+   <!-- 가게 찜 해제 -->
+   <delete id="deleteStoreLike">
+     DELETE FROM "BOOKMARK"
+     WHERE MEMBER_NO = #{memberNo}
+     AND STORE_NO = #{storeNo}
+   </delete>
+   
+   <!-- 가게 찜 체크 -->
+    <insert id="insertStoreLike">
+     INSERT INTO "BOOKMARK" (MEMBER_NO, STORE_NO)
+     VALUES(#{memberNo}, #{storeNo})
+     
+    </insert>
+   
+   <!-- 가게 찜 개수 -->
+   <select id="selectLikeCount">
+    SELECT COUNT(*) FROM "BOOKMARK"
+     WHERE STORE_NO = #{storeNo}
+   </select>
+   
   
 </mapper>

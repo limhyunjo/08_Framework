@@ -2,11 +2,60 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.project.foodpin.reservation.model.mapper.ReservationMapper">
 
-	<select id="selectStoreList">
+	<select id="storeDetail" resultType="store">
 		SELECT STORE_NO, STORE_NAME, STORE_INFO, STORE_LOCATION, STORE_STATUS, STORE_MAX_NUMBER, STORE_TEL, OPEN_HOUR, CLOSE_HOUR,
-				BREAKTIME_START, BREAKTIME_END, STORE_CLOSED, STORE_IMG, TOTAL_RATING, STORE_MAX_TABLE, MEMBER_NO
+				BREAKTIME_START, BREAKTIME_END, STORE_CLOSED, STORE_IMG, TOTAL_RATING, MEMBER_NO, STORE_MAX_TABLE
 		FROM "STORE"
 		WHERE STORE_NO=#{storeNo}
+		AND STORE_CLOSED = 'N'
 	</select>
+	
+	<!-- <select id="selectStoreNo">
+		SELECT STORE_NO 
+		FROM "STORE"
+		WHERE STORE_NAME =#{storeName}
+	</select> -->
 
+	<!-- 이용시간 조회 -->
+	<select id="selectUseTime">
+		SELECT OPEN_HOUR , CLOSE_HOUR, BREAKTIME_START , BREAKTIME_END
+		FROM "STORE"
+		WHERE STORE_NO = #{storeNo}
+		AND STORE_CLOSED = 'N'
+	</select>
+	
+	<!-- 예약 저장 -->
+	<insert id="insertReservation">
+		INSERT INTO "RESERVATION" VALUES(
+			SEQ_RESERV_NO.NEXTVAL,
+			TO_DATE(#{reservDate}, 'YYYY-MM-DD'),
+			#{reservTime},
+			#{reservCount}, 
+			DEFAULT,
+			#{reservRequest},
+			#{memberNo},
+			#{storeNo},
+			#{visitName},
+			#{visitTel}
+	)
+	</insert>
+	
+	
+	<!-- 예약하려는 날짜의 예약 건수 조회 -->
+	<select id="confirmReservDate">
+		SELECT RESERV_TIME , COUNT(*) "COUNTS"
+		FROM "RESERVATION"
+		JOIN "STORE" USING (STORE_NO)
+		WHERE TO_CHAR(RESERV_DATE, 'MM.DD') IN (
+		    SELECT TO_CHAR(TO_DATE(RESERV_DATE, 'YYYY-MM-DD'), 'MM.DD') "RESERV_DATE"
+		    FROM "RESERVATION"
+		    WHERE TO_CHAR(RESERV_DATE, 'YYYY-MM-DD') = #{reservDate}
+		)
+		AND STORE_NO = #{storeNo}
+		AND STORE_CLOSED = 'N'
+		AND RESERV_STATUS_FL IN ('Y', 'N')
+		GROUP BY RESERV_DATE, RESERV_TIME
+
+	</select>
+	
 </mapper>

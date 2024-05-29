@@ -6,7 +6,7 @@
 	
 	<!-- 가게 정보 수정 화면 이동 -->
 	<select id="selectstoreInfo">
-		SELECT STORE_NAME, STORE_TEL, STORE_LOCATION, OPEN_HOUR, CLOSE_HOUR, 
+		SELECT STORE_NO, STORE_IMG, STORE_NAME, STORE_TEL, STORE_LOCATION, OPEN_HOUR, CLOSE_HOUR, 
 			BREAKTIME_START, BREAKTIME_END, STORE_STATUS, STORE_MAX_NUMBER, 
 			STORE_MAX_TABLE, STORE_INFO 
 		FROM "STORE"
@@ -18,6 +18,59 @@
 		)
 	</select>
 	
+	<!-- 가게 정보 수정 -->
+	<update id="storeInfoUpdate">
+		UPDATE "STORE" SET STORE_IMG = #{storeImg}, STORE_STATUS = 'Y', 
+			STORE_MAX_NUMBER = #{storeMaxNumber}, STORE_MAX_TABLE = #{storeMaxTable}, 
+			OPEN_HOUR = #{openHour}, CLOSE_HOUR = #{closeHour}, 
+			BREAKTIME_START = #{breaktimeStart}, BREAKTIME_END = #{breaktimeEnd}, STORE_INFO = #{storeInfo}
+		WHERE STORE_NO =(
+			SELECT STORE_NO FROM "STORE"
+			JOIN MEMBER USING(MEMBER_NO)
+			WHERE MEMBER_NO = #{memberNo}
+		)
+	</update>
+	
+	<!-- *** 메뉴 정보 *** -->
+	
+	
+	
+	
+	<!-- *** 휴무일 정보 *** -->
+	
+	<!-- 고정 휴무일 개수 조회 -->
+	<select id="countOffWeek">
+		SELECT COUNT(*) FROM "OFF_WEEK" WHERE STORE_NO = #{storeNo}
+	</select>
+	
+	<!-- 기존 고정 휴무일 삭제 -->
+	<delete id="deleteOffWeek">
+		DELETE FROM "OFF_WEEK" WHERE STORE_NO = #{storeNo}
+	</delete>
+	
+	<!-- 해당하는 결과가 없을 경우 등록 -->
+	<insert id="insertOffWeek">
+		INSERT INTO "OFF_WEEK" VALUES(SEQ_WEEK_OFF_NO.NEXTVAL, #{storeNo}, #{offWeek})
+	</insert>
+	
+	<!-- 고정 휴무일 조회 -->
+	<select id="selectWeekOff">
+		SELECT OFF_WEEK FROM "OFF_WEEK" WHERE STORE_NO = #{storeNo}
+	</select>
+	
+	<!-- 지정 휴무일 조회 -->
+	<select id="calendarOffSelect">
+		SELECT OFF_DAY_TITLE , TO_CHAR(OFF_DAY_START, 'YYYY-MM-DD') OFF_DAY_START, TO_CHAR(OFF_DAY_END, 'YYYY-MM-DD') OFF_DAY_END
+		FROM "OFF_DAY"
+		WHERE STORE_NO = #{storeNo}
+	</select>
+	
+	
+	<!-- 지정 휴무일 등록 -->
+	<insert id="calendarOffInsert">
+		INSERT INTO "OFF_DAY" VALUES(SEQ_DAY_OFF_NO.NEXTVAL, #{offDayTitle}, 
+		#{offDayStart}, #{offDayEnd}, #{storeNo})
+	</insert>
 	
 	
 	<!-- *** 예약 *** -->

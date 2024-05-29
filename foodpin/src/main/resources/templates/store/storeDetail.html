@@ -46,7 +46,7 @@
                         <button>좌</button>
 
                         <img class="storedetail-thumbnail" 
-                        src="/images/storeDetail/store.jpg" alt="가게 기본 이미지">
+                        th:src="*{storeImg}" alt="가게 기본 이미지">
                     
 
                         <button>우</button>
@@ -71,27 +71,40 @@
                                     <span id="storeName" th:text="*{storeName}">가게 이름</span> 
                                 </div>
                                 
-                                <div class="bookmark">
-
-                                    <i class="fa-regular fa-heart" id="bookmarkCheck"
-                                    th:classappend="*{bookmark == 1} ? fa-solid : fa-regular"></i>
+                                <div class="bookmark-box">
+                                  
+                                    <th:block th:if="${session.loginMember?.memberCode == 1}">
+                                        <i class="fa-heart" id="bookmarkCheck"
+                                        
+                                        th:classappend="*{bookMark == 1} ? fa-solid : fa-regular"></i>
+    
+                                    </th:block>
+                                
+                                           <!-- 좋아요 개수 -->
+                                           <th:block th:if="${session.loginMember==null}">
+                                            <i class="fa-solid fa-heart"> </i>
+                                           </th:block>
+                                           <!-- &nbsp; -->
+                                           <span id="storeLikeCount" th:text="*{likeCount}">0</span>
                                     
+                                   
+                                
                                 </div>
                             
                             </div>
 
 
 
-                            <!-- 지역 / 카테고리 -->
+                        
                             <div class="storedetail-row">
-                                <!-- 회원 정보 조회
-                                    클릭하면 검색 페이지로 이동 -->
-                            <span>비키니시티 | 패스트푸드</span>
+
+                                    <!-- 클릭하면 카테고리 검색된 상태로 상세 페이지로 이동 -->
+                              <span id="storeCat">패스트푸드</span>
                             </div>
 
 
 
-                            <!-- 별점 / 클릭시 아래 리뷰 페이지로 내려가는 버튼 -->
+                            <!-- 별점 -->
                             <div class="storedetail-row">
 
 
@@ -102,13 +115,13 @@
                                     <i class="rating__star far fa-star"></i>
                                     <i class="rating__star far fa-star"></i>
                                    
-                                    &nbsp;
-                                    <span th:text="*{totalRating}"> 점수 </span>
+                                    
+                                    <span th:text="*{totalRating}"> 점수 </span> 
                                 </div>
 
                                   
                                     
-                                <span id="showReview">리뷰></span>
+                               
 
                             </div>
 
@@ -119,11 +132,11 @@
                             <div class="storedetail-mid">
 
                             
-                                <!-- 가게 주소 / 지역 -->
+                                <!-- 가게 주소 / 지역 --> <!-- 토글로 가게 우편 번호와 상세 주소 넣기 -->
                                 <div class="storedetail-two">
-                                    <span th:text="*{storeLocation}">
-                                        가게 주소
-                                    </span>
+
+                                    <span id="detailLoc" th:text="${address}"></span>
+                                    
 
                                     <!-- 누르면 상세 페이지로 이동
                                         해당 가게의 위치가 상세 페이지에서 검색됨 -->
@@ -144,11 +157,11 @@
                                 <!-- 가게 정보 해시태그 -->
                                 <div id="storedetail-row">
                                     <!-- 클릭 시 상세 검색 페이지로 이동(카테고리 선택됨) -->
-                                <p>#패스트푸드</p>
+                                    <a href="/chatting/chat" id="toChatting">문의하기</a>
                                 </div>
 
-                                <a href="#" id="toChatting">문의하기</a>
-         
+                                
+                                <span id="showReview">리뷰></span>
 
                                
 
@@ -161,19 +174,11 @@
                         </div>
 
 
-                     <!-- 가게 소개 조회
-                        // 이거도 더보기로 할까... 화면 안 이쁜데 뺄 수도-->
+                    
                         <div class="store-detail-content">
 
                             <pre class="store-detail-text" th:text="*{storeInfo}">
-집게리아(영어: Krusty Krab)는 즉석식 레스토랑으로 시그니처 버거인 게살버거(영어: Krabby Patty)로 유명하며, 그 요리법은 영업 비밀로 엄격히 보호되고 있다.
-
-이 레스토랑은 소유자이자 매니저인 집게사장이 설립하였다. 
-소문에 따르면 집게사장의 딸 진주가 커서 집게리아를 물려받을 예정이라고 한다. 
-
-스폰지밥과 징징이가 유일한 정규직 직원인 이 레스토랑은 비키니시티에서 "식사를 위해 설립된 최고의 식당"으로 간주하며, 
-주요 경쟁자인 플랑크톤과 슈퍼컴퓨터이자 플랑크톤의 아내인 카렌이 운영하는 첨 버켓의 끊임없는 도전을 받고 있다.               
-                       </pre>
+                            </pre>
 
                            
                         </div>
@@ -191,7 +196,7 @@
                      <div class="storedetail-reservationbuttonbox">
                         <!-- 클릭하면 예약하기 페이지로 이동 -->
                         <th:block th:if="${session.loginMember?.memberCode==1 || session.loginMember==null}">
-                            <a href="/reservation/reservationDetail" id="storereservationbutton">예약하기</a>
+                            <a th:href="'/store/storeDetail/' + ${storeNo} + '/reservation'" id="storereservationbutton">예약하기</a>
                         </th:block>
 
                         <th:block th:unless="${session.loginMember?.memberCode==1|| session.loginMember==null}">
@@ -324,7 +329,7 @@
                                 <span>영업시간</span>
                           
                                 <!-- 가게 상태 조회(휴무일/ 브레이크타임/라스트오더) -->
-                             <span id="storeStatusText">영업 중</span>
+                             <span id="storeStatusText" >영업 중</span>
                             </div>
 
 
@@ -335,15 +340,19 @@
                                         [오늘] 05.21 (화)
                                       </Strong>
                                     </p>
+
+                                  
                                     <p class="l-txt">
-                                        영업시간: 11:00 - 21:30                      
+                                        영업시간 : <span th:text="${store.openHour}"></span>               
+                                                  - <span th:text="${store.closeHour}"></span>               
                                     </p>
                                 </li>
        
                                 <li>
                                     <p class="t-txt"></p>
                                     <p class="l-txt">
-                                        브레이크타임: 14:30 - 17:00                                           
+                                        브레이크타임 : <span th:text="${store.breaktimeStart}"></span>               
+                                        - <span th:text="${store.breaktimeEnd}"></span>                                           
                                     </p>
                                 </li>
                              
@@ -497,80 +506,32 @@
  
                     </div>
                    
-                    <div class="store-menu-list">
+                    <div class="store-menu-list" >
                     <!-- 메뉴 이미지 div 3개 추가 -->
-                    <div class="menu-image-container">
-                        <div>
-                            <img src="/images/storeDetail/burger4.jpg" class="storedetail-menuimage" 
+                    <div class="menu-image-container" th:each="menu:${store.menuList}" >
+                        
+            
+                        <div >
+                            <img 
+                            th:if="${menu.menuImgUrl!=null}"
+                            th:src="${menu.menuImgUrl}" class="storedetail-menuimage" 
                              alt="메뉴 사진">
                         </div>
 
                         <div class="menu-info">
-                            <span id="menuName">게살버거</span>
-                            <span id="menuPrice">4000 원</span>
+                            <span id="menuName" th:text="${menu.menuTitle}">메뉴 이름</span>
+                            <span id="menuPrice" th:text="${menu.menuAmount}+'원'">가격</span>
+                        </div>
+
+                        <div class="menu-info-content">
+                             <span id="menuDetail" th:text="${menu.menuContent}"></span>
                         </div>
                     </div>
                     
-                    <div class="menu-image-container">
-                        <div>
-                            <img src="/images/storeDetail/burger.jpg" class="storedetail-menuimage" 
-                             alt="메뉴 사진">
-                        </div>
-
-                        <div class="menu-info">
-                            <span id="menuName">스페셜버거</span>
-                            <span id="menuPrice">22000 원</span>
-                        </div>
-                    </div>
+            
                     
-                    <div class="menu-image-container">
-                        <div>
-                            <img src="/images/storeDetail/pizza.jpg" class="storedetail-menuimage" 
-                             alt="메뉴 사진">
-                        </div>
-
-                        <div class="menu-info">
-                            <span id="menuName">피자</span>
-                            <span id="menuPrice">9000 원</span>
-                        </div>
-                    </div>
-                    <div class="menu-image-container">
-                        <div>
-                            <img src="/images/storeDetail/burger4.jpg" class="storedetail-menuimage" 
-                             alt="메뉴 사진">
-                        </div>
-
-                        <div class="menu-info">
-                            <span id="menuName">게살버거</span>
-                            <span id="menuPrice">4000 원</span>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-image-container">
-                        <div>
-                            <img src="/images/storeDetail/burger.jpg" class="storedetail-menuimage" 
-                             alt="메뉴 사진">
-                        </div>
-
-                        <div class="menu-info">
-                            <span id="menuName">스페셜버거</span>
-                            <span id="menuPrice">22000 원</span>
-                        </div>
-                    </div>
-                    
-                    <div class="menu-image-container">
-                        <div>
-                            <img src="/images/storeDetail/pizza.jpg" class="storedetail-menuimage" 
-                             alt="메뉴 사진">
-                        </div>
-
-                        <div class="menu-info">
-                            <span id="menuName">피자</span>
-                            <span id="menuPrice">9000 원</span>
-                        </div>
-                    </div>
-
-                 </div>
+             
+                   </div>
 
                     <div class="moreMenuImageBtnBox">
                         <button id="moreMenuImageBtn">더보기</button>
@@ -621,15 +582,15 @@
             </div>
               
         
-        <div class="detail-images">
+        <div class="detail-images" th:if="${#lists.size(imageList)>0}">
 
+            <th:block th:each="i:${#numbers.sequence(0, #lists.size(store.imageList)-1)}">
+           
+             <img class="store-look" th:src="|${imageList[i].imagePath}${imageList[i].imgRename}|">
+
+            </th:block>
          
-            <img class="store-look" src="/images/storeDetail/hotdog.jpg">
-            <img class="store-look" src="/images/storeDetail/cooking.jpg">
-            <img class="store-look" src="/images/storeDetail/counter2.jpg">
-            <img class="store-look" src="/images/storeDetail/counter3.jpg">
-            <img class="store-look" src="/images/storeDetail/counter.jpg">
-            <img class="store-look" src="/images/storeDetail/burger2.jpg" >
+      
            
         </div>
 
@@ -657,14 +618,14 @@
 
 
                
+                
+                <div class="storereview-container" th:each=" review : ${reviewList}" th:object="${review}">
+                    
+                    <a th:object="${store}" th:href="'/review/reviewPage/' + *{storeNo}">리뷰쓰기</a>
 
-            <div class="storereview-container">
-
-
-                <a href="/review/reviewPage">리뷰쓰기</a>
 
     
-                <h3 class="review-title">방문자 리뷰</h3>
+                    <h3 class="review-title">방문자 리뷰</h3>
                 
                 <div class="review-avgScore">
                     <i class="rating__star far fa-star"></i>
@@ -673,16 +634,16 @@
                     <i class="rating__star far fa-star"></i>
                     <i class="rating__star far fa-star"></i>
                     <span> 평균 점수</span>
-                </div>
+                    </div>
 
 
                     <div class="storereview-top">
 
-
                         <div class="storereview-top-left">
-                            <img class="review-member-profile" src="/images/storeDetail/hotdog.jpg" alt="회원 프로필 이미지">
+                            <img class="review-member-profile"
+                                th:src="*{profileImg}">
                             <div class="review-info">
-                                <span>닉네임</span>
+                                <span th:text="*{memberName}">닉네임</span>
                                 
                                 <div class="review-memberScore">
                                     <i class="rating__star far fa-star"></i>
@@ -690,38 +651,41 @@
                                     <i class="rating__star far fa-star"></i>
                                     <i class="rating__star far fa-star"></i>
                                     <i class="rating__star far fa-star"></i>
-                                    <span> 점수</span>
+                                    <span th:text="|*{reviewRating} 점|"> 점수</span>
                                 </div>
 
                             </div>
                         </div>
 
                         <div class="storereview-top-right">
-                            <button type="button" id="reviewReport">🚨신고하기</button>
-                            <span>2024-05-17</span>
+                            <button type="button" id="reviewReport"  th:if="${session.loginMember}">🚨신고하기</button>
+                            <span th:text="*{reviewRegDate}">2024-05-17</span>
                         </div>
 
                     </div>
 
                     
                     <div class="storereview-mid">
-                        <p>리뷰 내용</p>
+                        <p th:text="*{reviewContent}">리뷰 내용</p>
                     </div>
 
-                    <div class="storereview-bottom">
-                        <p>주문 내역</p>
-                        <div class="storereview-image">
-                            <img class="review-look" src="/images/storeDetail/counter2.jpg">
-                            <img class="review-look" src="/images/storeDetail/counter3.jpg">
-                            <img class="review-look" src="/images/storeDetail/counter.jpg">
+                    <th:block>
+                        <div class="storereview-bottom">
+                            <p th:if="*{imageList}">주문 내역</p>
+                            <div class="storereview-image" th:if="*{imageList}">
+                                <th:block th:each=" image : *{imageList}">
+                                    <img class="review-look" th:src="|${image.imagePath}${image.imgRename}|">
+                                </th:block>
+                            </div>
+                            <p>해시태그</p>
+                            <div class="review-hashtag">
+
+                                <th:block th:each=" hash : *{hashList}">
+                                    <span th:text="|${hash.hashTitle} |">#해시태그</span>
+                                </th:block>
+                            </div>
                         </div>
-                        <p>해시태그</p>
-                        <div class="review-hashtag">
-                            <span>#해시태그</span>
-                            <span>#해시태그</span>
-                            <span>#해시태그</span>
-                        </div>
-                    </div>
+                    </th:block>
 
                     <div class="store-reply">
                         <img class="review-store-profile" src="/images/storeDetail/store.jpg" alt="가게 프로필 이미지">
@@ -729,69 +693,8 @@
                         <p class="reply-content-bubble">
                             사장님 답글
                         </p>
-
-                    </div>
-                    <div class="storereview-top">
-
-
-                        <div class="storereview-top-left">
-                            <img class="review-member-profile" src="/images/storeDetail/hotdog.jpg" alt="회원 프로필 이미지">
-                            <div class="review-info">
-                                <span>닉네임</span>
-                                
-                                <div class="review-memberScore">
-                                    <i class="rating__star far fa-star"></i>
-                                    <i class="rating__star far fa-star"></i>
-                                    <i class="rating__star far fa-star"></i>
-                                    <i class="rating__star far fa-star"></i>
-                                    <i class="rating__star far fa-star"></i>
-                                    <span> 점수</span>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="storereview-top-right">
-                            <button type="button" id="reviewReport">🚨신고하기</button>
-                            <span>2024-05-17</span>
-                        </div>
-
-                    </div>
-
-                    
-                    <div class="storereview-mid">
-                        <p>리뷰 내용</p>
-                    </div>
-
-                    <div class="storereview-bottom">
-                        <p>주문 내역</p>
-                        <div class="storereview-image">
-                            <img class="store-look" src="/images/storeDetail/counter2.jpg">
-                            <img class="store-look" src="/images/storeDetail/counter3.jpg">
-                            <img class="store-look" src="/images/storeDetail/counter.jpg">
-                        </div>
-                        <p>해시태그</p>
-                        <div class="review-hashtag">
-                            <span>#해시태그</span>
-                            <span>#해시태그</span>
-                            <span>#해시태그</span>
-                        </div>
-                    </div>
-
-                    <div class="store-reply">
-                        <img class="review-store-profile" src="/images/storeDetail/store.jpg" alt="가게 프로필 이미지">
-
-                        <p class="reply-content-bubble">
-                            사장님 답글
-                        </p>
-
                     </div>
                     
-                    <div class="review-more-button">
-                        <button id="reviewMoreButton">리뷰 더보기</button>
-                    </div>
-
-                  
 
                 </div>
             </div>
@@ -807,26 +710,7 @@
                
                 <div class="review-reason">
                     <p>리뷰를 신고하려는 이유를 알려주세요!</p>
-                    <p>타당한 근거 없이신고된 내용은 관리자 확인 후 반영되지 않을 수 있습니다.</p>
-                </div>
-    
-                <div class="select-report">
-
-                    <div>
-                        <input type="radio" name="reportRadio" id="report1"> 주문과 관련없는 내용
-                    </div>
-                    <div>
-                        <input type="radio" name="reportRadio" id="report1"> 욕설/비방 표현입니다.
-                    </div>
-                    <div>
-                        <input type="radio" name="reportRadio" id="report1"> 불쾌한 사진, 영상을 포함하고 있습니다.
-                    </div>
-                    <div>
-                        <input type="radio" name="reportRadio" id="report1"> 개인정보 노출 게시물입니다.
-                    </div>
-                    <div>
-                        <input type="radio" name="reportRadio" id="report1"> 기타 (하단 내용 작성)
-                    </div>
+                    <p>타당한 근거 없이 신고된 내용은 관리자 확인 후 반영되지 않을 수 있습니다.</p>
                 </div>
                    
                 <div class="report-button-area">
@@ -840,6 +724,8 @@
 
 
 
+        
+
     
     </main>
        <!-- templetes/common/footer.html  조각 추가 -->
@@ -848,10 +734,20 @@
     <script th:inline="javascript">
         const loginMember = /*[[${session.loginMember?.memberNo}]]*/ "로그인회원";
         const memberCode = /*[[${session.loginMember?.memberCode}]]*/ "회원코드";
+
+       
+        const storeMaxTable = /*[[${store.storeMaxTable}]]*/ "최대 예약 팀 수(테이블)"
+
+        const storeNo = /*[[${store.storeNo}]]*/ "사업자등록번호"
+
+        let bookMark =/*[[${store.bookMark}]]*/ "좋아요 여부";
+        
+
     </script>
 
    <script src="/js/reservation/reservation.js"></script>
    <script src="/js/store/storeDetail.js"></script>
+   <script src="/js/reservation/calendar.js"></script>
 
 
     <aside>

@@ -1,5 +1,6 @@
 package com.project.foodpin.myPage.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,12 +9,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.project.foodpin.member.model.dto.Member;
@@ -42,13 +48,14 @@ public class MemberMyPageController {
 	@PostMapping("memberInfo")
 	public String updateInfo(
 		Member inputMember,
+		@RequestParam("uploadImg") MultipartFile profileImg,
 		@SessionAttribute("loginMember") Member loginMember,
-		RedirectAttributes ra) {
+		RedirectAttributes ra) throws IllegalStateException, IOException {
 		
 		int memberNo = loginMember.getMemberNo();
 		inputMember.setMemberNo(memberNo);
 		
-		int result = service.updateInfo(inputMember);
+		int result = service.updateInfo(profileImg, inputMember);
 		
 		String message = null;
 		
@@ -58,6 +65,7 @@ public class MemberMyPageController {
 			loginMember.setMemberNickname(inputMember.getMemberNickname());
 			loginMember.setMemberEmail(inputMember.getMemberEmail());
 			loginMember.setMemberTel(inputMember.getMemberTel());
+			loginMember.setProfileImg(inputMember.getProfileImg());
 		} else {
 			message = "회원 정보 수정에 실패하였습니다.";
 		}
@@ -102,7 +110,9 @@ public class MemberMyPageController {
 		
 		int memberNo = loginMember.getMemberNo();
 		List<Reservation> reservation = service.reservationFix(memberNo);
+		int noshowCount = service.noshowCount(memberNo);
 		model.addAttribute("reservation", reservation);
+		model.addAttribute("noshowCount", noshowCount);
 		
 		return "myPage/member/reservation/fix";
 	}
@@ -115,7 +125,9 @@ public class MemberMyPageController {
 		
 		int memberNo = loginMember.getMemberNo();
 		List<Reservation> reservation = service.reservationWait(memberNo);
+		int noshowCount = service.noshowCount(memberNo);
 		model.addAttribute("reservation", reservation);
+		model.addAttribute("noshowCount", noshowCount);
 		
 		return "myPage/member/reservation/wait";
 	}
@@ -128,8 +140,11 @@ public class MemberMyPageController {
 		
 		int memberNo = loginMember.getMemberNo();
 		List<Reservation> reservation = service.reservationLast(memberNo);
+		int noshowCount = service.noshowCount(memberNo);
+
 		model.addAttribute("reservation", reservation);
-		
+		model.addAttribute("noshowCount", noshowCount);
+
 		return "myPage/member/reservation/last";
 	}
 	
@@ -141,24 +156,32 @@ public class MemberMyPageController {
 		
 		int memberNo = loginMember.getMemberNo();
 		List<Reservation> reservation = service.reservationCancelNoshow(memberNo);
+		int noshowCount = service.noshowCount(memberNo);
+
 		model.addAttribute("reservation", reservation);
-		
+		model.addAttribute("noshowCount", noshowCount);
+
 		return "myPage/member/reservation/cancelNoshow";
 	}
 	
 	// 예약 취소하기
+	@ResponseBody
 	@PostMapping("cancelReservation")
-	public ResponseEntity<Map<String, Object>> cancelReservation(
-		@SessionAttribute("loginMember") Member loginMember,
-		RedirectAttributes ra) {
+	public boolean cancelReservation(
+		@RequestBody int reservNo,
+		@SessionAttribute("loginMember") Member loginMember) {
 		
 		int memberNo = loginMember.getMemberNo();
-		boolean cancel = service.cancelReservation(memberNo);
-		Map<String, Object> response = new HashMap<>();
-		response.put("success", cancel);
-		return ResponseEntity.ok(response);
+		int result = service.cancelReservation(memberNo, reservNo);
+		
+		
+		if(result > 0) {
+			return true;
+		} else {
+			return false;
+			
+		}
 	}
-	
 	
 	
 	// 북마크 목록 조회
@@ -170,6 +193,7 @@ public class MemberMyPageController {
 		int memberNo = loginMember.getMemberNo();
 		List<Store> store = service.memberLikeList(memberNo);
 		model.addAttribute("store", store);
+
 		
 		return "myPage/member/memberLike";
 	}
@@ -204,16 +228,24 @@ public class MemberMyPageController {
 		
 		int result = service.secession(memberPw, loginMember);
 		
+		int reserv = service.selectReserv(memberNo);
+		
 		String path = null;
 		String message = null;
 		
-		if(result > 0) {
+		if(reserv == 0) {
+			message = "예약 확정/대기 상태가 있을 경우 취소해 주세요";
+			path = "reservation/fix";
+		}
+		
+		else if(result == 0) {
+			message = "비밀번호가 일치하지 않습니다";
+			path = "memberSecession";
+			
+		} else {
 			message = "탈퇴 처리가 되었습니다";
 			status.setComplete();
 			path = "/";
-		} else {
-			message = "비밀번호가 일치하지 않습니다";
-			path = "myPage/member/memberSecession";
 		}
 		
 		ra.addFlashAttribute("message", message);

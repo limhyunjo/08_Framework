@@ -1,12 +1,19 @@
 package com.project.foodpin.myPage.model.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.project.foodpin.common.util.Utility;
 import com.project.foodpin.member.model.dto.Member;
 import com.project.foodpin.myPage.model.mapper.MemberMyPageMapper;
 import com.project.foodpin.reservation.model.dto.Reservation;
@@ -16,20 +23,55 @@ import com.project.foodpin.store.model.dto.Store;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
+@PropertySource("classpath:/config.properties")
 public class MemberMyPageServiceImpl implements MemberMyPageService{
 	
 	private final MemberMyPageMapper mapper;
 	
 	private final BCryptPasswordEncoder bcrypt;
 	
+	@Value("${my.profile.web-path}")
+	private String profileWebPath;
+	
+	@Value("${my.profile.folder-path}")
+	private String profileFolderPath;
+	
 
-	// 회원 정보 수정
+
+	// 회원 정보 변경
 	@Override
-	public int updateInfo(Member inputMember) {
-		return mapper.updateInfo(inputMember);
+	public int updateInfo(MultipartFile profileImg, Member inputMember) throws IllegalStateException, IOException {
+		
+		String updatePath = null;
+		String rename = null;
+		
+		if(!profileImg.isEmpty()) {
+			rename = Utility.fileRename(profileImg.getOriginalFilename());
+			
+			updatePath = profileWebPath + rename;
+		}
+		
+		Member mem = Member.builder()
+					.memberNo(inputMember.getMemberNo())
+					.memberNickname(inputMember.getMemberNickname())
+					.memberEmail(inputMember.getMemberEmail())
+					.memberTel(inputMember.getMemberTel())
+					.profileImg(updatePath)
+					.build();
+		
+		int result = mapper.updateInfo(mem);
+
+		if(result > 0) {
+			if(!profileImg.isEmpty()) {
+				profileImg.transferTo(new File(profileFolderPath + rename));
+			}
+			inputMember.setProfileImg(updatePath);
+		}
+		return result;
 	}
+
 
 	// 회원 비밀번호 변경
 	@Override
@@ -47,6 +89,12 @@ public class MemberMyPageServiceImpl implements MemberMyPageService{
 		paramMap.put("memberNo", memberNo);
 		
 		return mapper.memberChangePw(paramMap);
+	}
+	
+	// 노쇼 횟수 조회
+	@Override
+	public int noshowCount(int memberNo) {
+		return mapper.noshowCount(memberNo);
 	}
 	
 	// 예약 확정 조회
@@ -73,10 +121,11 @@ public class MemberMyPageServiceImpl implements MemberMyPageService{
 		return mapper.reservationCancelNoshow(memberNo);
 	}
 	
-//	****************************************
+	// 예약 취소
 	@Override
-	public boolean cancelReservation(int memberNo) {
-		return false;
+	public int cancelReservation(int memberNo, int reservNo) {
+		Map<String, Integer> map = Map.of("memberNo", memberNo, "reservNo", reservNo);
+		return mapper.cancelReservation(map);
 	}
 
 	// 찜 목록 조회
@@ -102,6 +151,19 @@ public class MemberMyPageServiceImpl implements MemberMyPageService{
 		
 		return mapper.secession(memberNo);
 	}
+	
+	// 회원 탈퇴 전 예약 확정/대기 조회
+	@Override
+	public int selectReserv(int memberNo) {
+		int checkReserv = mapper.checkReserv(memberNo);
+		if(checkReserv != 0) return 0;
+		return mapper.secession(memberNo);
+		
+	}
+
+
+
+
 
 	
 	

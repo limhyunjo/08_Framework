@@ -1,5 +1,9 @@
 package com.project.foodpin.store.model.dto;
 
+import java.util.List;
+
+import com.project.foodpin.review.model.dto.UploadImage;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,9 +36,23 @@ public class Store {
 	private int memberNo;
 	
 	
-	// 찜
-	private String bookmarkCheck;
-	private int bookmark;
+	//가게 이미지 목록
+	private List<UploadImage> imageList;
 
+	// 가게 메뉴 목록
+	private List<Menu> menuList;
+
+	// 찜
+	private int likeCount;
+	private int bookMark;
+
+	
+	// 메뉴
+	private int menuNo;
+	private String menuTitle;
+	private int menuAmount;
+	private String menuContent;
+	private String menuImgUrl;
+	
 	
 }

@@ -16,9 +16,9 @@
     <th:block th:replace="~{common/header}"></th:block>
     <section class="review-section">
       
-      <form action="/review/insertReview" method="POST" id="reviewForm" enctype="multipart/form-data">
+      <form th:action="'/review/insertReview/' + *{store.storeNo}" method="POST" id="reviewForm" enctype="multipart/form-data">
         <div class="review-container"> 
-          <h2>OOO 장소의 방문 리뷰쓰기</h2>
+          <h2 th:text="|${store.storeName} 장소의 방문 리뷰쓰기|"></h2>
           <div class="review-selectBox">
   
             <div class="review-menu">
@@ -43,52 +43,16 @@
                     </thead>
               
                     <tbody id="menuBody">
-                      <tr>
+                      <tr th:each=" menu : ${menuList}">
                         <td>
-                          <img src="/images/storeDetail/hotdog.jpg" alt="">
+                          <img src="/images/storeDetail/hotdog.jpg">
                         </td>
                         <td>
-                          <p>메뉴</p>
-                          <p>가격</p>
+                          <p th:text="${menu.menuTitle}">메뉴</p>
+                          <p th:text="|${menu.menuAmount} 원|">가격</p>
                         </td>
                         <td>
-                          <input type="checkbox"  class="menu-checkbox">
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <img src="/images/storeDetail/cooking.jpg" alt="">
-                        </td>
-                        <td>
-                          <p>메뉴</p>
-                          <p>가격</p>
-                        </td>
-                        <td>
-                          <input type="checkbox" class="menu-checkbox">
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <img src="/images/storeDetail/counter2.jpg" alt="">
-                        </td>
-                        <td>
-                          <p>메뉴</p>
-                          <p>가격</p>
-                        </td>
-                        <td>
-                          <input type="checkbox" class="menu-checkbox">
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <img src="/images/storeDetail/counter2.jpg" alt="">
-                        </td>
-                        <td>
-                          <p>메뉴</p>
-                          <p>가격</p>
-                        </td>
-                        <td>
-                          <input type="checkbox" class="menu-checkbox">
+                          <input type="checkbox" class="menu-checkbox" th:value="${menu.menuNo}" th:attr="data-amount=${menu.menuAmount}" name="menuNo">
                         </td>
                       </tr>
                     </tbody>
@@ -108,7 +72,7 @@
             
             <div class="review-pay">
               <span>총 금액</span>
-              <span id="totalAmount">10000</span>
+              <span id="totalAmount">0</span>
               <span>원</span>
             </div>
 
@@ -256,6 +220,12 @@
   
 
   <th:block th:replace="~{common/footer}"></th:block>
+
+  <script th:inline="javascript">
+    const loginMember = /*[[${session.loginMember?.memberNo}]]*/ "로그인회원";
+    const storeNo = /*[[${store.storeNo}]]*/ '가게 번호';
+    const menuList= /*[[${menuList}]]*/ "메뉴 리스트";
+  </script>
 
 
   <script src="/js/storeReview/storeReview.js"></script>  

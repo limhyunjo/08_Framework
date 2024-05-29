@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.project.foodpin.member.model.dto.Member;
 import com.project.foodpin.reservation.model.dto.Reservation;
@@ -14,12 +15,14 @@ import com.project.foodpin.store.model.dto.Store;
 public interface MemberMyPageMapper {
 
 	// 회원 정보 수정
-	int updateInfo(Member inputMember);
-
+	int updateInfo(Member mem);
 
 	// 회원 비밀번호 변경
 	int memberChangePw(Map<String, Object> paramMap);
 
+	// 노쇼 횟수 조회
+	int noshowCount(int memberNo);
+	
 	// 예약 확정 조회
 	List<Reservation> reservationFix(int memberNo);
 	
@@ -32,6 +35,9 @@ public interface MemberMyPageMapper {
 	// 예약 취소/노쇼 조회
 	List<Reservation> reservationCancelNoshow(int memberNo);
 	
+	// 예약 취소 기능
+	int cancelReservation(Map<String, Integer> map);
+	
 	// 찜 목록 조회
 	List<Store> memberLikeList(int memberNo);
 
@@ -43,6 +49,14 @@ public interface MemberMyPageMapper {
 	
 	// 회원 탈퇴하기
 	int secession(int memberNo);
+
+	// 회원 탈퇴 전 예약 확정/대기 조회
+	int checkReserv(int memberNo);
+
+
+
+
+
 
 
 

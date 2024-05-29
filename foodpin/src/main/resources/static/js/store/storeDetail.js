@@ -2,7 +2,7 @@
 const storedetailmapbutton = document.querySelector("#storedetailmapbutton");
 
 storedetailmapbutton.addEventListener("click", () => {
-  location.href = "storeSearch";
+  location.href = "/store/storeSearch";
   currentlocation();
 
 });
@@ -31,6 +31,9 @@ lessText.addEventListener("click", ()=>{
   moreText.style.display = 'flex';
   storeDetailText.style.display = '-webkit-box'; 
 });
+
+
+
 
 
 /* ****************지도******************* */
@@ -113,12 +116,64 @@ function displayMarker(locPosition, message) {
 
 }
 
+
+
 /* 화면 생성 시 자동 실행 */
 window.onload = function() {
   // currentlocation 함수 실행
   currentlocation();
+ 
 };
+
+
 /* ****************지도******************* */
+
+
+/* 별점  */
+
+document.addEventListener('DOMContentLoaded', function () {
+  // totalRating 값을 가져옵니다.
+  let totalRating = parseFloat(document.querySelector('.totalRating').textContent.trim());
+  let stars = document.querySelectorAll('.rating__star');
+
+  // totalRating에 따라 별을 채웁니다.
+  for (let i = 0; i < stars.length; i++) {
+      if (totalRating >= (i + 1)) {
+          // 완전히 채워진 별
+          stars[i].classList.remove('far');
+          stars[i].classList.add('fas');
+      } else if (totalRating > i) {
+          // 반쯤 채워진 별 (여기서는 기본으로 제공되는 fa-star-half를 사용하지 않음)
+          stars[i].classList.remove('far');
+          stars[i].classList.add('fas');
+      } else {
+          // 빈 별
+          stars[i].classList.remove('fas');
+          stars[i].classList.add('far');
+      }
+  }
+});
+
+
+
+/* 전화번호 - 넣기 */
+
+document.addEventListener('DOMContentLoaded', function () {
+  // phoneFormatter 함수 정의
+  function phoneFormatter(storeTel) {
+      var formatNum = '';
+      formatNum = storeTel.replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, '$1-$2-$3');
+      return formatNum;
+  }
+
+  // storeTel 값을 가져옴
+  var storeTelElement = document.getElementById('memberTel');
+  var storeTel = storeTelElement.textContent.trim();
+
+  // 포맷팅된 전화번호로 업데이트
+  var formattedTel = phoneFormatter(storeTel);
+  storeTelElement.textContent = formattedTel;
+});
 
 /* 폐점/ 정보 정정 신고 팝업 */
 
@@ -256,4 +311,57 @@ showReview.addEventListener("click", ()=>{
     behavior:'smooth'
   })
 })
+
+/**************** 가게 찜, 좋아요 개수 ******************/
+
+// 1. #bookmarkCheck 클릭 되었을 때
+const bookmarkCheck = document.querySelector("#bookmarkCheck");
+bookmarkCheck.addEventListener("click", e=>{
+
+  
+    // 3. 준비된 3개의 변수를 객체로 저장 -> (Json 변환 예정)
+    const obj = {
+        "memberNo" : loginMember,
+        "storeNo"  : storeNo,
+        "bookMark": bookMark
+    };
+
+    //4. 좋아요 INSERT / DELETE 비동기 요청
+    fetch("/store/like", {
+
+    method  : "POST",
+    headers : {"Content-Type" : "application/json"},
+    body    : JSON.stringify(obj) // 객체를 Json으로 문자화 
+
+    })
+
+    .then(resp =>resp.text()) // 반환 결과 text(글자) 형태로 변환
+    .then(count =>{
+
+        // count == 첫 번째 then의 파싱되어 반환된 값('-1' 또는 게시글 좋아요 수)
+        //console.log("result :", result);
+
+
+        if(count == -1){
+            console.log("좋아요 처리 실패");
+            return;
+        }
+
+        // 5. bookmark 값 0<->1 변환
+        // (왜? 클릭 될 때 마다 INSERT/DELETE 동작을 번갈아 가면서 할 수 있음)
+         bookMark = bookMark == 0? 1: 0;
+
+        // 6. 하트를 채웠다/비웠다 바꾸기
+        e.target.classList.toggle("fa-regular");
+        e.target.classList.toggle("fa-solid");
+
+        // 7. 게시글 좋아요 수 수정
+        e.target.nextElementSibling.innerText = count;
+
+
+       
+
+    });
+
+});
 

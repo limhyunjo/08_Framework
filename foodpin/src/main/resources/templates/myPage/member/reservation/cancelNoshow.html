@@ -20,11 +20,16 @@
 
             <section class="content-container">
                 <div class="myPage-title-container">
-                    <section class="myPage-title">예약 현황
-                        <span class="memberNoshow" th:text="|누적 노쇼 *{noshowCount}회|">
-                            누적 노쇼 1회
-                        </span>
-                        <i class="fa-solid fa-circle-exclamation" title="경고는 3회 이상이면 3일정지입니다"></i>
+                    <section class="myPage-title">취소 / 노쇼
+                        <span class="memberNoshow">
+                            <span th:text="|누적 노쇼 ${noshowCount}회|"></span>
+                                <i class="fa-solid fa-circle-exclamation tooltip">
+                                    <span class="tooltip-text">
+                                        노쇼 3회 이상 누적 시 3일 정지 <br>
+                                        노쇼 5회 이상 누적 시 계정 정지
+                                    </span>
+                                </i>
+                            </span>
                     </section>
 
                     <section class="myPage-sub-title">
@@ -50,7 +55,7 @@
 
                     <th:block th:unless="${#lists.isEmpty(reservation)}">
                         <section id="reservation">
-                            총 3건
+                            <span th:text="|총 ${reservation[0].cancelNoshowCount}건|"></span>
                             <table>
                                 <ul>
                                     <li class="reservationList" th:each="reservation : ${reservation}">

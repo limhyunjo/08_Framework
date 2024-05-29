@@ -26,10 +26,7 @@ if(storereservationbutton != null) {
 // -------------------------------------------------------------
 
 // 선택 항목 검사용
-const checkObj = {
-    "reservTime" : false
-};
-
+const checkObj = {"reservTime" : false};
 
 // -------------------------------------------------------------
 
@@ -48,12 +45,48 @@ if(noticeTitle !=null) {
 
 /* **************  reservationDetail ************** */
 
-// 예약 시 인원/날짜 체크 함수
+const storeMaxNumber = document.querySelector("#reservCount").dataset.storeMaxNumber;
+
+const temp = 10;
+
+if(storeMaxNumber == 0) {
+    for(let i = 1; i<=temp; i++){
+        const buttonList = document.querySelector(".button-list");
+        
+        // li 태그
+        const countList = document.createElement("li");
+        countList.className="button-item";
+        countList.innerText = `${i}명`;
+        
+        buttonList.append(countList); 
+
+    }
+}
+
+if(storeMaxNumber != null) {
+    
+    for(let i = 1; i<=storeMaxNumber; i++){
+        
+        /* li 태그 생성하기 */
+        
+        // ul 태그 
+        const buttonList = document.querySelector(".button-list");
+        
+        // li 태그
+        const countList = document.createElement("li");
+        countList.className="button-item";
+        countList.innerText = `${i}명`;
+        
+        buttonList.append(countList); // ui>li
+        
+    }
+}
 
 // 예약 인원 수 체크
-const buttonItem = document.querySelectorAll(".button-item");
 
 // 기본으로 0번째 인덱스는 체크 상태에서 시작
+const buttonItem = document.querySelectorAll(".button-item");
+
 if(buttonItem != null && buttonItem.length > 0) {
     buttonItem[0].classList.add("select");
 
@@ -71,49 +104,9 @@ if(buttonItem != null && buttonItem.length > 0) {
             return;
         });
     };
-    // console.log(checkObj);
 }
 
 
-// 예약 시간 체크
-const timeItem = document.querySelectorAll(".time-item");
-
-// fetch("/reservation/reservationDetail", {
-//     method : "POST",
-//     headers : {"Content-Type" : "application/json"},
-//     body : {}
-// })
-// .then(resp => resp.text())
-// .then(result => {
-
-// })
-if(timeItem != null) {
-
-    for(let time of timeItem){
-
-        time.addEventListener("click", () => {
-
-            for(let item of timeItem){
-                item.classList.remove("select");
-            }
-            time.classList.add("select");
-            checkObj.reservTime = true;
-            return;
-        });
-    }
-
-    // 초기 상태에도 선택된 항목이 있는지 확인
-
-    for(let item of timeItem) {
-        if(item.classList.contains("select")){
-            checkObj.reservTime = true;
-        }
-        else{ 
-            checkObj.reservTime = false;
-        }
-    }
-    // console.log(checkObj);
-}
 
 // ----------------------------------------------------------------------------------------
 
@@ -161,13 +154,13 @@ if(nextBtn != null){
 
         /* ****** 버튼 클릭 될 때 form 태그 생성 ******  */
         const form = document.createElement("form");
-        form.action="/reservation/nextPage"; //제출될 주소
+        form.action=`/store/storeDetail/${storeNo}/reservation/nextPage`; //제출될 주소
         form.method="POST";
 
         // 인원 선택한 값 저장 input
         const input1 = document.createElement("input");
         const selectCount = document.querySelector(".button-item.select").innerText
-        console.log(selectCount);
+        // console.log(selectCount);
 
         input1.type="hidden";
         input1.name="reservCount";
@@ -184,15 +177,7 @@ if(nextBtn != null){
         input2.className="select-date";
         input2.value = selectDate;
         
-        console.log("input2" , input2);
-
-        // 달력에서 선택된 날짜 (아마도..?)
-        // if (selectDate) {
-        //     input2.value = selectDate.innerText || selectDate.value || "";
-        // } else {
-        //     input2.value = "";
-        // } // 선택된 날짜가 없을 경우 빈 값으로 설정
-        
+        // console.log("input2" , input2);
 
         // 시간 선택
         const input3 = document.createElement("input");
@@ -209,24 +194,17 @@ if(nextBtn != null){
         // body에 form 태그
         document.body.append(form);
 
-         form.submit(); // 다음 버튼 클릭 시 form 태그 제출
+        form.submit(); // 다음 버튼 클릭 시 form 태그 제출
 
     });
 }
 
-
-
-/* *** 예약 인원, 날짜 체크 *** */
-// const detailObj = {
-//     "reservCount": reservCount,
-
-// }
-
 // 30분 간격으로 시간 쪼개기 예시
-const startTime = "11:00";
-const endTime = "19:00";
-const interval = 30;
+let startTime;
+let endTime;
+let interval;
 
+/* 시간 30분 단위로 출력하는 함수 설정 */
 const getTimeSplit = (startTime, endTime, interval) => {
 
     const times = []; // 쪼갠 시간 저장 할 빈 배열
@@ -254,28 +232,23 @@ const getTimeSplit = (startTime, endTime, interval) => {
 
         times.push(`${hours}:${mins}`);
     }
-
-    // li 태그 얻어오기
-    const timeItme = document.querySelectorAll(".time-item");
-    
-    // li 태그 text 지우고 날짜로 출력하기
-    for(let li of timeItem){
-        
-        // li.innerHTML="";
-
-        // for(let detailTime of times){ 
-        //     console.log(detailTime);
-        //     // li.innerText=detailTime;
-        // }
-    }
-
-    console.log(times);
-    return;
+    // console.log(times);
+    return times;
 }
 getTimeSplit(startTime, endTime, interval);
 
-
 /*  ************  reservationCheck ************ */
+
+/* 예약자 정보와 실제 방문자 정보가 다를 경우 폼 */
+const visitInfoBtn = document.querySelector(".visitInfoBtn");
+const visitForm = document.querySelector(".visit-form");
+const visitInfoBtnUp = document.querySelector(".visitInfoBtnUp");
+
+if(visitInfoBtn != null) {
+    visitInfoBtn.addEventListener("click", () => {
+        visitForm.classList.toggle("visit");
+    })
+}
 
 /* 다음 페이지 클릭 할 때 체크박스 검사 */
 const confirmBtn = document.querySelector("#confirmBtn");
@@ -304,44 +277,93 @@ if(confirmBtn != null) {
             }
         }
 
-        /* form 태그 생성... */
-        
+        /* 예약 확정 하기 전 예약 정보 페이지이기 때문에 별도의 검사 진행XX */
+
+        /* 예약 정보를 담은  form 생성... */
+
+        // form 태그 생성
         const insertForm = document.createElement("form");
-        insertForm.action="/reservation/insertPage"; //제출될 주소
+        insertForm.action=`/store/storeDetail/${storeNo}/reservation/insertPage`; //제출될 주소
+        //`/store/storeDetail/${storeNo}/reservation/nextPage`
         insertForm.method="POST";
 
         // 예약 날짜
         const input1 = document.createElement("input");
+
+        /* 날짜, 시간 둘 다 사용해야 할 값 */
         const finalDate = document.querySelector(".reserv-date-count").innerText;
         // console.log(finalDate);
         input1.type="hidden";
         input1.name="reservDate";
-        input1.value=finalDate;
+        
+        const datePart = finalDate.slice(0,5); // 00.00 날짜만 가져옴
+        console.log(datePart);
+        const [month, day] = datePart.split(".").map(Number); // .을 기준으로 month와 day 분리
+        const year = new Date().getFullYear(); // 현재 년도를 가져옴
+        const dateObj = new Date(year, month-1, day+1);
+        const dateString = dateObj.toISOString().split("T")[0];   // ex) 2024-05-23T14:48:00.000Z을
+                                                                //"YYYY-MM-DD" 형식으로 저장
 
-        /* 고민해봐야할듯 시간 분리해야하는데 */
+        console.log(dateString);
+
+        // 최종적으로 form 태그에 담겨 DB에 저장될 값
+        input1.value=dateString;
+
+        // thymeleaf에서 이용할 값 DB 저장 X
         const input2 = document.createElement("input");
         input2.type="hidden";
-        input2.name="reservTime";
+        input2.name="originalReservDate";
+        input2.value = finalDate;
+
+
+        /* 고민해봐야할듯 시간 분리해야하는데 */
+        const input3 = document.createElement("input");
+        input3.type="hidden";
+        input3.name="reservTime";
+
+        const reservTime = finalDate.slice(9); // 8번째 인덱스 이후부터 잘라냄 (시간만 분리)
+        console.log(reservTime);
+        input3.value = reservTime;
 
         // 예약 인원
-        const input3 = document.createElement("input");
+        const input4 = document.createElement("input");
         const finalCount = document.querySelector(".reserv-date-count").innerText;
-        input3.type="hidden";
-        input3.name="reservCount";
-        input2.value=finalCount;
+        input4.type="hidden";
+        input4.name="reservCount";
+        // input4.value=finalCount;'
+        
+        const countPart = finalCount.substr(0,1); // "2명" 에서 "2" 만 추출
+        const reservCount = Number(countPart); // 문자를 숫자로 변환
+        input4.value=reservCount; // DB 저장용 
 
+        // 요청사항
+        const input5 = document.createElement("input");
+        const reservRequest = document.querySelector("#reservRequest").innerText;
+        input5.type="hidden";
+        input5.name="reservRequest";
+        input5.value=reservRequest;
+
+        // 방문자 이름
+        const input6 = document.createElement("input");
+        const visitName = document.querySelector("#visitName").innerText;
+        input6.type="hidden";
+        input6.name="visitName";
+        input6.value=visitName;
+
+        // 방문자 전화번호
+        const input7 = document.createElement("input");
+        const visitTel = document.querySelector("#visitTel").innerText;
+        input7.type="hidden";
+        input7.name="visitTel";
+        input7.value=visitTel;
+
+        insertForm.append(input1, input2, input3, input4, input5,  input6, input7);
+        
+        // body에 form 태그
+        document.body.append(insertForm);
+        
+        insertForm.submit(); // 다음 버튼 클릭 시 form 태그 제출
 
     });
 }
 
-
-/* 예약자 정보와 실제 방문자 정보가 다를 경우 폼 */
-const visitInfoBtn = document.querySelector(".visitInfoBtn");
-const visitForm = document.querySelector(".visit-form");
-const visitInfoBtnUp = document.querySelector(".visitInfoBtnUp");
-
-if(visitInfoBtn != null) {
-    visitInfoBtn.addEventListener("click", () => {
-        visitForm.classList.toggle("visit");
-    })
-}

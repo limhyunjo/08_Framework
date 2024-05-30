@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -96,7 +95,7 @@ public class MemberMyPageServiceImpl implements MemberMyPageService{
 	public int noshowCount(int memberNo) {
 		return mapper.noshowCount(memberNo);
 	}
-	
+
 	// 예약 확정 조회
 	@Override
 	public List<Reservation> reservationFix(int memberNo) {
@@ -134,6 +133,13 @@ public class MemberMyPageServiceImpl implements MemberMyPageService{
 		return mapper.memberLikeList(memberNo);
 	}
 
+	// 찜 취소
+	@Override
+	public int cancelLike(int memberNo, int storeNo) {
+		Map<String, Integer> map = Map.of("memberNo", memberNo, "storeNo", storeNo);
+		return mapper.cancelLike(map);
+	}
+	
 	// 리뷰 목록 조회
 	@Override
 	public List<Review> selectReviewList(int memberNo) {

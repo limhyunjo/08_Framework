@@ -51,8 +51,19 @@ public class ReservationServiceImpl implements ReservationService{
 	// 예약 저장
 	@Override
 	public int insertReservation(Map<String, Object> map){
-		return mapper.insertReservation(map);
 		
+		Map<String, Object> storeName = mapper.storeName(map);
+		
+		map.put("storeName", storeName);
+		
+		return mapper.insertReservation(map);
+	}
+	
+	
+	// 예약 가능 상태 변경
+	@Override
+	public int updateStoreStatus(Store store) {
+		return mapper.updateStoreStatus(store);
 	}
 }
 

@@ -4,6 +4,7 @@ package com.project.foodpin.store.model.service;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +32,6 @@ public class DetailStoreServiceImpl implements DetailStoreService{
 	
 
 
-	
 	
 	// 가게 리뷰 상세 조회
 	@Override
@@ -78,6 +78,15 @@ public class DetailStoreServiceImpl implements DetailStoreService{
 		
 		return -1;
 	}
+
+
+	// 리뷰 신고
+	@Override
+	public int reviewReport(Map<String, String> map) {
+		return mapper.reviewReport(map);
+	}
+
+
 
 	
 }

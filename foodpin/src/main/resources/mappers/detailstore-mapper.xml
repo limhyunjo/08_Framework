@@ -3,14 +3,16 @@
 <mapper namespace="com.project.foodpin.store.model.mapper.DetailStoreMapper">
 
 
-	
+
+
 	<resultMap type="Review" id="review_rm">
+
 	
 		<id property="reviewNo" column="REVIEW_NO"/>
 		
 		<collection 
-			property="imageList"
-			select = "selectImageList"
+			property="uploadList"
+			select = "uploadImageList"
 			column = "REVIEW_NO"
 			javaType = "java.util.ArrayList"
 			ofType = "UploadImage"
@@ -23,9 +25,16 @@
 			javaType = "java.util.ArrayList"
 			ofType = "ReviewHash"
 		/>
+		
+		<collection 
+			property="replyList"
+			select = "selectReplyList"
+			column = "REVIEW_NO"
+			javaType = "java.util.ArrayList"
+			ofType = "ReviewReply"
+		/>
+		
 	</resultMap>
-
-
 
 
 
@@ -53,6 +62,12 @@
                javaType = "java.util.ArrayList"
                ofType = "Menu"
    />
+   <collection property="storeHashList"
+               select = "selectStoreHashList"
+               column = "STORE_NO"
+               javaType = "java.util.ArrayList"
+               ofType = "ReviewHash"
+   />
 
 </resultMap>
 
@@ -60,20 +75,31 @@
 
 	   <!-- 가게 상세 조회 -->
    <select id="storeDetail" resultMap="store_rm">
-   SELECT STORE_NAME, STORE_INFO, STORE_LOCATION, STORE_STATUS,
+   	SELECT STORE_NAME, STORE_INFO, STORE_LOCATION, STORE_STATUS,
        STORE_TEL, OPEN_HOUR, CLOSE_HOUR, BREAKTIME_START, BREAKTIME_END,
-       STORE_CLOSED, STORE_IMG, TOTAL_RATING, MEMBER_NO, STORE_NO,
+       STORE_CLOSED, STORE_IMG, MEMBER_NO, STORE_NO,
+       
+       (SELECT COUNT(*) 
+       FROM "REVIEW"
+       WHERE STORE_NO = #{storeNo}
+      AND REVIEW_DEL_FL = 'N') REVIEW_COUNT,
+
        	(SELECT COUNT(*) 
 		 FROM "BOOKMARK"
 		 WHERE STORE_NO = #{storeNo}) LIKE_COUNT,
+		 
 		 (SELECT COUNT(*)FROM "BOOKMARK"
 	    WHERE MEMBER_NO = #{memberNo}
-	    AND STORE_NO =#{storeNo}) BOOK_MARK
-		 
+	    AND STORE_NO =#{storeNo}) BOOK_MARK ,
+	    
+	     (SELECT ROUND(AVG(REVIEW_RATING), 1)
+		  FROM REVIEW
+		  WHERE STORE_NO =#{storeNo}
+		  AND REVIEW_DEL_FL = 'N') TOTAL_RATING 
+		  
 		FROM "STORE" 
 		WHERE STORE_NO = #{storeNo}
 		AND STORE_CLOSED ='N'
-		
    </select>
    
    
@@ -82,7 +108,7 @@
      FROM "UPLOAD_IMAGE"
      WHERE STORE_NO = #{storeNo}
      ORDER BY REVIEW_NO DESC
-   </select>
+   </select> 
    
    <select id="selectMenuList" resultType="Menu">
      SELECT *
@@ -91,10 +117,20 @@
      ORDER BY MENU_NO
    </select>
    
+   <select id="selectStoreHashList" resultType="ReviewHash">
+     
+		SELECT DISTINCT H.HASH_TITLE
+		FROM REVIEW R
+		JOIN REVIEW_HASH RH ON R.REVIEW_NO = RH.REVIEW_NO
+		JOIN HASH H ON RH.HASH_NO = H.HASH_NO
+		WHERE R.STORE_NO =  #{storeNo} 
+   </select>
+
    
-   <!-- 가게 리뷰 상세 조회 -->
+   
+      <!-- 가게 리뷰 상세 조회 -->
    <select id="reviewDetail" resultMap="review_rm">
-   		SELECT DISTINCT MEMBER_NAME, PROFILE_IMG, REVIEW_NO, REVIEW_RATING, REVIEW_CONTENT,
+   		SELECT DISTINCT MEMBER_NICKNAME, PROFILE_IMG, REVIEW_NO, REVIEW_RATING, REVIEW_CONTENT,
 			TO_CHAR(REVIEW__REG_DATE, 'YYYY-MM-DD') REVIEW__REG_DATE, REVIEW_DEL_FL,
 			STORE_NO, MEMBER_NO
 		FROM REVIEW
@@ -107,23 +143,29 @@
    </select>
    
    <!-- 리뷰 이미지 조회 -->
-   <select id="selectImageList" resultType="UploadImage">
+   <select id="uploadImageList" resultType="UploadImage">
 		SELECT * 
 		FROM UPLOAD_IMAGE
 		WHERE REVIEW_NO = #{reviewNo}
 		ORDER BY IMAGE_ORDER
-	</select>
+	</select> 
 	
 	<!-- 리뷰 해시태그 조회 -->
-	<select id="selectHashList" resultType="ReviewHash">
+	 <select id="selectHashList" resultType="ReviewHash">
 		SELECT HASH_NO, REVIEW_NO, HASH_TITLE 
 		FROM REVIEW_HASH
 		JOIN HASH USING (HASH_NO)
 		WHERE REVIEW_NO = #{reviewNo}
 	</select>
-   
-   
-   
+	
+	<!-- 리뷰 사장님 댓글 조회 -->
+	 <select id="selectReplyList" resultType="ReviewReply">
+		SELECT R.*, S.STORE_IMG
+		FROM REVIEW_REPLY R
+		JOIN STORE S ON (R.STORE_NO = S.STORE_NO)
+		WHERE REVIEW_NO = #{reviewNo}
+		AND REPLY_DEL_FL = 'N'
+	</select>
    
    
    
@@ -146,6 +188,29 @@
     SELECT COUNT(*) FROM "BOOKMARK"
      WHERE STORE_NO = #{storeNo}
    </select>
+   
+   
+   <!-- 리뷰 신고 -->
+	<insert id="reviewReport" useGeneratedKeys="true" parameterType="Report">
+		
+		<selectKey order="BEFORE" resultType="_int" keyProperty="reportNo">
+	      SELECT SEQ_REPORT_NO.NEXTVAL FROM DUAL
+	  	</selectKey>
+		
+		INSERT INTO "REPORT" VALUES(#{reportNo}, #{reportContet}, #{reportNo}, #{memberNo})
+	</insert>   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
    
   
 </mapper>

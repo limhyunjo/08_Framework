@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.session.RowBounds;
 
 import com.project.foodpin.review.model.dto.Review;
 import com.project.foodpin.store.model.dto.Menu;
@@ -20,11 +21,6 @@ public interface DetailStoreMapper {
 
 	
 
-	/** 가게 메뉴 상세 조회
-	 * @param storeNo
-	 * @return
-	 */
-	List<Menu> menuDetail(String storeNo);
 
 	
 	/** 가게 찜 해제 
@@ -53,6 +49,14 @@ public interface DetailStoreMapper {
 	 * @return
 	 */
 	List<Review> reviewDetail(String storeNo);
+
+	/** 리뷰 신고
+	 * @param map
+	 * @return
+	 */
+	int reviewReport(Map<String, String> map);
+
+
 
 
 }

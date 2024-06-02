@@ -29,6 +29,16 @@
                       
                     <div class="search-categoryContaier">
 
+                        <div class="search-categoryContaier-hide">
+                            <span >
+                                <i class="fa-solid fa-plus"></i>
+                            </span>
+                            <span >
+                                <i class="fa-solid fa-minus"></i>
+                            </span>
+    
+                        </div>
+
                         <div class="searchcategory-Btnbox">
                             <button >한식</button>
                             <button>중식</button>
@@ -48,28 +58,40 @@
                     <!-- 검색창 아래 내용 -->
                     <div class="search-panelContent">
 
-                        <div>
+                        <div class="rotate-container">
                             <i class="fa-solid fa-arrow-rotate-left"></i>
                         </div>
 
-                        <div>
-                            <div>
-                                <span>주변</span>
+                        <div class="search-storelist-type">
+
+                            <div class="storelist-typecontainer">
+
+                                <div>
+                                    <span>주변</span>
+                                </div>
+    
+                                <div>
+                                    
+                                    <div>
+                                        <span >
+                                            <i class="fa-solid fa-angle-down"></i>
+                                        </span>
+                                        <span >
+                                            <i class="fa-solid fa-angle-up"></i>
+                                        </span>
+                
+                                    </div>
+                                   
+                                </div>
+
                             </div>
+                           
 
                             <div>
-                                
-                                <div>
-                                    <span >
-                                        <i class="fa-solid fa-chevron-down"></i>
-                                    </span>
-                                    <span >
-                                        <i class="fa-solid fa-chevron-up"></i>
-                                    </span>
-            
-                                </div>
                                 <span>내 위치에서(북마크 많은 순 , 리뷰개수 순 , 가까운 순, 평점 순)</span>
                             </div>
+
+                            
                         </div>
                     
                         <div>
@@ -91,7 +113,7 @@
                                             가게 카테고리
                                         </span>
 
-                                        <a href="#">예약 페이지로 이동</a>
+                                        <a href="store/storeDetail/${store.storeNo}/reservation">예약 페이지로 이동</a>
                                     </div>
 
                                     <div>

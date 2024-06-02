@@ -20,6 +20,7 @@
     /* border: 1px solid #cecece; */
     width: 800px;
     height: 370px;
+    margin: 10px;
 }
 
 /* 가게 사진 */
@@ -42,12 +43,13 @@
     width: 100%;
     margin-left: 10px;  
 }
-
+/* 
 .title{
     display: flex;
     padding-left: 10px;
     font-size: 20px;
-}
+    padding-bottom: 3px;
+} */
 
 .content {
     padding-left: 10px;
@@ -59,18 +61,21 @@
     color: #4A4848;
 }
 
-.title-container {
-    display: flex;
-    align-items: center;
-    
+.store{
+    font-weight: bold;
+    font-size: 26px;
+    padding: 3px 0 5px 0;
 }
 
-.content-container {
+.content-container, .store-name-container{ 
+    width: 600px;
     display: flex;
     align-items: center;
 }
 
-.content-container, .title-container{ width: 600px;}
+.content-container>.title{
+    margin-left: 10px;
+}
 
 /* 예약 인원, 날짜 section */
 .reservation-body-container{
@@ -99,8 +104,7 @@
     justify-content: center;
     width:600px;
 }
-
-.nav-list>a{
+.reserv-info{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -114,7 +118,12 @@
 
 }   
 
-.nav-list>a:hover{
+.reserv-info:hover{
+    background-color: #afafaf;
+    color: white !important;
+}
+
+.click-a {
     background-color: #afafaf;
     color: white !important;
 }
@@ -159,7 +168,7 @@
 .button-list {
     display: flex;
     flex-wrap: wrap;
-    height: 100px;
+    height: 110px;
     overflow-x: auto; /* 가로 오버플로우 설정 */
     white-space: nowrap;
     margin-bottom: 20px;
@@ -221,9 +230,16 @@
 }
 
 .calendar{
-    width: 500px;
+    /* width: 500px; */
     height: 400px;
-    margin: 40px 20px 30px 20px;
+    margin: 20px 20px 30px 20px;
+}
+
+#calendar{
+    width: 600px;
+    margin-top: 10px;
+    padding: 15px;
+    height: 500px;
 }
 
 .reserv-time-container{
@@ -232,12 +248,12 @@
     justify-content: center;
     flex-direction: column;
     height: 50%;
-    margin: 20px;
+    /* margin: 20px; */
 }
 
 .reservation-time{
     width: 500px;
-    margin: 10px;
+    margin:  10px 0 30px 0;
 }
 
 .time-title{

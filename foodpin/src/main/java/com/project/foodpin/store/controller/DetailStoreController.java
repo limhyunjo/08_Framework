@@ -39,40 +39,54 @@ public class DetailStoreController {
 		List<Review> reviewList = service.reviewDetail(storeNo);
 
 		/* Store offday = service.storeOff(storeNo); */
+		// request scope 값 세팅
+		
+		
+
+
+		model.addAttribute("reviewList",reviewList); 
+		model.addAttribute("start" , 0);
 
 		// 불러온 store 정보에서 주소 쪼개기
 		String storeLocation = store.getStoreLocation();
 		String[] arr = storeLocation.split("\\^\\^\\^");
 
-		model.addAttribute("store", store);
-
-
-		model.addAttribute("reviewList",reviewList); 
-		model.addAttribute("start" , 0);
 
 
 		model.addAttribute("postcode", arr[0]);
 		model.addAttribute("address", arr[1]);
 		model.addAttribute("detailAddress", arr[2]);
 
+		
+
 		String path = null;
 
-		if (store != null) {
-
-			// request scope 값 세팅
-			model.addAttribute("store", store);
-
 	
-          
+
+			model.addAttribute("store", store);
+	
 			model.addAttribute("storeHashList", store.getStoreHashList());
 			model.addAttribute("menuList", store.getMenuList());
 			model.addAttribute("imageList", store.getImageList());
 
 			path = "/store/storeDetail";
 
-		}
+		
 		return path;
 	}
+	
+	
+	/** 가게 신고
+	 * @param map
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping("storeReport")
+	public int storeReport(@RequestBody Map<String, Object> map) {
+		
+		return service.storeReport(map);
+	}
+	
 
 	/**
 	 * 가게 찜
@@ -89,13 +103,15 @@ public class DetailStoreController {
 	}
 	
 	
+	
+	
 	/** 리뷰 신고
 	 * @param map
 	 * @return
 	 */
 	@ResponseBody
 	@PostMapping("reviewReport")
-	public int reviewReport(@RequestBody Map<String, String> map) {
+	public int reviewReport(@RequestBody Map<String, Object> map) {
 		
 		return service.reviewReport(map);
 	}

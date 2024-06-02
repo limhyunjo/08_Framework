@@ -230,8 +230,10 @@ public class MemberMyPageController {
 		@SessionAttribute("loginMember") Member loginMember) {
 		
 		int memberNo = loginMember.getMemberNo();
-				
 		List<Store> store = service.memberLikeList(memberNo);
+		int likeCount = service.likeCount(memberNo);
+		
+		model.addAttribute("likeCount", likeCount);
 		model.addAttribute("store", store);
 		
 	    for (Store stores : store) {
@@ -243,7 +245,6 @@ public class MemberMyPageController {
 	        
 	        stores.setStoreLocation(addressWithoutPostcode);
 	    }	
-		
 		return "myPage/member/memberLike";
 	}
 	
@@ -256,7 +257,7 @@ public class MemberMyPageController {
 		int memberNo = loginMember.getMemberNo();
 		int result = service.cancelLike(memberNo, storeNo);
 		
-		if (result > 0) {
+		if (result > 1) {
 			return true;
 		} else {
 			return false;
@@ -272,9 +273,14 @@ public class MemberMyPageController {
 		
 		int memberNo = loginMember.getMemberNo();
 		List<Review> review = service.selectReviewList(memberNo);
+		int reviewCount = service.reviewCount(memberNo);
+		
 		model.addAttribute("review", review);
+		model.addAttribute("reviewCount", reviewCount);
+		
 		return "myPage/member/memberReview";
 	}
+	
 	
 	// 회원 탈퇴 페이지로
 	@GetMapping("memberSecession")

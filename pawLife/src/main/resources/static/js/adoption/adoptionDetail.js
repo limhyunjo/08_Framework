@@ -75,7 +75,7 @@ bookmarkCheck.addEventListener("click", e=>{
 
 
         if(count == -1){
-            console.log("북마크 실패");
+            console.log("좋아요 실패");
             return;
         }
 

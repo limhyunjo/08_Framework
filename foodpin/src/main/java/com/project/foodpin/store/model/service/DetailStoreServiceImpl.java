@@ -82,11 +82,57 @@ public class DetailStoreServiceImpl implements DetailStoreService{
 
 	// 리뷰 신고
 	@Override
-	public int reviewReport(Map<String, String> map) {
+	public int reviewReport(Map<String, Object> map) {
+		
+		int reviewNo = Integer.parseInt(String.valueOf(map.get("reviewNo")));
+		
+		int memberNo = mapper.selectMemberNo(reviewNo);
+		
+		map.put("memberNo", memberNo);
+		
+		
 		return mapper.reviewReport(map);
 	}
 
 
+
+
+	// 가게 정보 정정 신고
+	@Override
+	public int storeReport(Map<String, Object> map) {
+	    // Map에서 데이터를 추출합니다.
+	    String storeNo = (String) map.get("storeNo");
+	    String requestContent = (String) map.get("requestContent");
+	    String requestCategoryTitle = (String) map.get("requestCategoryTitle");
+
+	    // storeNo와 연관된 memberNo를 조회합니다.
+	    int memberNo = mapper.selectReportMemberNo(storeNo);
+
+	    // Map에 memberNo를 추가합니다.
+	    map.put("memberNo", memberNo);
+
+	    // Map에 requestCategoryCode를 추가합니다.
+	    switch (requestCategoryTitle) {
+	        case "changeBasicinfo":
+	            map.put("requestCategoryCode", "1");
+	            break;
+	        case "changeMenu":
+	            map.put("requestCategoryCode", "2");
+	            break;
+	        case "chageStoreTime":
+	            map.put("requestCategoryCode", "6");
+	            break;
+	        case "storeClosed":
+	            map.put("requestCategoryCode", "7");
+	            break;
+	        default:
+	            map.put("requestCategoryCode", "0"); // 기본값
+	            break;
+	    }
+
+	    // 신고 내용을 데이터베이스에 저장합니다.
+	    return mapper.storeReport(map);
+	}
 
 	
 }

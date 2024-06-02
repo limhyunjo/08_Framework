@@ -106,6 +106,9 @@ window.onload = function() {
 /* ****************지도******************* */
 
 
+
+
+
 /* 가게 상세 설명 더보기 */
 const storeDetailContent =document.querySelector('.store-detail-content');
 const storeDetailText =document.querySelector('.store-detail-text');
@@ -197,14 +200,37 @@ document.addEventListener('DOMContentLoaded', function () {
   storeTelElement.textContent = formattedTel;
 });
 
-/* 폐점/ 정보 정정 신고 팝업 */
+/* ******************************************************** */
+
+/* 리뷰> 클릭 시 아래 리뷰 페이지로 이동 */
+
+document.addEventListener('DOMContentLoaded', function() {
+  const showReview = document.querySelector("#showReview");
+  const reviewBox = document.getElementsByClassName(".review-container"); // 스크롤할 대상 요소
+
+  if (showReview && reviewBox) {
+    showReview.addEventListener("click", () => {
+      const scrollPosition = reviewBox.offsetTop;
+      window.scrollTo({
+        left: 0,
+        top: scrollPosition,
+        behavior: 'smooth'
+      });
+    });
+  }
+});
+
+
+
+
+/*********************** 폐점/ 정보 정정 신고 팝업 ******************/
 
 
 const popupShut = document.querySelector("#popupShut");
 const popupbox = document.querySelector("#popupbox");
 const storeReportForm = document.querySelector("#storeReportForm");
 const storeReport = document.querySelector("#storeReport");
-
+const storeReportBtn = document.querySelector('#storeReportBtn');
 
 popupShut.addEventListener("click", () => {
   
@@ -218,75 +244,109 @@ storeReport.addEventListener("click", ()=>{
 });
 
 
-/* ****************** 가게 영업 시간 더보기 *********************  */
+  const requestContent = document.getElementById('requestStoreContent');
+  const requestCategoryTitle = document.getElementById('requestSelect');
 
-const openContainer = document.querySelector(".storedetail-opencontainer");
-const busiHoursShort = document.querySelector(".busi-hours-short");
+  storeReportBtn.addEventListener("click",e =>{
+      e.preventDefault(); // 기본 폼 제출 동작을 방지합니다.
 
-const moreScheduleInfoBtn = document.querySelector("#moreScheduleInfoBtn");
-const shutScheduleInfoBtn = document.querySelector("#shutScheduleInfoBtn");
+      // 유효성 검사를 수행합니다.
+      if (requestContent.value.trim() === '') {
+          alert('상세 내용을 입력해주세요.');
+          requestContent.focus();
+          return;
+      }
 
-moreScheduleInfoBtn.addEventListener('click',()=>{
+      if (requestCategoryTitle.value === '') {
+          alert('신고 내용을 선택해주세요.');
+          requestType.focus();
+          return;
+      }
+
+      
+        // 선택된 신고 내용을 포함하여 객체 생성
+    const obj = {
+      "storeNo": storeNo,
+      "memberNo": loginMember,
+      "requestCategoryTitle": requestCategoryTitle.value, 
+      "requestContent": requestStoreContent.value,
+    };
+
+    fetch("/store/storeReport", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(obj)
+    })
+    .then(resp => resp.json())
+    .then(result => {
+      if (result == 0) {
+        alert("신고 접수가 되지 않았습니다.");
+        requestContent.focus();
+      } else {
+        alert("가게 신고가 접수 되었습니다.");
+        storeReportForm.classList.add("popup-hidden");
+        requestContent.value = '';
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('신고 중 오류가 발생했습니다. 다시 시도해주세요.');
+    });
+  });
 
 
-  // 더보기 버튼을 숨기고 줄이기 버튼 보이게 하기
-  moreScheduleInfoBtn.style.display = 'none'; 
-  shutScheduleInfoBtn.style.display = 'inline-block'; 
-  busiHoursShort.style.display = 'inline';
-})
-
-shutScheduleInfoBtn.addEventListener("click",()=>{
-
-  
-  shutScheduleInfoBtn.style.display = 'none'; 
-  moreScheduleInfoBtn.style.display = 'inline-block';
-  busiHoursShort.style.display = 'none'; 
-})
 
 
 /* ************************************************************* */
 
 /* 메뉴 이미지 더보기 */
 
-// 3개씩 불러오기
 
-
-
-
-const storeMenuList = document.querySelector(".store-menu-list");
-const menuImageContainer = document.querySelector(".menu-image-container");
-
+const storeMenuList = document.querySelector(".menu-image-container");
+const menuB = storeMenuList.querySelectorAll(".menu-basiclist");
 const moreMenuImageBtn = document.querySelector("#moreMenuImageBtn");
 const shutMenuImageBtn = document.querySelector("#shutMenuImageBtn");
 
+// 처음에 3개의 메뉴를 표시
+let visibleMenus = 3;
+const totalMenus = menuB.length;
+
+showMenus();
+
+moreMenuImageBtn.addEventListener('click', () => {
+  visibleMenus += 3;
+  showMenus();
+});
+
+shutMenuImageBtn.addEventListener("click", () => {
+  visibleMenus = 3;
+  showMenus();
+});
+
+// 메뉴를 표시/숨김 처리하는 함수
+function showMenus() {
+  for (let i = 0; i < totalMenus; i++) {
+    if (i < visibleMenus) {
+      menuB[i].style.display = "flex";
+    } else {
+      menuB[i].style.display = "none";
+    }
+  }
+
+  // 더보기/접기 버튼 토글
+  if (totalMenus <= 3) {
+    moreMenuImageBtn.style.display = "none";
+    shutMenuImageBtn.style.display = "none";
+  } else if (visibleMenus >= totalMenus) {
+    moreMenuImageBtn.style.display = "none";
+    shutMenuImageBtn.style.display = "block";
+  } else {
+    moreMenuImageBtn.style.display = "block";
+    shutMenuImageBtn.style.display = "none";
+  }
+}
 
 
-moreMenuImageBtn.addEventListener('click',()=>{
-
-
-  
-
-  moreMenuImageBtn.style.display = 'none'; 
-  shutMenuImageBtn.style.display = 'inline'; 
-  
-  storeMenuList.style.display = 'inline';
- 
- 
-})
-
-shutMenuImageBtn.addEventListener("click",()=>{
-
-  
-  shutMenuImageBtn.style.display = 'none'; 
-  moreMenuImageBtn.style.display = 'inline';
-
-  storeMenuList.style.display = 'flex';
-
-  storeMenuList.style.overflow = 'hidden';
-
- 
-
-})
 
 
 /* ****************************식당 사진 더보기*********************************** */
@@ -296,11 +356,11 @@ const storeLook = document.querySelector(".store-look");
 const moreStoreImageBtn = document.querySelector("#moreStoreImageBtn");
 const shutStoreImageBtn = document.querySelector("#shutStoreImageBtn");
 
-// 초기 상태 설정
+// 처음 이미지 6개 
 let visibleImages = 6;
 const totalImages = detailImages.querySelectorAll("img").length;
 
-// 초기에 보여줄 이미지 설정
+// 초기에 보여줄 이미지 
 showImages();
 
 // 더보기 버튼 클릭 시
@@ -367,7 +427,7 @@ hideReviewBtn.addEventListener("click", () => {
     showReviews();
 });
 
-// 리뷰 보이기 함수
+// 리뷰 보기 함수
 function showReviews() {
     reviews.forEach((review, index) => {
         if (index < visibleReviews) {
@@ -390,12 +450,14 @@ function showReviews() {
     }
 }
 
+
+
 /* ***************** 리뷰 신고 팝업 ****************** */
 const popupClose = document.querySelector("#popupClose");
 const popupLayer = document.querySelector("#popupLayer");
 const reviewReportForm = document.querySelector("#reviewReportForm");
-const reviewReport = document.querySelectorAll("#reviewReport");
-const reivewComplete = document.querySelector("#reviewComplete");
+const reviewReport = document.querySelectorAll(".reviewReport");
+const reportComplete = document.querySelector("#reportComplete");
 const reportContent = document.querySelector("#reportContent");
 
 popupClose.addEventListener("click", () => {
@@ -404,134 +466,47 @@ popupClose.addEventListener("click", () => {
 reviewReport.forEach((report) => {
   report.addEventListener("click", ()=>{
     reviewReportForm.classList.remove("popup-hidden");
-    
-    const reviewNo = reviewReport.getAttribute("data-review-no");
-    const memberNo = reviewReport.getAttribute("data-member-no");
-
-    reivewComplete.addEventListener("click" , (e) => {
+   
+    const reviewNo = report.dataset.reviewNo;
+   
+    reportComplete.addEventListener("click" , e => {
     
       if(reportContent.value.trim().length == 0){
         alert("신고 내용을 입력해주세요");
         reportContent.focus();
         e.preventDefault();
         return;
+      }else{
+        const obj = {
+          "reviewNo" : reviewNo,
+          "reportContent" : reportContent.value,
+        };
+    
+        fetch("/store/reviewReport", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(obj)
+        })
+        .then(resp => resp.json())
+        .then(result => {
+    
+          if(result == 0){
+            alert("신고 접수가 되지 않았습니다.");
+            reportContent.focus();
+            e.preventDefault();
+          }
+          else{
+            alert("리뷰 신고가 접수 되었습니다.");
+            reviewReportForm.classList.add("popup-hidden");
+            reportContent.value = '';
+          }
+        })
       }
-
-      const obj = {
-        "reviewNo" : reviewNo,
-        "reportContent" : reportContent.value,
-        "memberNo" : memberNo
-      };
-
-      fetch("/store/reviewReport", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(obj)
-      })
-      .then(resp => resp.json())
-      .then(result => {
-
-        if(result > 0){
-          alert("리뷰 신고가 접수 되었습니다.");
-          reportContent.innerText = '';
-          reviewReportForm.classList.add("popup-hidden");
-        }
-        else{
-          alert("신고 내용을 입력해주세요").
-          reportContent.focus();
-          e.preventDefault();
-        }
-
-        
-      })
-      
     })
-    
-
-
-
   })
 })
 
 
-/* ******************************************************** */
 
-/* 리뷰> 클릭 시 아래 리뷰 페이지로 이동 */
-
-const showReview = document.querySelector("#showReview");
-/* const scrollPosition = targetElement.offsetTop; */
-
-showReview.addEventListener("click", ()=>{
-
- 
-  window.scrollTo({
-    
-    left:0,
-    top:3000,
-    behavior:'smooth'
-  })
-})
-
-/**************** 가게 찜, 좋아요 개수 ******************/
-
-
-// 1. #bookmarkCheck 클릭 되었을 때
-const bookmarkCheck = document.querySelector("#bookmarkCheck");
-bookmarkCheck.addEventListener("click", e=>{
-
-  
-    // 3. 준비된 3개의 변수를 객체로 저장 -> (Json 변환 예정)
-    const obj = {
-        "memberNo" : loginMember,
-        "storeNo"  : storeNo,
-        "bookMark": bookMark
-    };
-
-    //4. 좋아요 INSERT / DELETE 비동기 요청
-    fetch("/store/like", {
-
-    method  : "POST",
-    headers : {"Content-Type" : "application/json"},
-    body    : JSON.stringify(obj) // 객체를 Json으로 문자화 
-
-    })
-
-    .then(resp =>resp.text()) // 반환 결과 text(글자) 형태로 변환
-    .then(count =>{
-
-        // count == 첫 번째 then의 파싱되어 반환된 값('-1' 또는 게시글 좋아요 수)
-        //console.log("result :", result);
-
-
-        if(count == -1){
-            console.log("좋아요 처리 실패");
-            return;
-        }
-
-        // 5. bookmark 값 0<->1 변환
-        // (왜? 클릭 될 때 마다 INSERT/DELETE 동작을 번갈아 가면서 할 수 있음)
-         bookMark = bookMark == 0? 1: 0;
-
-        // 6. 하트를 채웠다/비웠다 바꾸기
-        
-        e.target.classList.toggle("fa-regular");
-        e.target.classList.toggle("fa-solid");
-        
-
-
-        // 7. 게시글 좋아요 수 수정
-        e.target.nextElementSibling.innerText = count;
-
-        bookmarkCheck.classList.add('fa-bounce');
-
-        // 1초 후에 fa-shake 클래스를 제거
-        setTimeout(function () {
-          bookmarkCheck.classList.remove('fa-bounce');
-        }, 500);
-       
-
-    });
-
-});
 
 

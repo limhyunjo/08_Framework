@@ -122,7 +122,7 @@ dayoffBtn.addEventListener("click", () => {
 
       const li = document.createElement("li");
       li.classList.add("week-li");
-      li.innerText = week + "요일";
+      li.innerText = week;
       li.setAttribute('value', index);
       ul.append(li);
    })
@@ -147,7 +147,7 @@ dayoffBtn.addEventListener("click", () => {
             }
          })
 
-         // 고정 휴무일 값 - 요일과 일치하는 경우 'week-off' 클래스 추가
+         // 고정 휴무일 값 - 요일과 일치하는 경우 달력에 'week-off' 클래스 추가
          switch(parseInt(off.offWeek)) {
 
             case 0 : document.querySelectorAll(".fc-day-sun").forEach( (item) => {
@@ -263,50 +263,8 @@ dayoffBtn.addEventListener("click", () => {
    
 });
 
-
-
-
-/**
- * 고정 휴무일 체크
- */
-//const weekList = document.querySelectorAll(".week-li"); // 휴무 요일 각 li 태그
-
-// weekList.forEach( (item, index) => {
-
-//    selectWeekOff();
-   
-//    if(index === offList) item.classList.add('checked');
-// })
-
-// for(let li of weekList) {
-
-//    li.addEventListener("click", () => {
-
-//       li.classList.toggle("checked");
-
-//       console.log("checked");
-
-//    })
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+const testBtn = document.querySelector("#testBtn");
+const popupLayer = document.querySelector("#popupLayer");
 /**
  * 일정 등록하는 팝업창 생성 
  */
@@ -358,7 +316,7 @@ const createPopup = () => {
 
    btnRow.append(addBtn, cancelBtn);
    popupFrm.append(titleRow, startRow, endRow, btnRow);
-   testArea.append(popupFrm);
+   StoreOffContainer.append(popupFrm);
 
 
    /**

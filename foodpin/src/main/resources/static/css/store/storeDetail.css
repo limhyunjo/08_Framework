@@ -49,6 +49,17 @@ aside >a{
 
 }
 
+#toChatting{
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: rgb(39, 39, 39);
+}
+#toChatting:hover{
+    border-bottom: 1px solid rgb(66, 66, 66);
+}
+
 
 aside p{
     padding: 5px 0;
@@ -96,7 +107,7 @@ aside>a:hover{
     .store-container{ 
     border: 1px solid var(--main-color);
     border-radius: 15px;
-    width: 800px;
+    min-width: 800px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -151,7 +162,7 @@ aside>a:hover{
 #storeName{
     font-size: 28px;
     font-weight: bold;
-    color: rgb(43, 38, 38);
+    color: #383838;
 }
 
 
@@ -182,12 +193,15 @@ aside>a:hover{
     
 }
 
-.store-avgScore{
+.allstar-box{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 
- 
+.store-avgScore{
     position: relative;
-   
-    
+  
 }
 .background-star{
     position: absolute;
@@ -211,7 +225,6 @@ aside>a:hover{
     width: 25px;
     position: absolute;
     right: 513px;
-    top: 574px;
     z-index: 1000;
   
 }
@@ -322,6 +335,18 @@ aside>a:hover{
     color: var(--main-color);
 }
 
+.storeCatBox{
+ display: flex;
+ flex-direction: row;
+}
+
+.storeCatLoop{
+    margin-right: 5px;
+}
+#storeCat{
+ color: #383838;
+ cursor: pointer;
+}
 #storeCat::before{
 
     font-family:FontAwesome;
@@ -339,11 +364,7 @@ aside>a:hover{
     margin-right: 5px;
     color: var(--main-color);
 }
-#toChatting{
 
-    font-size: 14px;
-    color: rgb(39, 39, 39);
-}
 
 
 
@@ -585,9 +606,6 @@ color: rgb(66, 66, 66);
  flex-wrap: nowrap;
  text-align: left;
 }
-.check-store-div >*{
-    
-}
 
 .check-store-div label {
     
@@ -745,16 +763,20 @@ hr{
     width: 100px;
     height: 110px;
     border-radius: 5px;
+    margin-right: 20px;
 }
 
 
 .menu-basiclist{
-   display: flex;
-   flex-direction: row; 
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 500PX;
 }
 
-.menu-basic-list >*{
+.menu-basiclist >*{
     margin-top: 10px;
+  
 }
 
 
@@ -809,8 +831,9 @@ hr{
 
 .menuN{
   font-size: 14px;
-  color: var(--main-color);
-  border-bottom: 1px solid var(--main-color);
+  color: gray;
+ 
+
 }
 
 
@@ -877,6 +900,13 @@ hr{
     border-radius: 5px;
 }
 
+.imageN{
+    font-size: 14px;
+    color: gray;
+    border-bottom: 1px solid var(--main-color);
+    margin-bottom: 30px;
+}
+
 /* 식당 사진 더보기 버튼 박스 */
 .moreStoreImageBtnBox{
     display: flex;
@@ -884,6 +914,7 @@ hr{
     justify-content: center;
     align-items: center;
     margin: 60px;
+  
 }
 
 /* 사진 더보기 버튼 */
@@ -916,14 +947,7 @@ hr{
 .storereview-container{
     position: relative;
 }
-/* 리뷰 쓰기 페이지로 가는 a 태그 */
-.storereview-container a {
-    position: absolute;
-    right: -90px;
-    z-index: 1000;
-    top: 20px;
 
-}
 
 
 .review-title{
@@ -933,16 +957,6 @@ hr{
     align-items: center;
     padding: 35px 0;
     padding-top: 40px;
-}
-
-.review-avgScore{
-    width: 100%;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid var(--main-color);
-    padding: 27px 0;
-
 }
 
 .rating__star{
@@ -965,9 +979,8 @@ hr{
 }
 
 .storereview-top{
-    padding: 20px 0;
-    padding-top: 10px;
-    border-bottom: 1px solid var(--main-color);
+    padding: 24px 0;
+    border-bottom: 1px solid #E14C54;
     display: flex;
     justify-content: space-between;
 }
@@ -998,20 +1011,40 @@ hr{
 }
 
 
-
 .storereview-top-right{
-    display: flex;
-    font-size: 0.8em;
+    display: flex; /* 요소들을 가로로 배치 */
+    align-items: center; /* 세로축 가운데 정렬 */
     flex-direction: column;
-    justify-content: inherit;
+    height: 100%;
 }
 
-.storereview-top-right > button {
+.review-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 51px;
+    
+}
+
+.review-btn > button{
     border: none;
     background-color: white;
-    cursor: pointer;
-    margin-bottom: 10px;
+    margin-bottom: px;
 }
+
+.review-btn > a{
+    font-size: 13px;
+    margin: 10px 0;
+    color: #DF8B4E;
+}
+
+
+.review-date > span{
+    font-size: 13px
+}
+
 
 
 .storereview-mid{
@@ -1034,7 +1067,7 @@ hr{
     height: 25px;
     
     text-align: center;
-    border: 1px solid var(--main-color);
+    border: 1px solid #E14C54;
     border-radius:24px;
     margin: 10px 0;
 }
@@ -1054,7 +1087,6 @@ hr{
     padding: 0 25px;
     display: flex;
     margin: 30px 0;
-    border-bottom: 3px solid var(--main-color);
 }
 
 
@@ -1255,9 +1287,11 @@ hr{
 
 .review{
     width: 600px;
-    border: 1px solid var(--main-color);
+    border: 1px solid #E14C54;
     border-radius: 15px;
     padding: 24px;
+    padding-top: 12px;
+    padding-bottom: 12px;
     margin-bottom: 35px;
 }
 
@@ -1271,3 +1305,19 @@ hr{
     align-items: center;
     justify-content: center;
 }
+
+.report-area{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    min-height: 17px;
+}
+
+.report-area > button{
+    border: none;
+    background-color: white;
+    cursor: pointer;
+    margin-right: 10px;
+    color: #696969
+}
+

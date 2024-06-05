@@ -25,11 +25,11 @@ shutScheduleInfoBtn.addEventListener("click",()=>{
 
   // 현재 요일부터 일주일 동안의 일정을 동적으로 생성하는 함수
   function generateSchedule() {
-    const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
-    const currentDay = getCurrentDayOfWeek();
+     const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+    const currentDay = getCurrentDayOfWeek(); 
 
     // 현재 요일부터 일주일 동안의 일정 생성
-    const schedule = [];
+       const schedule = [];
     for (let i = 0; i < 7; i++) {
         const dayIndex = (currentDay + i) % 7;
         const day = daysOfWeek[dayIndex];
@@ -42,16 +42,16 @@ shutScheduleInfoBtn.addEventListener("click",()=>{
         });
     }
 
-    return schedule;
+    return schedule; 
 }
 
 // 일정을 HTML에 동적으로 추가하는 함수
 function renderSchedule() {
     const schedule = generateSchedule();
-    const currentDaySchedule = document.getElementById('currentDaySchedule');
+    const currentDaySchedule = document.getElementById('currentDaySchedule'); 
 
     // 현재 요일의 일정을 currentDaySchedule에 추가
-    const currentDayIndex = getCurrentDayOfWeek();
+     const currentDayIndex = getCurrentDayOfWeek();
     const currentDay = schedule[currentDayIndex];
     const currentListItem = document.createElement('li');
     currentListItem.innerHTML = `

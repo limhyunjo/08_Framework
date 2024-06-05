@@ -76,7 +76,9 @@
                                     <th:block th:if="${session.loginMember?.memberCode == 1}">
                                         <i class="fa-heart" id="bookmarkCheck"
                                         
-                                        th:classappend="*{bookMark == 1} ? fa-solid : fa-regular"></i>
+                                        th:classappend="*{bookmark == 1} ? fa-solid : fa-regular"></i
+                                        
+                                        >
     
                                     </th:block>
                                 
@@ -99,7 +101,12 @@
                             <div class="storedetail-row">
 
                                     <!-- 클릭하면 카테고리 검색된 상태로 상세 페이지로 이동 -->
-                              <span id="storeCat">패스트푸드</span>
+                              <div class="storeCatBox">
+                                <div class="storeCatLoop"th:each="cat:${store.storeCategoryList}">
+
+                                    <span id="storeCat" th:text="${cat.categoryTitle}"></span>
+                                </div>
+                              </div>
                             </div>
 
 
@@ -108,32 +115,41 @@
                             <div class="storedetail-row">
 
 
-                                <div class="store-avgScore">
+                                <div class="allstar-box">
 
-                                    <div class="background-star">
-                                        <i class="total_star  fas fa-star"></i>
-                                        <i class="total_star  fas fa-star"></i>
-                                        <i class="total_star  fas fa-star"></i>
-                                        <i class="total_star  fas fa-star"></i>
-                                        <i class="total_star  fas fa-star"></i>
-                                       
-                                 
-                                    </div>
-                                 
-                                    <div class="realAvg-star" >    
+                                    <div class="store-avgScore">
+
+                                        <div class="background-star">
+                                            <i class="total_star  fas fa-star"></i>
+                                            <i class="total_star  fas fa-star"></i>
+                                            <i class="total_star  fas fa-star"></i>
+                                            <i class="total_star  fas fa-star"></i>
+                                            <i class="total_star  fas fa-star"></i>
+                                           
                                      
-                                        <i class="total_star  fas fa-star"></i>
-                                        <i class="total_star  fas fa-star"></i>
-                                        <i class="total_star  fas fa-star"></i>
-                                        <i class="total_star  fas fa-star"></i>
-                                        <i class="total_star  fas fa-star"></i>
-
+                                        </div>
+                                     
+                                        <div class="realAvg-star" >    
+                                         
+                                            <i class="total_star  fas fa-star"></i>
+                                            <i class="total_star  fas fa-star"></i>
+                                            <i class="total_star  fas fa-star"></i>
+                                            <i class="total_star  fas fa-star"></i>
+                                            <i class="total_star  fas fa-star"></i>
+    
+                                        </div>
+                                     
+                                        
                                     </div>
-                                 
+    
+                                    <div>
+                                        <span id="totalScoreR" th:text="*{totalRating}"> 점수 </span> 
+                                    </div>
                                     
+
                                 </div>
                                 
-                                <span id="totalScoreR" th:text="*{totalRating}"> 점수 </span> 
+                               
                                   
                                     
                                
@@ -214,7 +230,7 @@
                                 <!-- 가게 정보 해시태그 -->
                                 <div id="storedetail-row">
                                     <!-- 클릭 시 상세 검색 페이지로 이동(카테고리 선택됨) -->
-                                    <a href="#" id="toChatting">문의하기</a>
+                                    <button id="toChatting">문의하기</button>
                                 </div>
 
                                 
@@ -234,14 +250,17 @@
 
                         </div>
 
+                        <th:block th:if="${store.storeInfo != null}">
 
                     
                         <div class="store-detail-content">
 
+                           
                             <pre class="store-detail-text" th:text="*{storeInfo}">
-                                
+                            
                             </pre>
 
+                        
                            
                         </div>
                         <span  class="more-text">
@@ -252,6 +271,8 @@
                         </span>
 
                         <hr>
+
+                       </th:block>
                      
 
                      <!-- 가게 예약 버튼-->
@@ -323,7 +344,11 @@
 
             
                     <div class="store-reportcontainer">
-                        <button type="button" id="storeReport">🚨 폐점 / 가게 정보 정정 신고</button>
+                        <th:block th:if="${session.loginMember?.memberCode !=2 && session.loginMember?.memberCode !=3}">
+                                        
+                            <button type="button" id="storeReport">🚨 폐점 / 가게 정보 정정 신고</button>
+                            
+                        </th:block>
                     </div>
 
                    <!-- ************************************************************** -->
@@ -438,8 +463,8 @@
                     <div class="menu-info-title">
                     <span>메뉴 정보</span>
                     </div>
-                
-                    <th:block th:if="${store.menuList==null}">
+                    
+                    <th:block th:if="${#lists.size(menuList) == 0}">
                     <span class="menuN">
                         <i class="fa-solid fa-circle-exclamation"></i>
                         메뉴가 아직 준비 중입니다
@@ -468,7 +493,7 @@
                     </div>
                     </div>
                 
-                    <div class="moreMenuImageBtnBox">
+                    <div class="moreMenuImageBtnBox" th:if="${#lists.size(menuList) > 3}">
                     <button id="moreMenuImageBtn">더보기</button>
                     <button id="shutMenuImageBtn" style="display: none;">접기</button>
                     </div>
@@ -511,9 +536,16 @@
             <div class="storeLookText">
                 <span>식당 사진</span>
             </div>
+
+                   <th:block th:if="${#lists.size(imageList) == 0}">
+                    <span class="imageN">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        아직 가게 사진이 없습니다
+                    </span>
+                    </th:block>
               
         
-        <div class="detail-images" th:if="${#lists.size(imageList)>0}">
+           <div class="detail-images" th:if="${#lists.size(imageList)>0}">
 
             <th:block th:each="i:${#numbers.sequence(0, #lists.size(store.imageList)-1)}">
            
@@ -525,7 +557,7 @@
            
         </div>
 
-        <div class="moreStoreImageBtnBox">
+        <div class="moreStoreImageBtnBox" th:if="${#lists.size(imageList)>6}">
             <button id="moreStoreImageBtn">사진 더보기</button>
             <button id="shutStoreImageBtn">사진 접기</button>
         </div>
@@ -550,7 +582,7 @@
                 
                 <div class="storereview-container" th:if="${reviewList}">
                     
-                    <th:block th:unless= "${!#lists.isEmpty(reviewList)}">
+                    <th:block th:if="${#lists.isEmpty(reviewList)}">
                         <h3>작성된 리뷰가 없습니다.</h3>
                     </th:block>
 
@@ -559,9 +591,11 @@
                         <h3 class="review-title">방문자 리뷰</h3>
                     </th:block>
 
-
+                    
                     <th:block  th:each=" review : ${reviewList}" th:object="${review}">
                         <div class="review">
+                            
+
                             <div class="storereview-top">
         
                                 <div class="storereview-top-left">
@@ -615,10 +649,23 @@
                                 </div>
         
                                 <div class="storereview-top-right">
-                                    <button type="button" class="reviewReport"  
-                                        th:if="${session.loginMember}" 
-                                        th:attr="data-review-no=*{reviewNo}">🚨신고하기</button>
-                                    <span th:text="*{reviewRegDate}">2024-05-17</span>
+
+                                    <div class="review-btn">
+                                        <th:block th:if="${review.memberNo == session.loginMember?.memberNo}">
+                                            <button type="button" id="reviewDeleteBtn"  
+                                                th:attr="data-review-no=*{reviewNo}">
+                                                삭제하기
+                                            </button>
+                                            <a th:href="'/review/reviewUpdate/' + *{storeNo} +'/' + *{reviewNo}" id="reviewUpdateBtn"  
+                                                th:attr="data-review-no=*{reviewNo}">
+                                                수정하기
+                                            </a>
+                                        </th:block>
+                                    </div>
+
+                                    <div class="review-date">
+                                        <span th:text="*{reviewRegDate}">2024-05-17</span>
+                                    </div>
                                 </div>
         
                             </div>
@@ -649,13 +696,20 @@
                                         </th:block>
                                     </div>
                                 </div>
+
+                                <div class="report-area" th:if="${session.loginMember}">
+                                    <button type="button" class="reviewReport"  
+                                        th:if="${session.loginMember}" 
+                                        th:attr="data-review-no=*{reviewNo}">🚨신고하기
+                                    </button>
+                                </div>
                             </th:block>
         
-                            <th:block th:if="${!#lists.isEmpty(replyList)}" th:each=" reply : *{replyList}">
+                            <th:block th:if="${!#lists.isEmpty(review.replyList)}" th:each=" reply : *{replyList}">
                                 <div class="store-reply">
                                     <img class="review-store-profile" th:src="${reply.storeImg}" alt="가게 프로필 이미지">
             
-                                    <p class="reply-content-bubble" th:text="${reply.replyContent}">
+                                    <p class="reply-content-bubble" th:text="${reply.replyConent}">
                                         사장님 답글
                                     </p>
                                 </div>
@@ -713,7 +767,7 @@
         const storeMaxTable = /*[[${store.storeMaxTable}]]*/ "최대 예약 팀 수(테이블)"
         const storeNo = /*[[${store.storeNo}]]*/ "사업자등록번호"
     
-        let bookMark =/*[[${store.bookMark}]]*/ "좋아요 여부";
+        let bookmark =/*[[${store.bookmark}]]*/ "좋아요 여부";
         
 
     </script>
@@ -733,11 +787,24 @@
     </aside>
     
 
+
     <script src="/js/store/storeDetail.js"></script>
     <script src="/js/store/storeLike.js"></script>
     <script src="/js/store/storeOpen.js"></script>
+
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+
+
+    <script th:inline="javascript">
+        const storeMemberNo = /*[[${store.memberNo}]]*/ '사업자번호';
+    </script>
+
     <script src="/js/reservation/reservation.js"></script>
     <script src="/js/reservation/calendar.js"></script>
+    <script src="/js/chatting/chatPopup.js"></script>
    
 </body>
 </html>
+
+
+

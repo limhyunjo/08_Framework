@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 document.addEventListener('DOMContentLoaded', function() {
   const showReview = document.querySelector("#showReview");
-  const reviewBox = document.getElementsByClassName(".review-container"); // 스크롤할 대상 요소
+  const reviewBox = document.querySelector(".review-container"); // 스크롤할 대상 요소
 
   if (showReview && reviewBox) {
     showReview.addEventListener("click", () => {
@@ -248,9 +248,14 @@ storeReport.addEventListener("click", ()=>{
   const requestCategoryTitle = document.getElementById('requestSelect');
 
   storeReportBtn.addEventListener("click",e =>{
-      e.preventDefault(); // 기본 폼 제출 동작을 방지합니다.
+      e.preventDefault(); // 기본 폼 제출 동작을 방지
 
-      // 유효성 검사를 수행합니다.
+      if(loginMember == null){
+        alert('로그인 후 신고해주십시오.');
+        return;
+      }
+
+      // 유효성 검사
       if (requestContent.value.trim() === '') {
           alert('상세 내용을 입력해주세요.');
           requestContent.focus();
@@ -491,12 +496,20 @@ reviewReport.forEach((report) => {
         .then(result => {
     
           if(result == 0){
-            alert("신고 접수가 되지 않았습니다.");
+            Swal.fire({
+              icon: "error",
+              title: "신고 접수 실패",
+              text: "신고 접수가 실패했습니다. 다시 한 번 확인해주세요.",
+            });
             reportContent.focus();
             e.preventDefault();
           }
           else{
-            alert("리뷰 신고가 접수 되었습니다.");
+            Swal.fire({
+              title: "신고 접수 완료",
+              text: "신고 접수가 정상적으로 처리 되었습니다.",
+              icon: "success"
+            });
             reviewReportForm.classList.add("popup-hidden");
             reportContent.value = '';
           }
@@ -507,6 +520,34 @@ reviewReport.forEach((report) => {
 })
 
 
+const reviewDeleteBtns = document.querySelectorAll("#reviewDeleteBtn");
 
+reviewDeleteBtns.forEach((btn) => {
+  
+  btn.addEventListener("click", () => {
+
+    const reviewNo = btn.dataset.reviewNo;
+
+    if(confirm("리뷰을 삭제하십시겠습니까?")) {
+      
+      fetch("/review/deleteReview", {
+        method: "POST",
+        headers: {"Content-Type" : "application/json"},
+        body: JSON.stringify(reviewNo)
+      })
+      .then(resp => resp.json())
+      .then(result => {
+        
+        if(result > 0){
+          alert("리뷰가 삭제 되었습니다.");
+          location.reload();
+        }
+
+      });
+    }else{
+      alert("취소 되었습니다.");
+    }
+  })
+})
 
 

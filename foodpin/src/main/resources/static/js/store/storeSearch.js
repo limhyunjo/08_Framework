@@ -13,10 +13,71 @@ mapHome.addEventListener("click", () => {
 const storedetailmapbutton = document.querySelector("#chatS");
 
 storedetailmapbutton.addEventListener("click", () => {
-  location.href = "/chatting/chat";
-
+    
+    if(loginMember == null){
+        alert('로그인이 필요한 기능입니다');
+        location.href = "storeSearch";
+        return;
+    }
+    
+    location.href = "/chatting/chat";
 });
 
+
+/* 사이드바 접기 */
+
+const hideSideBar = document.querySelector("#hideSideBar");
+const blind = document.querySelector(".blind");
+const show = document.querySelector(".show");
+const searchSidebarBox = document.querySelector(".search-sidebarbox");
+
+blind.addEventListener('click', ()=>{
+
+    blind.style.display= 'none';
+    show.style.display = 'flex';
+    searchSidebarBox.style.transform = 'translateX(-100%)';
+    searchSidebarBox.style.transition = 'transform 0.4s ease-out';
+    
+})
+show.addEventListener('click', ()=>{
+
+    show.style.display= 'none';
+    blind.style.display = 'flex';
+    searchSidebarBox.style.transform = 'translateX(0%)';
+    
+})
+
+
+
+
+
+/* 카테고리 박스 접기 */
+
+const searchCategoryCon = document.querySelector('.search-categoryContaier')
+const searchCategoryBtnBox = document.querySelector('.searchcategory-Btnbox')
+const bars = document.querySelector('.bars')
+const shortBar = document.querySelector('.short-bar')
+
+shortBar.addEventListener('click', ()=>{
+    shortBar.style.display = 'none';
+    bars.style.display = 'flex';
+
+    searchCategoryCon.style.transform = 'translateY(-100%)';
+    searchCategoryCon.style.transition = 'transform 0.4s ease-out';
+    searchCategoryCon.style.transition = 'transition:height 1s';
+    /* searchCategoryCon.style.height = '166px'; */
+ 
+})
+
+bars.addEventListener('click', ()=>{
+    bars.style.display = 'none';
+    shortBar.style.display = 'flex';
+    
+    searchCategoryCon.style.transform = 'translateY(0%)';
+    searchCategoryCon.style.transition = 'transform 0.4s ease-out';
+    
+    
+})
 
 
  
@@ -153,34 +214,8 @@ window.onload = function() {
 
 
 
-/* nav 바 접기 */
-
-/* 가게 상세 설명 더보기 */
-const storeDetailContent =document.querySelector('.store-detail-content');
-const storeDetailText =document.querySelector('.store-detail-text');
-const moreText =document.querySelector('.more-text');
-const lessText =document.querySelector('.less-text');
-
-moreText.addEventListener("click", () => {
-  
-  moreText.style.display = 'none'; 
-  lessText.style.display = 'block'; 
-  storeDetailText.style.display = 'inline';
-});
-
-
-lessText.addEventListener("click", ()=>{
- 
- 
-  
-  lessText.style.display = 'none'; 
-  moreText.style.display = 'flex';
-  storeDetailText.style.display = '-webkit-box'; 
-});
-
-
 // 비동기로 내용 불러올 공간
-const sidebarMenu = document.querySelector(".sidebar-menu");
+/* const sidebarMenu = document.querySelector(".sidebar-menu");
 
 
 
@@ -198,5 +233,66 @@ storedetailmapbutton.addEventListener("click", () => {
     sidebarMenu.innerHTML = "";
 
 
-});
+}); */
 
+/**************** 가게 찜, 좋아요 개수 ******************/
+
+
+// 1. #bookmarkCheck 클릭 되었을 때
+const bookmarkCheck = document.querySelector("#bookmarkCheck");
+bookmarkCheck.addEventListener("click", e=>{
+
+  
+    // 3. 준비된 3개의 변수를 객체로 저장 -> (Json 변환 예정)
+    const obj = {
+        "memberNo" : loginMember,
+        "storeNo"  : storeNo,
+        "bookmark": bookmark
+    };
+
+    //4. 좋아요 INSERT / DELETE 비동기 요청
+    fetch("/store/searchlike", {
+
+    method  : "POST",
+    headers : {"Content-Type" : "application/json"},
+    body    : JSON.stringify(obj) // 객체를 Json으로 문자화 
+
+    })
+
+    .then(resp =>resp.text()) // 반환 결과 text(글자) 형태로 변환
+    .then(count =>{
+
+        // count == 첫 번째 then의 파싱되어 반환된 값('-1' 또는 게시글 좋아요 수)
+        //console.log("result :", result);
+
+
+        if(count == -1){
+            console.log("좋아요 처리 실패");
+            return;
+        }
+
+        // 5. bookmark 값 0<->1 변환
+        // (왜? 클릭 될 때 마다 INSERT/DELETE 동작을 번갈아 가면서 할 수 있음)
+        bookmark = bookmark == 0? 1: 0;
+
+        // 6. 하트를 채웠다/비웠다 바꾸기
+        
+        e.target.classList.toggle("fa-regular");
+        e.target.classList.toggle("fa-solid");
+        
+
+
+        // 7. 게시글 좋아요 수 수정
+        e.target.nextElementSibling.innerText = count;
+
+        bookmarkCheck.classList.add('fa-bounce');
+
+        // 1초 후에 fa-shake 클래스를 제거
+        setTimeout(function () {
+          bookmarkCheck.classList.remove('fa-bounce');
+        }, 500);
+       
+
+    });
+
+});

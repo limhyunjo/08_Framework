@@ -7,6 +7,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.project.foodpin.member.model.dto.Member;
 import com.project.foodpin.myPage.model.dto.Off;
 import com.project.foodpin.reservation.model.dto.Reservation;
+import com.project.foodpin.review.model.dto.Review;
+import com.project.foodpin.review.model.dto.ReviewReply;
 import com.project.foodpin.store.model.dto.Menu;
 import com.project.foodpin.store.model.dto.Store;
 
@@ -37,10 +39,11 @@ public interface StoreMyPageService {
 	List<Menu> menuSelect(int storeNo);
 
 	/** 메뉴 수정
+	 * @param imgUrlList 
 	 * @param menuList
 	 * @return result
 	 */
-	int menuUpdate(List<Menu> inputMenuList);
+	int menuUpdate(List<Menu> inputMenuList, List<MultipartFile> imgUrlList);
 	
 	// ------ 휴무일 ------
 	
@@ -56,6 +59,10 @@ public interface StoreMyPageService {
 	 */
 	List<Off> selectWeekOff(int storeNo);
 
+	
+	
+	
+	
 	/** 지정 휴무일 조회
 	 * @param storeNo
 	 * @return offList
@@ -75,6 +82,12 @@ public interface StoreMyPageService {
 	 */
 	List<Reservation> reservAll(int memberNo);
 
+	/** 예약 승인
+	 * @param reserv
+	 * @return
+	 */
+	int updateReservStatus(int reservNo);
+	
 	/** 확정된 예약 조회
 	 * @param memberNo
 	 * @return
@@ -92,6 +105,22 @@ public interface StoreMyPageService {
 	 * @return result
 	 */
 	int ceoInfoUpdate(Member inputMember);
+
+	/** 사장님 리뷰 조회
+	 * @param memberNo
+	 * @return
+	 */
+	List<Review> reviewAll(int memberNo);
+
+
+	/** 사장님 댓글 삽입
+	 * @param inputReply
+	 * @return
+	 */
+	int insertReply(ReviewReply inputReply);
+
+
+	
 
 
 

@@ -3,7 +3,7 @@
 
     mainCategoryBtns.forEach(function(button) {
         button.addEventListener("click", function() {
-            window.location.href = "store/storeSearch";
+            window.location.href = "store/storeSearch/" + catgoryCode;
 
         });
     });
@@ -26,4 +26,4 @@ quickLoginBtn.forEach((item) =>{
    
 })
 
-console.log(loginMember);
+

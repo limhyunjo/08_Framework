@@ -30,7 +30,7 @@
     align-items: center;
     height: 300px; /* 사진 크기 확인 필요 */
     width: 600px;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     margin: auto;
 }
 
@@ -129,11 +129,11 @@
 }
 
 .review-count{
-    color: rgb(47, 113, 235);
+    color: #df8b4e;
 }
 
 .bold {
-    color: rgb(47, 113, 235);
+    color: #df8b4e;
     font-weight: bold;
 }
 
@@ -288,8 +288,9 @@
 }
 
 .select{
-    background-color: #4a484a;
-    color: white;
+    border: none;
+    background-color: #FDDFB6;
+    color: black;
 }
 
 
@@ -340,7 +341,7 @@
 }
 
 .notice-item{
-    width: 400px;
+    width: 500px;
 }
 
 .notice-inner-detail{
@@ -390,7 +391,7 @@
 }
 
 .next-btn:hover{
-    border: 1px solid black;
+    border: 1px solid #363f75;
 }
 
 .next-btn{
@@ -402,7 +403,7 @@
 
     border: none;
     font-size: 15px;
-    background-color: #4A4848;
+    background-color: #363f75;
     color: white;
     border-radius: 5px;
     cursor: pointer;
@@ -419,7 +420,7 @@
     cursor: pointer;
 }
 
- .fc .fc-daygrid-day.fc-day-today{
+ .fc.fc-daygrid-day.fc-day-today{
     background-color: rgb(250, 255, 226);
 } 
 
@@ -443,7 +444,7 @@
 }
 
 .select-bg{
-    background-color: rgb(233, 255, 226);
+    background-color: #f3c186;
 }
 
 /* .fc .fc-day-disabled{
@@ -454,6 +455,87 @@
     visibility: visible;
 }
 
+.fc-today-button.fc-button.fc-button-primary {
+    background: #f6f6e5;
+    border: 1px solid #363f75;
+    border-radius: 50px;
+    color: #363f75;
+}
+
+.fc-today-button.fc-button.fc-button-primary:active{
+    color: #f6f6e5;
+    border: 1px solid #363f75;
+    background-color: #363f75;
+}
+/* .fc-button-group{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
+
+.fc-button-group>.fc-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #363f75;
+    border-radius: 20px;
+    width: 45px;
+}
+
+.fc-button-group>.fc-button:hover{
+    background-color: #363f75;
+    color: #f6f6e5;
+}
+
+.fc-button-group>.fc-button:active{
+    background-color: #363f75;
+    color: #f6f6e5;
+}
+
 .disabled{
     color:#cecece;
+}
+
+.titleH1{
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.titleH2{
+    margin-top: 30px;
+}
+
+.contentP {
+    margin: 10px 0;
+}
+
+.contentUl{
+    list-style: none;
+    padding: 0;
+}
+
+.contentUl, .contentUl>li{
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+}   
+
+.contentUl li{
+    padding-left: 20px;
+    text-indent: -20px;
+    list-style: none;
+}
+.noshowInfoUl{
+    list-style-type: disc;
+    margin: 10px 0 10px 20px;
+}
+
+/* 고정 휴무 */
+.week-off{
+    background-color: #d3d9ff;
+}
+
+/* 지정 휴무 */
+.day-off{
+    color: #717171;
 }

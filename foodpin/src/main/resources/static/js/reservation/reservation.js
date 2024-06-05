@@ -69,6 +69,7 @@ if(noticeTitle !=null) {
 if(document.querySelector("#reservCount") != null){
     const storeMaxNumber = document.querySelector("#reservCount").dataset.storeMaxNumber;
     
+    // 예약 가능 인원을 지정하지 않은 경우 10명까지로 지정
     const temp = 10;
     
     if(storeMaxNumber == 0) {
@@ -184,7 +185,7 @@ if(nextBtn != null){
         // 인원 선택한 값 저장 input
         const input1 = document.createElement("input");
         const selectCount = document.querySelector(".button-item.select").innerText
-        // console.log(selectCount);
+        console.log(selectCount);
 
         input1.type="hidden";
         input1.name="reservCount";
@@ -350,14 +351,16 @@ if(confirmBtn != null) {
 
         // 예약 인원
         const input4 = document.createElement("input");
-        const finalCount = document.querySelector(".reserv-date-count").innerText;
+        const finalCount = document.querySelector("#reservCount").innerText;
+        // alert(finalCount);
         input4.type="hidden";
         input4.name="reservCount";
-        // input4.value=finalCount;'
+        // input4.value=finalCount;
         
-        const countPart = finalCount.substr(0,1); // "2명" 에서 "2" 만 추출
-        const reservCount = Number(countPart); // 문자를 숫자로 변환
+        const reservCount = finalCount.replace("명", ""); // "2명" 에서 "2" 만 추출
+        // const reservCount = Number(countPart); // 문자를 숫자로 변환
         input4.value=reservCount; // DB 저장용 
+        // console.log(reservCount);
 
         // 요청사항
         const input5 = document.createElement("input");
@@ -384,8 +387,7 @@ if(confirmBtn != null) {
         
         // body에 form 태그
         document.body.append(insertForm);
-        
-        insertForm.submit(); // 다음 버튼 클릭 시 form 태그 제출
 
+        insertForm.submit(); // 다음 버튼 클릭 시 form 태그 제출
     });
 }

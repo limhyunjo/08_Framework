@@ -1,6 +1,12 @@
 let calendar;
+let offWeek;
                         /* 예약 날짜 */
-const selectTimeFn = (reservDate) => {
+const selectTimeFn = async (reservDate) => {
+
+    //reservDate의 요일이 경우 함수 실행 X
+    if(offWeek.includes(String(new Date(reservDate).getDay()))) return;
+
+
 
     const obj = {
         "storeNo" : storeNo,
@@ -17,23 +23,37 @@ const selectTimeFn = (reservDate) => {
         
         console.log(result);
 
+        const temp = document.querySelectorAll(".week-off");
+        temp.forEach(item => {
+            
+            if(item.classList.contains(".fc-day-today")) {
+                
+            };
+
+            console.log(item);
+        });
+
         const reservTimes = result.reservTimes;
-        const confirmReservDate = result.confirmReservDate; // 시간병 예약 개수를 List로 조회한 결과
+        const confirmReservDate = result.confirmReservDate; // 시간별 예약 개수를 List로 조회한 결과
         console.log(confirmReservDate);
         
         const selectReservTime = confirmReservDate.length > 0 ? confirmReservDate[0].reservTime : null;
 
-        // const counts = confirmReservDate[0].counts; // 시간에 예약된 개수
-        // console.log(counts);
-
-        
         // console.log(filteredArray);
         // 예약이 꽉 찬 시간대만 저장한 배열
         // storeMaxTable : 시간별 예약 가능 최대 팀 수
         const fullTimeList = [];
         confirmReservDate.filter(item => {
+            // Ensure storeMaxTable is a number
+            // const maxTable = Number(storeMaxTable);
+            
+            // maxTable가 0이라면 return
+            if (Number(storeMaxTable) === 0) return;
+            
+            // storeMaxTable과 item.counts의 값 비교
             if (Number(item.counts) === Number(storeMaxTable)) {
                 fullTimeList.push(item.reservTime);
+                item.classList.add("disbled");
             }
         });
 
@@ -63,10 +83,6 @@ const selectTimeFn = (reservDate) => {
             console.log(closeHour);
             getTimeSplit(openHour, end, 60);
 
-            // const tomorrow = new Date();
-            // tomorrow.setDate(tomorrow.getDate() + 1); // 다음날로 설정
-            // reservTimes.closeHour = tomorrow; // 마감 시간을 00:00으로 설정
-            // closeHour = tomorrow;
         }
 
         // closeHour 보다 1시간 이전까지만 출력해야 함
@@ -77,10 +93,6 @@ const selectTimeFn = (reservDate) => {
         
         const times = getTimeSplit(openHour, tempHour, 60);
         const breakTimes = getTimeSplit(reservTimes.breaktimeStart, reservTimes.breaktimeEnd, 60);
-        // console.log(breakTimes);
-
-        // console.log(times);
-        // console.log(breakTimes);
 
         const filteredArray = times.filter(item => !breakTimes.includes(item));
 
@@ -102,10 +114,7 @@ const selectTimeFn = (reservDate) => {
             timeItem.innerText = `${i}`;
             // console.log(timeItem);
 
-
             const currentTime = new Date();
-            // const currentHours = currentTime.getHours();
-            // const currentMinutes = currentTime.getMinutes();
         
             // 선택한 날짜
             const selectedDate = document.querySelector(".select-date").innerText.split('(')[0];
@@ -129,25 +138,22 @@ const selectTimeFn = (reservDate) => {
             const selectedTimeIsPast = selectedDateTime <= currentTime; // true = 오전, false = 오후
 
             console.log(selectedTimeIsPast);
-
             
-        
+
             if (isToday && selectedTimeIsPast || fullTimeList.includes(i)) {
+               
                 timeItem.classList.add("disabled");
                 timeItem.classList.remove("select");
             }
         
             timeList.append(timeItem);
 
+            // 오전 오후 구분용 margin 설정
             if(timeItem.innerText === '11:00' || timeItem.innerText === '00:00'){
                 const hr = document.createElement("div");
                 hr.style.width = "100%";
                 hr.style.margin = "10px 10px";
                 timeList.append(hr);
-                
-                // const timeTitle = document.querySelector("time-title");
-                // timeTitle.innerText="";
-                // timeTitle.innerText = "오전"
             }
         }
 
@@ -157,6 +163,7 @@ const selectTimeFn = (reservDate) => {
             for (let time of timeItem) {
                 time.addEventListener("click", e => {
 
+                   
                     if (time.classList.contains("disabled")) {
                         alert("해당 시간의 예약이 마감 되었습니다.");
                         return;
@@ -170,15 +177,7 @@ const selectTimeFn = (reservDate) => {
                     // 시간
                     time.classList.add("select");
                     checkObj.reservTime = true;
-                    console.log(time.innerText);
-
-                    // console.log(storeMaxTable);
-
-                    // 클릭한 날짜에 예약된 시간과 클릭 한 시간이 동일할 경우
-                    if (selectReservTime == time.innerText) {
-                        time.classList.remove("select");
-                        return;
-                    }
+                    // console.log(time.innerText);
 
                 });
             }
@@ -200,7 +199,139 @@ const selectTimeFn = (reservDate) => {
 
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+
+// 휴무일 계산용 배열
+//  const arr = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+
+//  arr.forEach((arrItem, index) => {
+//     console.log(arrItem);
+// })
+
+
+
+// 고정 휴무일 조회
+const fixedOffWeek = async () => {
+   const resp = await fetch("/store/selectOffWeek", {
+        method : "POST",
+        headers : {"Content-Type" : "application/json"},
+        body : storeNo
+    });
+
+    const offWeekList = await resp.json();
+
+    
+    console.log("offWeekList : ", offWeekList);
+
+    offWeek = offWeekList.map(item => item.offWeek);
+
+    document.querySelectorAll(".fc-scrollgrid-sync-table tr").forEach(row => {
+
+        offWeek.forEach(item => {
+            row.children[item].classList.add("week-off");   
+        });
+    });
+}
+
+
+
+// 지정 휴무일 조회
+fetch("/store/selectOffDay", {
+    method : "POST",
+    headers : {"Content-Type" : "application/json"},
+    body : storeNo
+})
+.then(resp => resp.json())
+.then(offDayList=> {
+    
+    console.log("offDayList : ", offDayList);
+
+    offDayList.forEach(item => {
+
+        console.log(item);
+
+        // const offDayNo = item.offDayNo;
+        // console.log(offDayNo);
+
+        // 휴무 시작일('YYYY-MM-DD' 형식)
+        const offDayStart = item.offDayStart;
+
+        // 휴무 종료일('YYYY-MM-DD' 형식)
+        const offDayEnd = item.offDayEnd;
+        console.log(offDayEnd);
+
+        // 일주일을 인덱스 순서대로 표현
+        const offWeek = item.offWeek;
+
+        console.log("offDayStart : " + offDayStart, "offDayEnd : " + offDayEnd, "offWeek : " + offWeek);
+
+        // 시작일과 종료일 사이의 모든 날짜를 처리
+        let currentDate = new Date(offDayStart);
+        let endDate = new Date(offDayEnd);
+
+        date = (endDate.getDate() + 1) < 10 ? '0' + (endDate.getDate() + 1) : endDate.getDate() + 1;
+        month = endDate.getMonth()+1 < 10 ? '0' + (endDate.getMonth()+1) : endDate.getMonth()+1;
+        year = endDate.getFullYear();
+
+        // console.log(offDayEnd,year, month, date);
+        endDate = `${year}-${month}-${date}`;
+        // console.log(endDate);
+
+
+        while(currentDate <= endDate){
+
+            // 해당 날짜의 요일 인덱스를 얻음
+            const dayIndex = currentDate.getDay();
+            // console.log(dayIndex);
+
+            // offWeek에 해당 요일 인덱스가 포함되어 있는지 확인
+            if(offWeek.includes(dayIndex)){
+
+                calendar.addEvent({
+                    // title: '휴무일',
+                    start: currentDate.toISOString().split('T')[0], // 'YYYY-MM-DD' 형식
+                    end : endDate, 
+                    allDay: true,
+                    // display: 'background',
+                    extendedProps: {
+                        isOffDay: true
+                    }
+
+                });
+            }
+            
+             // 다음 날짜로 이동
+             currentDate.setDate(currentDate.getDate() + 1);
+        }
+
+        // arr 배열의 인덱스와 offWeek 숫자와 동일할 경우 == 휴무일
+        // arr.forEach((dayItem, index) => {
+        //     // console.log("dayItem " + index);
+        // })
+    })
+    
+    // // 요일, 인덱스
+    // arr.forEach((dayItem, index) => {
+    //     const isOffDay = offDayList.includes(index); // true = 휴무일, false = 영업일
+    //     console.log(isOffDay);
+
+    //     // true (= 휴무일)일 경우
+    //     if(isOffDay){
+    //         document.querySelector(`.fc-day-${dayItem}`).classList.remove("select-bg");
+    //         document.querySelector(`.fc-day-${dayItem}`).classList.add("disabled");
+    //     }
+
+    //     // console.log(isOffDay);
+    //     // console.log(`${index}: ${dayItem} - ${isOffDay}`);
+    //     const temp = `${index}: ${dayItem}`;
+    //     console.log(temp);
+
+        
+    // }) 
+        
+
+})
+
+document.addEventListener('DOMContentLoaded', async function () {
 
     const dayArr = ['일','월','화','수','목','금','토'];
 
@@ -213,7 +344,19 @@ document.addEventListener('DOMContentLoaded', function () {
         timeZone: 'UTC',
         initialView: 'dayGridMonth',
         selectable : false, // 드래그 방지
+        // events: [],
+        // eventDidMount: function(info) {
+
+        //     // FullCalendar에서 이벤트 객체에 추가적인 속성을 설정하고 해당 속성을 확인하기 위한 코드
+        //     // 이벤트가 렌더링된 후 실행
+        //     if(info.event.extendedProps.isOffDay){
+        //         info.el.classList.add("disabled");
+        //     }
+                
+        // },
         dateClick : function(info){
+
+            if(info.dayEl.classList.contains("week-off")) return;
             // console.log(info);
             console.log(info.dateStr);
             // console.log(dayArr[info.date.getDay()]);
@@ -224,12 +367,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const month = info.dateStr.slice(5,7);
             const day = info.dateStr.slice(8, 10);
 
-            // const getDay(className)=>{
-            //     switch(true){
-
-            //     }
-            // }
-
             // const date = month + "." + day + "(" + ")";
             const date = `${month}.${day}(${dayArr[info.date.getDay()]})`;
 
@@ -237,9 +374,10 @@ document.addEventListener('DOMContentLoaded', function () {
             selectDate.innerText = date;
 
             // 달력 날짜 클릭 시 bg 색상 변함
+            
             document.querySelectorAll(".select-bg").forEach(item => item.classList.remove("select-bg"));
             info.dayEl.classList.add("select-bg"); // info.dayEl => 달력 한 칸
-
+            
             selectTimeFn(info.dateStr);
 
         },
@@ -249,29 +387,29 @@ document.addEventListener('DOMContentLoaded', function () {
             end: new Date(new Date().setMonth(new Date().getMonth() + 2))
         }
 
-        // events: [ // 일정 데이터 추가 , DB의 event를 가져오려면 JSON 형식으로 변환해 events에 넣어주면된다.
-        //     {
-        //         // title: '단체예약 (예약자명: 김예약)',
-        //         start: '2024-05-16',
-        //         // end: '2024-05-16'
-        //     }
-
-        // ],
-
     });
 
     calendar.render();
- 
 
     // 화면 로드 시 현재 날짜 출력
     const temp = new Date();
+
+    // 한 자릿수 월 앞에 0 붙이기
     const currentMonth = temp.getMonth()+1 < 10 ? '0' + (temp.getMonth()+1) : temp.getMonth()+1;
-    const now = `${currentMonth}.${temp.getDate()}(${dayArr[temp.getDay()]})`;
-    const nowDate = `${temp.getFullYear()}-${currentMonth}-${temp.getDate()}`;
+
+    // 한 자릿수 일 앞에 0 붙이기
+    const currentDay = temp.getDate() < 10 ? '0' + (temp.getDate()) : temp.getDate();
+
+    // 오늘 날짜(화면에 보여주는 용)(MM.DD(요일))
+    const now = `${currentMonth}.${currentDay}(${dayArr[temp.getDay()]})`;
+
+    // 날짜 형식으로 수정한 오늘 날짜('YYYY-MM-DD')
+    const nowDate = `${temp.getFullYear()}-${currentMonth}-${currentDay}`;
     // console.log(nowDate);
     // console.log(now);
     document.querySelector(".select-date").innerText = now;
 
+    await fixedOffWeek();
                 /* 현재날짜 */
-    selectTimeFn(nowDate);
+    await selectTimeFn(nowDate);
 });

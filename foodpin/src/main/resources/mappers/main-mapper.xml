@@ -11,5 +11,12 @@
    ORDER BY STORE_NO DESC
  
  </select>
+ 
+    <!-- 카테고리 종류 조회 -->
+<select id="selectCategoryTypeList">
+   SELECT CATEGORY_CODE "categoryCode", CATEGORY_TITLE "categoryTitle"
+  FROM CATEGORY
+  ORDER BY CATEGORY_CODE
+</select>
 
 </mapper>

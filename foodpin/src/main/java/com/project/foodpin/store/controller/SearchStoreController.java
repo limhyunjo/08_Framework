@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -28,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("store")
 public class SearchStoreController {
 
-	private SearchStoreService service;
+	private  final SearchStoreService service;
 
 	// 가게 검색 페이지 이동(+ 카테고리 선택된 상태로 검색되어야 함)
 	/*
@@ -38,72 +39,60 @@ public class SearchStoreController {
 	 */
 
 	
-	@GetMapping("storeSearch/{categoryCode}")
-	public String storeSearch(@PathVariable("categoryCode") int categoryCode, 
-			@SessionAttribute(value="loginMember", required = false) Member loginMember,
-			Model model, RedirectAttributes ra) {
+	  @GetMapping("storeSearch/{categoryCode}") 
+	  public String searchStoreList(@PathVariable("categoryCode") int categoryCode,  
+	  Store storeNo,	  
+	  @SessionAttribute(value = "loginMember", required = false) Member loginMember, 
+	  Model model, 
+	  RedirectAttributes ra) {
+	  
 		
+			
+			
 
-		Map<String, Object> map = new HashMap<>();
+			Map<String, Object> map = new HashMap<>();
+			
+			if(loginMember != null) {
+				int memberNo = loginMember.getMemberNo();
+				map.put("memberNo", memberNo);
+			}
 		
-		if(loginMember != null) {
-			int memberNo = loginMember.getMemberNo();
-			map.put("memberNo", memberNo);
-		}
-	
-		map.put("categoryCode", categoryCode);
-
-		Store store = service.storeSearch(map);
-
-
-		/* Store offday = service.storeOff(storeNo); */
-		// request scope 값 세팅
+			map.put("storeNo", storeNo);
+			map.put("categoryCode", categoryCode);
+			
 		
-		
-
-		// 불러온 store 정보에서 주소 쪼개기
-		String storeLocation = store.getStoreLocation();
-		String[] arr = storeLocation.split("\\^\\^\\^");
-
+			Store store = service.storeSearchDetail(map);
+			
+			String storeLocation = store.getStoreLocation();
+			String[] arr = storeLocation.split("\\^\\^\\^");
 
 
-		model.addAttribute("postcode", arr[0]);
-		model.addAttribute("address", arr[1]);
-		model.addAttribute("detailAddress", arr[2]);
 
-		
+			model.addAttribute("postcode", arr[0]);
+			model.addAttribute("address", arr[1]);
+			model.addAttribute("detailAddress", arr[2]);
 
-		String path = null;
+			
 
-	
+			String path = null;
 
 			model.addAttribute("store", store);
-	
-			model.addAttribute("storeCategoryList", store.getStoreCategoryList());
-			model.addAttribute("storeHashList", store.getStoreHashList());
-			model.addAttribute("menuList", store.getMenuList());
-
+			// 위까지 가게 상세 조회
+			
+			
+			// 동기로 메인에서 카테고리로 선택된 가게 리스트
+			// 검색 X key 값이 null인 경우 가게 리스트 조회
+			/*
+			 * model.addAttribute("categoryStoreList",categoryStoreList);
+			 * model.addAttribute("searchCategoryList",searchCategoryList);
+			 */
+			//검색으로 조회된 경우 (key값 있는 경우)
+			
+			//
 
 			path = "/store/storeSearch";
 
-		
-		return path;
-	}
-	
-	/**
-	 * 가게 찜
-	 * 
-	 * @param map
-	 * @return count
-	 */
-	@ResponseBody
-	@PostMapping("searchlike")
-	public int storeLike(@RequestBody Map<String, Object> map) {
-
-		return service.storeLike(map);
-
-	}
-	
-
-
+			
+			return path;
+	  }	
 }

@@ -49,6 +49,16 @@ public class Store {
 	
 	//가게 카테고리 목록
 	private List<StoreCategory>storeCategoryList;
+	
+	//카테고리로 검색하는 가게 리스트 목록
+	private List<StoreCategory>categoryStoreList;
+	
+	
+	private List<Store>searchStoreList;
+	
+
+	private int categoryCode;
+	private String categoryTitle;
 
 	// 찜
 	private int likeCount;

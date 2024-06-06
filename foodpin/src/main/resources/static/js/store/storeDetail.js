@@ -356,6 +356,7 @@ function showMenus() {
 
 /* ****************************식당 사진 더보기*********************************** */
 
+document.addEventListener('DOMContentLoaded', function(){
 const detailImages = document.querySelector(".detail-images");
 const storeLook = document.querySelector(".store-look");
 const moreStoreImageBtn = document.querySelector("#moreStoreImageBtn");
@@ -404,6 +405,8 @@ function showImages() {
   }
 
   }
+
+});
 
 
 

@@ -162,14 +162,17 @@ header {
 .main-category-container{
    display: flex;
    justify-content: center;
+
   
 }
-
+.main-category-content{
+   height: 200px;
+   width: 700px;
+}
 
 /* 카테고리 박스 */
 .main-category-button{
-   height: 200px;
-   width: 700px;
+  
    display: flex;
    flex-wrap: wrap; /* 요소들이 넘칠 때 가로 줄 바꿈 */
    justify-content: center;
@@ -185,6 +188,12 @@ header {
     font-size: 24px;
 }
 
+.main-cat-btnbox{
+   flex-wrap: wrap; /* 요소들이 넘칠 때 가로 줄 바꿈 */
+   justify-content: center;
+   align-items: center;
+   
+}
 /* 카테고리 버튼 영역 */
 .main-category-button button {
   

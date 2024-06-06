@@ -3,35 +3,40 @@
 <mapper namespace="com.project.foodpin.store.model.mapper.SearchStoreMapper">
 
 
- <resultMap type="Store" id="store_rm">
+<resultMap type="Store" id="store_rs">
+ 
+    <!-- id 태그 : PK 역할을 하는 컬럼, 필드를 작성하는 태그 -->
+    <!-- resultMap의 Pk로 boardNo를 하겠다고 지정하고 밑에서 컬럼으로 전달-->
+    <!-- collection을 만들기 위해 정의한 PK 컬럼 -->
+    <id property="storeNo" column="STORE_NO"/>
+    
 
-  <id property="storeNo" column="STORE_NO"/>
-  
-  <!-- id(PK역할하는 컬럼, 필드를 작성하는 태그)
-       resultMap의 PK로 storeNo를 하겠다고 지정
-   -->
-   
-   
-
-   <collection property="storeHashList"
-               select = "selectStoreHashList"
-               column = "STORE_NO"
-               javaType = "java.util.ArrayList"
-               ofType = "ReviewHash"
-   />
-   <collection property="storeCategoryList"
-               select = "selectStoreCategoryList"
+     
+		  
+		  <!-- 가게 카테고리로 조회하는 가게 리스트-->
+			<collection property  = "categoryStoreList"  
+		                 select      = "selectCategoryStoreList "
+		                 column    = "STORE_NO"
+		                 javaType  = "java.util.ArrayList"
+		                 ofType     = "Store"
+		  />
+		  
+		  <!--  가게 상세 페이지의 카테고리 리스트-->
+		     <collection property="searchCategoryList"
+               select = "selectSearchStoreCategoryList"
                column = "STORE_NO"
                javaType = "java.util.ArrayList"
                ofType = "StoreCategory"
-   />
-
-</resultMap>
-
-
-
+           />
+           
+  
+		
+ </resultMap>
+ 
+ 
+ 
 	   <!-- 가게 상세 조회 -->
-   <select id="storeDetail" resultMap="store_rm">
+   <select id="storeSearchDetail" resultMap="store_rs">
    	SELECT STORE_NAME, STORE_INFO, STORE_LOCATION, STORE_STATUS,
        STORE_TEL, OPEN_HOUR, CLOSE_HOUR, BREAKTIME_START, BREAKTIME_END, 
        STORE_CLOSED, STORE_IMG, STORE_NO, 
@@ -64,45 +69,37 @@
 		WHERE STORE_NO = #{storeNo}
 		AND STORE_CLOSED ='N'
    </select>
-   
-   
+ 
+     <!-- 카테고리 종류 조회 -->
+<select id="selectSearchCategoryTypeList" resultType="StoreCategory">
+   SELECT CATEGORY_CODE "categoryCode", CATEGORY_TITLE "categoryTitle"
+  FROM CATEGORY
+  ORDER BY CATEGORY_CODE
+</select>
 
-   <select id="selectStoreHashList" resultType="ReviewHash">
-     
-		SELECT DISTINCT H.HASH_TITLE
-		FROM REVIEW R
-		JOIN REVIEW_HASH RH ON R.REVIEW_NO = RH.REVIEW_NO
-		JOIN HASH H ON RH.HASH_NO = H.HASH_NO
-		WHERE R.STORE_NO =  #{storeNo} 
-		AND REVIEW_DEL_FL ='N' 
-   </select>
 
-   
-    <select id="selectStoreCategoryList" resultType="StoreCategory">
-        SELECT CATEGORY_TITLE  FROM "CATEGORY"
-		JOIN "STORE_CATEGORY" USING (CATEGORY_CODE)
-		WHERE STORE_NO = #{storeNo} 
-    </select>
-    
-    
-    <!-- 가게 찜 해제 -->
-   <delete id="deleteStoreLike">
-     DELETE FROM "BOOKMARK"
-     WHERE MEMBER_NO = #{memberNo}
-     AND STORE_NO = #{storeNo}
-   </delete>
-   
-   <!-- 가게 찜 체크 -->
-    <insert id="insertStoreLike">
-     INSERT INTO "BOOKMARK" (MEMBER_NO, STORE_NO)
-     VALUES(#{memberNo}, #{storeNo})
-     
-    </insert>
-   
-   <!-- 가게 찜 개수 -->
-   <select id="selectLikeCount">
-    SELECT COUNT(*) FROM "BOOKMARK"
-     WHERE STORE_NO = #{storeNo}
-   </select>
+
+
+  <!-- 카테고리에 해당하는 가게 리스트 조회-->
+  <select id="selectSearchStoreList" resultType="Store">
+  	
+  	SELECT BOARD_NO, BOARD_TITLE, MEMBER_NICKNAME, READ_COUNT,
+
+
+(SELECT COUNT(*)
+FROM "BOARD_LIKE" L
+WHERE L.BOARD_NO = B.BOARD_NO)LIKE_COUNT,
+
+
+FROM "BOARD"B
+JOIN "MEMBER" USING(MEMBER_NO)
+WHERE BOARD_DEL_FL ='N'
+AND BOARD_CODE = #{boardCode}
+ORDER BY BOARD_NO DESC
+  	
+  </select> 
+  
+  
+ 
 
 </mapper>

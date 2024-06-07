@@ -14,14 +14,14 @@ public interface DetailStoreService {
 	 * @param storeNo
 	 * @return
 	 */
-	Store storeDetail(String storeNo);
+	Store storeDetail(Map<String, Object> map);
 	
 
 	/** 가게 찜
 	 * @param map
 	 * @return count
 	 */
-	int storeLike(Map<String, Integer> map);
+	int storeLike(Map<String, Object> map);
 
 	/** 가게 리뷰 상세 조회
 	 * @param storeNo
@@ -42,6 +42,12 @@ public interface DetailStoreService {
 	 * @return
 	 */
 	int storeReport(Map<String, Object> map);
+
+
+	
+
+
+	
 
 
 

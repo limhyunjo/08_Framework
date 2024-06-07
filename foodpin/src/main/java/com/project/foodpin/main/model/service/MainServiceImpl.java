@@ -1,6 +1,7 @@
 package com.project.foodpin.main.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -25,5 +26,14 @@ public class MainServiceImpl implements MainService{
 		
 		 return storeList;
 	}
+	
+	
+	// 카테고리 종류 조회
+	@Override
+	public List<Map<String, Object>> selectCategoryTypeList() {
+		
+		return mapper.selectCategoryTypeList();
+	}
+	
 	
 }

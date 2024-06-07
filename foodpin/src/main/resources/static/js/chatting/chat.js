@@ -16,7 +16,7 @@ if( notificationLoginCheck ){
 }
 
 
-/* 채팅 메시지를 보내는 함수 */
+/* 채팅 메시지를 보내는 함수 */ 
 const sendMessage = () => {
 
   // 채팅 입력 textarea
@@ -80,7 +80,7 @@ if(chattingSock != undefined){
         p.innerHTML = msg.messageContent; // br태그 해석을 위해 innerHTML
       
         // 내가 작성한 메세지인 경우
-        if(loginMemberNo == msg.senderNo){ 
+        if(loginMemberNo == msg.memberNo){ 
           li.classList.add("my-chat");
           
           li.append(span, p);
@@ -128,7 +128,7 @@ if(chattingSock != undefined){
           console.log(roomList);
   
           // 채팅방 목록 출력 영역 선택
-          const chattingList = document.querySelector(".chatting-list");
+          const chattingList = document.querySelector(".room-list");
   
           // 채팅방 목록 지우기
           chattingList.innerHTML = "";
@@ -292,7 +292,7 @@ if(chattingSock != undefined){
               p.innerHTML = msg.messageContent; // br태그 해석을 위해 innerHTML
   
               // 내가 작성한 메세지인 경우
-              if(loginMemberNo == msg.senderNo){ 
+              if(loginMemberNo == msg.memberNo){ 
                   li.classList.add("my-chat");
                   
                   li.append(span, p);
@@ -319,8 +319,8 @@ if(chattingSock != undefined){
   
               ul.append(li);
               display.scrollTop = display.scrollHeight; // 스크롤 제일 밑으로
-          }
-  
+            }
+            
       })
       .catch(err => console.log(err));
   }

@@ -136,6 +136,7 @@
     border-radius: 10px;
     padding: 10px;
     margin-bottom: 20px;
+    resize: none;
 }
 
 .visitInfoBtn{
@@ -260,8 +261,8 @@
 }
 
 .check-agree>input:checked+label>i{
-    background-color: rgb(34, 216, 55);
-    border: 1px solid rgb(34, 216, 55) !important;
+    background-color: #e14c54;
+    border: 1px solid #e14c54 !important;
     color: white;
 }
 
@@ -288,7 +289,7 @@
     width: 80px;
     height: 40px;
 
-    border: 1px solid #4A4848;
+    border: 1px solid #363f75;
     font-size: 15px;
     background-color: white;
     border-radius: 5px;
@@ -301,7 +302,7 @@
 }
 
 .next-btn:hover{
-    border: 1px solid black;
+    border: 1px solid #363f75;
 }
 
 .next-btn{
@@ -313,7 +314,7 @@
 
     border: none;
     font-size: 15px;
-    background-color: #4A4848;
+    background-color: #363f75;
     color: white;
     border-radius: 5px;
     cursor: pointer;

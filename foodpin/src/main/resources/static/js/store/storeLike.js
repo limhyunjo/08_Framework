@@ -10,7 +10,7 @@ bookmarkCheck.addEventListener("click", e=>{
     const obj = {
         "memberNo" : loginMember,
         "storeNo"  : storeNo,
-        "bookMark": bookMark
+        "bookmark": bookmark
     };
 
     //4. 좋아요 INSERT / DELETE 비동기 요청
@@ -36,7 +36,7 @@ bookmarkCheck.addEventListener("click", e=>{
 
         // 5. bookmark 값 0<->1 변환
         // (왜? 클릭 될 때 마다 INSERT/DELETE 동작을 번갈아 가면서 할 수 있음)
-         bookMark = bookMark == 0? 1: 0;
+        bookmark = bookmark == 0? 1: 0;
 
         // 6. 하트를 채웠다/비웠다 바꾸기
         

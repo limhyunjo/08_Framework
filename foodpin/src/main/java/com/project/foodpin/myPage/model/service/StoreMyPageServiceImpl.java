@@ -1,7 +1,9 @@
 package com.project.foodpin.myPage.model.service;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -14,6 +16,8 @@ import com.project.foodpin.member.model.dto.Member;
 import com.project.foodpin.myPage.model.dto.Off;
 import com.project.foodpin.myPage.model.mapper.StoreMyPageMapper;
 import com.project.foodpin.reservation.model.dto.Reservation;
+import com.project.foodpin.review.model.dto.Review;
+import com.project.foodpin.review.model.dto.ReviewReply;
 import com.project.foodpin.store.model.dto.Menu;
 import com.project.foodpin.store.model.dto.Store;
 
@@ -57,7 +61,7 @@ public class StoreMyPageServiceImpl implements StoreMyPageService{
 		String updatePath = "";
 		String rename = "";
 		
-		if( !image.isEmpty()) { // input에서 이미지를 업로드 힌 경우
+		if( !image.isEmpty()) { // input에서 이미지를 업로드 한 경우
 			
 			rename = Utility.fileRename(image.getOriginalFilename());
 			
@@ -77,6 +81,7 @@ public class StoreMyPageServiceImpl implements StoreMyPageService{
 				e.printStackTrace();
 			} 
 		}
+		
 		return result;
 	}
 	
@@ -91,29 +96,31 @@ public class StoreMyPageServiceImpl implements StoreMyPageService{
 
 	// 메뉴 수정 (삭제, 추가)
 	@Override
-	public int menuUpdate(List<Menu> inputMenuList) {
+	public int menuUpdate(List<Menu> inputMenuList, List<MultipartFile> imgUrlList) {
 		
 		int result = 0;
 		String updatePath = "";
 		String rename = "";
 		
-		// 기존 저장된 데이터 삭제
-		result = mapper.deleteMenu(inputMenuList.get(0).getStoreNo());
+		result = mapper.deleteAllMenu(inputMenuList.get(0).getStoreNo()); // 기존 메뉴 데이터 삭제 (플래그 변경)
 		
-		if( inputMenuList.isEmpty()) return 0; // 입력된 메뉴 정보가 없는 경우
-		
-		else {
+		// 메뉴명이 비어있지 않은 경우 (입력된 데이터가 있는 경우)
+		if( !inputMenuList.get(0).getMenuTitle().isEmpty()) { 
 			
-			for(Menu menu : inputMenuList) {
-				
-				if( !menu.getMenuImg().isEmpty()) { // 업로드 한 메뉴 이미지가 있는 경우
+			for (Menu menu : inputMenuList) {
+
+				// 업로드 한 메뉴 이미지가 있는 경우
+				if( !imgUrlList.isEmpty()) { 
 					
-					rename = Utility.fileRename(menu.getMenuImg().getOriginalFilename());
-					updatePath = menuWebPath + rename;
-					menu.setMenuImgUrl(menuWebPath + rename);
+					for(MultipartFile imgUrl : imgUrlList) {
+						
+						rename = Utility.fileRename(imgUrl.getOriginalFilename());
+						updatePath = menuWebPath + rename;
+						menu.setMenuImgUrl(updatePath);
+					}
 				}
 				
-				result = mapper.updateMenu(menu);
+				result = mapper.insertMenu(menu); // 메뉴 등록
 				
 				if(result > 0) { // db등록 성공시 파일 업로드 폴더에 이미지 저장
 					
@@ -124,10 +131,8 @@ public class StoreMyPageServiceImpl implements StoreMyPageService{
 					}
 				} // if
 			}
-		} // 이미지 있는 경우	
-		
-
-		
+			
+		}
 		return result;
 	}
 
@@ -187,6 +192,13 @@ public class StoreMyPageServiceImpl implements StoreMyPageService{
 	public List<Reservation> reservAll(int memberNo) {
 		return mapper.reservAll(memberNo);
 	}
+	
+	// 예약 승인
+	@Override
+	public int updateReservStatus(int reservNo) {
+		
+		return mapper.updateReservStatus(reservNo);
+	}
 
 
 	// 확정된 예약 조회
@@ -210,9 +222,17 @@ public class StoreMyPageServiceImpl implements StoreMyPageService{
 	}
 
 
+	// 사장님 리뷰 조회
+	@Override
+	public List<Review> reviewAll(int memberNo) {
+		return mapper.reviewAll(memberNo);
+	}
 
-
-
+	// 사장님 댓글 삽입
+	@Override
+	public int insertReply(ReviewReply inputReply) {
+		return mapper.insertReply(inputReply);
+	}
 
 
 

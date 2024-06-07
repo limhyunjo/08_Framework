@@ -2,17 +2,20 @@ package com.project.foodpin.myPage.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +25,10 @@ import com.project.foodpin.member.model.dto.Member;
 import com.project.foodpin.myPage.model.dto.Off;
 import com.project.foodpin.myPage.model.service.StoreMyPageService;
 import com.project.foodpin.reservation.model.dto.Reservation;
+import com.project.foodpin.review.model.dto.Review;
+import com.project.foodpin.review.model.dto.ReviewReply;
 import com.project.foodpin.store.model.dto.Menu;
+import com.project.foodpin.store.model.dto.MenuContainer;
 import com.project.foodpin.store.model.dto.Store;
 
 import lombok.RequiredArgsConstructor;
@@ -43,7 +49,9 @@ public class StoreMyPageController {
 	@GetMapping("storeInfo")
 	public String storeInfo(@SessionAttribute("loginMember") Member loginMember, Model model) {
 
-		Store store = service.selectstoreInfo(loginMember.getMemberNo());
+		Store store = service.selectstoreInfo(loginMember.getMemberNo()); // 가게 정보
+		
+		
 		
 		// 불러온 store 정보에서 주소 쪼개기
 		String storeLocation = store.getStoreLocation();
@@ -94,7 +102,7 @@ public class StoreMyPageController {
 	 * @param loginMember
 	 * @return menuList
 	 */
-	@GetMapping(value="menuSelect", produces = "application/json")
+	@GetMapping("menuSelect")
 	@ResponseBody
 	public List<Menu> menuSelect(@RequestParam("storeNo") int storeNo) {
 		
@@ -105,11 +113,20 @@ public class StoreMyPageController {
 	 * @param menuList
 	 * @return
 	 */
-	@PutMapping(value="menuUpdate", produces = "application/json")
+	@PostMapping("menuUpdate")
 	@ResponseBody
-	public int menuUpdate(@RequestBody List<Menu> inputMenuList) {
+	public int menuUpdate(@RequestBody @ModelAttribute MenuContainer menuContainer) {
 		
-		return service.menuUpdate(inputMenuList);
+		// menuContainer에서 이미지파일 제외한 정보 inputMenuList로 분리
+		List<Menu> inputMenuList =  menuContainer.getMenuList();
+		
+		List<MultipartFile> imgUrlList = new ArrayList<>(); // 이미지파일만 담아 줄 리스트 생성
+		
+		for (Menu menu : inputMenuList) {
+			imgUrlList.add(menu.getMenuImg());
+		}
+		
+		return service.menuUpdate(inputMenuList, imgUrlList);
 	}
 	
 	
@@ -140,7 +157,6 @@ public class StoreMyPageController {
 		return list;
 	}
 	
-	
 	/** 지정 휴무일 조회 (비동기, 캘린더로 불러오기)
 	 * @param storeNo
 	 * @return map
@@ -149,27 +165,29 @@ public class StoreMyPageController {
 	@ResponseBody
 	public List<Map<String, String>> calendarOffSelect(@RequestBody int storeNo) {
 		
-		
 		List<Off> offList = service.calendarOffSelect(storeNo);
 		
-		if(offList.isEmpty()) return null; // 지정 휴무일 조회 결과 없는 경우
+//		if(offList.isEmpty()) return null; // 지정 휴무일 조회 결과 없는 경우
 			
-		List<Map<String, String>> mapList = new ArrayList<>();
+		List<Map<String, String>> listMap = new ArrayList<>();
 		
 		for (Off off : offList) {
 			
 			Map<String, String> map = new HashMap<>();
+			
 			map.put("title", off.getOffDayTitle());
 			map.put("start", off.getOffDayStart());
 			map.put("end", off.getOffDayEnd());
 			
-			mapList.add(map);
+			listMap.add(map);
 		}
 		
-		return mapList;
+		return listMap;
 	}
 	
 	
+
+
 	/** 팝업창에서 지정 휴무일 등록
 	 * @param inputOff
 	 * @return
@@ -180,7 +198,7 @@ public class StoreMyPageController {
 		
 		return service.calendarOffInsert(inputOff);
 	}
-
+	// ------ 예약 관리 ------
 	
 	/** 예약 관리 화면 이동 (+예약 전체 조회)
 	 * @param loginMember
@@ -193,6 +211,7 @@ public class StoreMyPageController {
 		List<Reservation> reservList = service.reservAll(loginMember.getMemberNo());
 		
 		model.addAttribute("reservList", reservList);
+		model.addAttribute("storeNo", reservList.get(0).getStoreNo());
 		
 		return "myPage/store/reservation";
 	}
@@ -206,7 +225,6 @@ public class StoreMyPageController {
 		
 		int memberNo = loginMember.getMemberNo();
 		
-		System.out.println(statusFl);
 		if(statusFl == null) {
 			List<Reservation> reservList = service.reservAll(memberNo);
 			
@@ -215,6 +233,26 @@ public class StoreMyPageController {
 		
 		return null;
 	}
+	
+	/** 예약 승인 (비동기)
+	 * @return reservList
+	 */
+	@ResponseBody
+	@GetMapping("updateReservStatus")
+	public int updateReservStatus(@RequestParam("reservNo") int reservNo) {
+		
+		
+		return service.updateReservStatus(reservNo);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	/** 확정된 예약 전체 조회 (비동기)
 	 * @return reservList
@@ -228,12 +266,26 @@ public class StoreMyPageController {
 	}
 	
 	
+	
 	//----
 	@GetMapping("review")
-	public String review() {
+	public String review(
+		@SessionAttribute("loginMember") Member loginMember,
+		Model model, RedirectAttributes ra
+		) {
+		
+		int memberNo = loginMember.getMemberNo();
+		
+		List<Review> reviewList = service.reviewAll(memberNo);
+		
+		model.addAttribute("reviewList", reviewList);
+		
+		
 		return "myPage/store/review";
 	}
 	
+	
+	// -----
 	
 	// -----
 	
@@ -299,6 +351,71 @@ public class StoreMyPageController {
 
 		return service.ceoInfoUpdate(member);
 	}
+	
+	
+	
+	/** 사장님 댓글 삽입
+	 * @param loginMember
+	 * @param replyContent
+	 * @param inputReply
+	 * @param ra
+	 * @return
+	 */
+	@PostMapping("insertReply")
+	public String insertReply(
+	    @SessionAttribute("loginMember") Member loginMember,
+	    @RequestParam("replyConent") String replyConent,
+	    ReviewReply inputReply,
+	    RedirectAttributes ra) {
+		
+		inputReply.setReplyConent(replyConent);
+	    
+	    int result = service.insertReply(inputReply);
+	    
+	    String message = null;
+	    
+	    if(result > 0) {
+	    	message = "답글이 작성되었습니다.";
+	    } else {
+	    	message = "답글 작성 실패했습니다.";
+	    }
+	    
+	    ra.addFlashAttribute("message", message);
+	    
+	    return "redirect:/myPage/store/review";
+	}
+	
+	
+	// 댓글 미답변 조회
+	@GetMapping("reviewUnanswered")
+	public String reviewUnanswered(
+		@SessionAttribute("loginMember") Member loginMember,
+		Model model, RedirectAttributes ra
+		) {
+			
+		int memberNo = loginMember.getMemberNo();
+		
+		List<Review> reviewList = service.reviewAll(memberNo);
+		
+		model.addAttribute("reviewList", reviewList);
+		
+		
+		return "myPage/store/reviewUnanswered";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

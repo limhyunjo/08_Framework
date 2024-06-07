@@ -68,6 +68,12 @@
                javaType = "java.util.ArrayList"
                ofType = "ReviewHash"
    />
+   <collection property="storeCategoryList"
+               select = "selectStoreCategoryList"
+               column = "STORE_NO"
+               javaType = "java.util.ArrayList"
+               ofType = "StoreCategory"
+   />
 
 </resultMap>
 
@@ -76,8 +82,8 @@
 	   <!-- 가게 상세 조회 -->
    <select id="storeDetail" resultMap="store_rm">
    	SELECT STORE_NAME, STORE_INFO, STORE_LOCATION, STORE_STATUS,
-       STORE_TEL, OPEN_HOUR, CLOSE_HOUR, BREAKTIME_START, BREAKTIME_END,
-       STORE_CLOSED, STORE_IMG, MEMBER_NO, STORE_NO,
+       STORE_TEL, OPEN_HOUR, CLOSE_HOUR, BREAKTIME_START, BREAKTIME_END, 
+       STORE_CLOSED, STORE_IMG, STORE_NO, 
 
        (SELECT COUNT(*) 
        FROM "REVIEW"
@@ -93,15 +99,17 @@
 	     (SELECT ROUND(AVG(REVIEW_RATING), 1)
 		  FROM REVIEW
 		  WHERE STORE_NO =#{storeNo}
-		  AND REVIEW_DEL_FL = 'N') TOTAL_RATING,
+		  AND REVIEW_DEL_FL = 'N') TOTAL_RATING
 		 
 		 <if test="memberNo!=null">
-		 (SELECT COUNT(*)FROM "BOOKMARK"
+		 
+		 , (SELECT COUNT(*)FROM "BOOKMARK"
 	    WHERE MEMBER_NO = #{memberNo}
 	    AND STORE_NO =#{storeNo}) BOOKMARK
 	    </if>
 		  
 		FROM "STORE" 
+		JOIN "MEMBER" USING(MEMBER_NO)
 		WHERE STORE_NO = #{storeNo}
 		AND STORE_CLOSED ='N'
    </select>
@@ -118,6 +126,7 @@
      SELECT *
      FROM "MENU"
      WHERE STORE_NO = #{storeNo}
+     AND MENU_FL ='N' 
      ORDER BY MENU_NO
    </select>
    
@@ -128,10 +137,17 @@
 		JOIN REVIEW_HASH RH ON R.REVIEW_NO = RH.REVIEW_NO
 		JOIN HASH H ON RH.HASH_NO = H.HASH_NO
 		WHERE R.STORE_NO =  #{storeNo} 
+		AND REVIEW_DEL_FL ='N' 
    </select>
 
    
-   
+    <select id="selectStoreCategoryList" resultType="StoreCategory">
+        SELECT CATEGORY_TITLE  FROM "CATEGORY"
+		JOIN "STORE_CATEGORY" USING (CATEGORY_CODE)
+		WHERE STORE_NO = #{storeNo} 
+    </select>
+    
+    
       <!-- 가게 리뷰 상세 조회 -->
    <select id="reviewDetail" resultMap="review_rm">
    		SELECT DISTINCT MEMBER_NICKNAME, PROFILE_IMG, REVIEW_NO, REVIEW_RATING, REVIEW_CONTENT,
@@ -139,8 +155,6 @@
 			STORE_NO, MEMBER_NO
 		FROM REVIEW
 		JOIN "MEMBER" USING (MEMBER_NO)
-		JOIN "REVIEW_HASH" USING (REVIEW_NO)
-		JOIN "HASH" USING (HASH_NO)
 		WHERE STORE_NO = #{storeNo}
 		AND REVIEW_DEL_FL = 'N'
 		ORDER BY REVIEW_NO DESC
@@ -164,7 +178,8 @@
 	
 	<!-- 리뷰 사장님 댓글 조회 -->
 	 <select id="selectReplyList" resultType="ReviewReply">
-		SELECT R.*, S.STORE_IMG
+		SELECT R.REPLY_NO , R.STORE_NO, R.REPLY_CONENT, R.REPLY_REG_DATE ,R.REPLY_DEL_FL , 
+			R.REVIEW_NO,  S.STORE_IMG
 		FROM REVIEW_REPLY R
 		JOIN STORE S ON (R.STORE_NO = S.STORE_NO)
 		WHERE REVIEW_NO = #{reviewNo}
@@ -200,8 +215,8 @@
 		<selectKey order="BEFORE" resultType="_int" keyProperty="reportNo">
 	      SELECT SEQ_REPORT_NO.NEXTVAL FROM DUAL
 	  	</selectKey>
-		
-		INSERT INTO "REPORT" VALUES(#{reportNo}, #{reportContent}, #{reviewNo}, #{memberNo})
+		   
+		INSERT INTO "REPORT" VALUES(#{reportNo}, #{reportContent}, #{reviewNo}, #{memberNo}, DEFAULT, DEFAULT)
 	</insert>   
    
    
@@ -213,37 +228,33 @@
    </select>
    
    <!-- 가게 정보 정정 신고 -->
-<insert id="storeReport" useGeneratedKeys="true">
-    <selectKey order="BEFORE" resultType="_int" keyProperty="requestNo">
-        SELECT SEQ_REQUEST_NO.NEXTVAL FROM DUAL
-    </selectKey>
-    INSERT INTO "REQUEST_EDIT" (REQUEST_NO, REQUEST_CONTENT, STORE_NO, MEMBER_NO, REQUEST_CATEGORY_CODE)
-    VALUES (
-        #{requestNo}, 
+<insert id="storeReport">
+    INSERT INTO "REQUEST_EDIT" (
+        REQUEST_NO, 
+        REQUEST_CONTENT, 
+        STORE_NO, 
+        MEMBER_NO, 
+        REQUEST_CATEGORY_CODE, 
+        REQUEST_DATE,
+        REQUEST_DEL_FL
+    ) VALUES (
+        SEQ_REQUEST_NO.NEXTVAL, 
         #{requestContent}, 
         #{storeNo}, 
         #{memberNo},
         CASE 
-            WHEN '${requestCategoryTitle}' = 'changeBasicinfo' THEN '1'
-            WHEN '${requestCategoryTitle}' = 'changeMenu' THEN '2'
-            WHEN '${requestCategoryTitle}' = 'chageStoreTime' THEN '6'
-            WHEN '${requestCategoryTitle}' = 'storeClosed' THEN '7'
+            WHEN #{requestCategoryTitle} = 'changeBasicinfo' THEN '1'
+            WHEN #{requestCategoryTitle} = 'changeMenu' THEN '2'
+            WHEN #{requestCategoryTitle} = 'changeStoreTime' THEN '6'
+            WHEN #{requestCategoryTitle} = 'storeClosed' THEN '7'
             ELSE '0' 
-        END
+        END,
+        DEFAULT,
+        'N'
     )
 </insert>
    
-   <!-- 가게 정보 정정 신고 회원번호 조회 -->
-   <select id="selectReportMemberNo">
-   		SELECT MEMBER_NO
-   		FROM STORE
-		WHERE STORE_NO= #{storeNo}
-   </select>
 
-   
-   
-   
-   
 
    
   

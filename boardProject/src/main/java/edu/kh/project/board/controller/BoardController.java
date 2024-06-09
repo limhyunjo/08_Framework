@@ -183,7 +183,7 @@ public class BoardController {
 		
 		// 조회 결과가 없는 경우
 		if(board==null) {
-			path="redirect:/boar/" + boardCode; //  목록 재요청
+			path="redirect:/board/" + boardCode; //  목록 재요청
 		    ra.addFlashAttribute("message", "게시글이 존재하지 않습니다");
 		}
 		// 조회 결과가 있을 경우

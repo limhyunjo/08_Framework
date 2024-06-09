@@ -89,7 +89,6 @@ public class DetailStoreServiceImpl implements DetailStoreService{
 		
 		map.put("memberNo", memberNo);
 		
-		
 		return mapper.reviewReport(map);
 	}
 

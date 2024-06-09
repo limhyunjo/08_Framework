@@ -43,6 +43,8 @@ public class ChattingWebsocketHandler extends TextWebSocketHandler{
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		
+		log.info("session Id : {}", session.getId());
+		
 		// 연결된 클라이언트를 sessions에 추가
 		sessions.add(session);
 	}
@@ -81,6 +83,8 @@ public class ChattingWebsocketHandler extends TextWebSocketHandler{
     	// DB 삽입 서비스 호출
         int result = service.insertMessage(msg);
         
+        int storeMemberNo = msg.getStoreMemerNo();
+        
         if(result == 0) return;
         
         //채팅이 보내진 시간을 MSG 세팅
@@ -90,7 +94,7 @@ public class ChattingWebsocketHandler extends TextWebSocketHandler{
 		
 		// 연결된 모든 클라이언트를 순차 접근
 		for(WebSocketSession s : sessions) {
-			
+			log.info("session Id 탐색 : {}", s.getId());
 			// 전달받은 Message의 targetNo와
 			// 연결된 클라이언트의 회원 번호가 같을 경우
 			// == 메시지를 받을 회원인 경우
@@ -105,6 +109,7 @@ public class ChattingWebsocketHandler extends TextWebSocketHandler{
 			// 보낸 사람/받는 사람에게 전달
 			
 			if(msg.getTargetNo() == clientMemberNo || msg.getMemberNo() ==  clientMemberNo) {
+				log.info("찾음");
 				TextMessage textMessage 
 					= new TextMessage( objectMapper.writeValueAsString(msg) ); 
 											//  JSON       <-          DTO

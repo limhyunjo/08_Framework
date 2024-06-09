@@ -28,6 +28,21 @@ if(storereservationbutton != null) {
 // 선택 항목 검사용
 const checkObj = {"reservTime" : false};
 
+// 가게 정보에 작성할 수 있는 글자 수 제한
+const content = document.querySelector(".content");
+
+// 제한 할 글자 수
+let length = 30;
+
+if (content != null) {
+
+    let temp = content.innerText;
+    if (temp.length > length) {
+        temp = temp.slice(0, length) +  "...";
+    }
+    content.innerText = temp;
+}
+
 // -------------------------------------------------------------
 
 // 공통 --- 예약 주의 사항
@@ -44,27 +59,6 @@ if(noticeTitle !=null) {
 // -------------------------------------------------------------
 
 /* **************  reservationDetail ************** */
-
-// const reservInfo = document.querySelectorAll(".reserv-info");
-
-// if (reservInfo != null) {
-//     reservInfo[0].classList.add("click-a");
-
-//     for (let a of reservInfo) {
-
-//         reservInfo[0].classList.remove("click-a");
-
-//         a.addEventListener("click", () => {
-
-//             // for(let item of reservInfo) {
-//             //     item.classList.add("click-a");
-//             //     item.classList.remove("click-a");
-//             // }
-//             reservInfo.classList.add("click-a");
-//         })
-//     }
-// }
-
 
 if(document.querySelector("#reservCount") != null){
     const storeMaxNumber = document.querySelector("#reservCount").dataset.storeMaxNumber;
@@ -301,6 +295,42 @@ if(confirmBtn != null) {
             }
         }
 
+        const visitName = document.querySelector("#visitName").value;
+        const visitTel = document.querySelector("#visitTel").value;
+        
+        if(visitName != "" || visitTel != ""){
+            // 둘 중 하나만 값이 있는 경우
+            if (visitName == "") {
+                Swal.fire({
+                    title: "",
+                    text: "방문자 성함을 작성해 주세요",
+                    icon: "warning",
+                    showCancelButton: false,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "확인"
+                });
+                return;
+            }
+            
+            // 방문자 연락처에 숫자가 아닌 다른 문자를 작성했을 경우에 대한 검사 
+            if (!(/^\d+$/.test(visitTel))){
+                e.preventDefault(); 
+                Swal.fire({
+                    title: "",
+                    text: "방문자 전화번호를 확인해 주세요.",
+                    icon: "warning",
+                    showCancelButton: false,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "확인"
+                });
+                return;
+            }
+        }
+
+
+
         /* 예약 확정 하기 전 예약 정보 페이지이기 때문에 별도의 검사 진행XX */
 
         /* 예약 정보를 담은  form 생성... */
@@ -371,14 +401,14 @@ if(confirmBtn != null) {
 
         // 방문자 이름
         const input6 = document.createElement("input");
-        const visitName = document.querySelector("#visitName").value;
+        
         input6.type="hidden";
         input6.name="visitName";
         input6.value=visitName;
 
         // 방문자 전화번호
         const input7 = document.createElement("input");
-        const visitTel = document.querySelector("#visitTel").value;
+       
         input7.type="hidden";
         input7.name="visitTel";
         input7.value=visitTel;
@@ -391,3 +421,14 @@ if(confirmBtn != null) {
         insertForm.submit(); // 다음 버튼 클릭 시 form 태그 제출
     });
 }
+// 스크롤
+// const detail = document.querySelector(".detail");
+// const navList = document.querySelector(".nav-list");
+// detail.addEventListener("click", () => {
+//     const scrollPosition = navList.offsetTop;
+//     window.scrollTo({
+//         left: 0,
+//         top: scrollPosition,
+//         behavior: 'smooth'
+//     });
+// });

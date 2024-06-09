@@ -37,4 +37,10 @@ public interface NotificationMapper {
 	// 관리자에게 보낼 알림
 	void sendNotificationManager(Notification managerNotification);
 
+
+	Store selectStoreName(String storeNo);
+
+	// 예약한 사람의 회원 번호
+	int selectReservMemerNo(String pkNo);
+
 }

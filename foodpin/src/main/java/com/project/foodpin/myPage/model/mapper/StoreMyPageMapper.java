@@ -1,6 +1,7 @@
 package com.project.foodpin.myPage.model.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -11,6 +12,7 @@ import com.project.foodpin.review.model.dto.Review;
 import com.project.foodpin.review.model.dto.ReviewReply;
 import com.project.foodpin.store.model.dto.Menu;
 import com.project.foodpin.store.model.dto.Store;
+import com.project.foodpin.store.model.dto.StoreCategory;
 
 @Mapper
 public interface StoreMyPageMapper {
@@ -22,7 +24,17 @@ public interface StoreMyPageMapper {
 	 * @return store
 	 */
 	Store selectstoreInfo(int memberNo);
-	
+
+	/** 모든 카테고리 조회
+	 * @return
+	 */
+	List<StoreCategory> selectCategoryAll();
+
+	/** 가게 카테고리 조회
+	 * @param storeNo
+	 * @return
+	 */
+	List<StoreCategory> selectCategory(String storeNo);
 	
 	/** 가게 정보 수정
 	 * @param inputStore
@@ -38,18 +50,25 @@ public interface StoreMyPageMapper {
 	 */
 	List<Menu> menuSelect(int storeNo);
 	
-	/** 메뉴 삭제 ('N' -> 'Y' 변경)
-	 * @param menu
-	 * @return
-	 */
-	int deleteMenu(Menu menu);
-
 	/** 메뉴 번호 조회
 	 * @param inputMenuList
 	 * @return
 	 */
 	int selectMenuNo(Menu menu);
 
+	/** 메뉴 삭제 ('N' -> 'Y' 변경)
+	 * @param storeNo
+	 * @return
+	 */
+	int deleteAllMenu(String storeNo);
+
+	/** 메뉴 등록
+	 * @param inputMenuList
+	 * @return
+	 */
+	int insertMenu(Menu menu);
+
+//
 	/** 완전히 동일한 메뉴인지 조회
 	 * @param menu
 	 * @return
@@ -61,7 +80,6 @@ public interface StoreMyPageMapper {
 	 * @return
 	 */
 	int updateMenu(Menu menu);
-	
 	
 	// ------ 휴무일 ------
 	
@@ -102,9 +120,7 @@ public interface StoreMyPageMapper {
 	 */
 	int calendarOffInsert(Off inputOff);
 	
-	
-	// ----- 예약 
-	
+	// ------ 예약 관리 ------
 	
 	/** 전체 예약 조회
 	 * @param storeNo
@@ -112,19 +128,33 @@ public interface StoreMyPageMapper {
 	 */
 	List<Reservation> reservAll(int memberNo);
 	
+	/** 예약 조회
+	 * @param map
+	 * @return reservList
+	 */
+	List<Reservation> selectReserv(Map<String, String> map);
+	
 	/** 예약 승인 
-	 * @param reserv
-	 * @return
+	 * @param reservNo
+	 * @return result
 	 */
 	int updateReservStatus(int reservNo);
+	
+	/** 예약 거절 
+	 * @param reservNo
+	 * @return result
+	 */
+	int rejectReservStatus(int reservNo);
 
 
 	/** 확정된 예약 조회
 	 * @param memberNo
 	 * @return
 	 */
-	List<Reservation> reservConfirm(int memberNo);
+	List<Reservation> reservConfirm(String storeNo);
 
+	// ------ 사장님 정보 ------
+	
 	/** 사장님 정보 변경 화면으로 전환
 	 * @param memberNo
 	 * @return
@@ -136,34 +166,59 @@ public interface StoreMyPageMapper {
 	 * @return result
 	 */
 	int ceoInfoUpdate(Member inputMember);
-
-
-	/** 메뉴 삭제
-	 * @param storeNo
+	
+	
+	/** 기존 암호화 비밀번호 조회
+	 * @param memberNo
 	 * @return
 	 */
-	int deleteAllMenu(String storeNo);
+	String selectPw(int memberNo);
 
 
-	/** 메뉴 등록
-	 * @param inputMenuList
+	/** 비밀번호 변경
+	 * @param map
 	 * @return
 	 */
-	int insertMenu(Menu menu);
+	int ceoPwUpdate(Map<String, Object> map);
 
-
+	// ------ 리뷰 ------
+	
 	/** 사장님 리뷰 조회
 	 * @param memberNo
 	 * @return
 	 */
 	List<Review> reviewAll(int memberNo);
 
+	/** 사장님 미답변 조회
+	 * @param memberNo
+	 * @return
+	 */
+	List<Review> reviewAllNoReply(int memberNo);
 
 	/** 사장님 댓글 삽입
 	 * @param inputReply
 	 * @return
 	 */
 	int insertReply(ReviewReply inputReply);
+  
+	/** 사장님 댓글 수정
+	 * @param map
+	 * @return
+	 */
+	int updateReply(Map<String, Object> map);
+
+
+	/** 사장님 댓글 삭제
+	 * @param replyNo
+	 * @return
+	 */
+	int deleteReply(int replyNo);
+
+
+
+
+
+
 
 
 

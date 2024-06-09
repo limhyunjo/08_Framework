@@ -1,13 +1,13 @@
 package com.project.foodpin.main.model.service;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import com.project.foodpin.main.model.mapper.MainMapper;
+import com.project.foodpin.store.model.dto.Category;
 import com.project.foodpin.store.model.dto.Store;
-
+import com.project.foodpin.store.model.dto.StoreCategory;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,14 +26,13 @@ public class MainServiceImpl implements MainService{
 		
 		 return storeList;
 	}
-	
-	
-	// 카테고리 종류 조회
+
 	@Override
-	public List<Map<String, Object>> selectCategoryTypeList() {
+	public List<Category> selectMainCategory() {
 		
-		return mapper.selectCategoryTypeList();
+		List<Category> mainCategoryList = mapper.selectMainCategoryList();
+		
+		return mainCategoryList;
 	}
-	
 	
 }

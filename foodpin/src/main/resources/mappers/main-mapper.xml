@@ -12,11 +12,9 @@
  
  </select>
  
-    <!-- 카테고리 종류 조회 -->
-<select id="selectCategoryTypeList">
-   SELECT CATEGORY_CODE "categoryCode", CATEGORY_TITLE "categoryTitle"
-  FROM CATEGORY
-  ORDER BY CATEGORY_CODE
-</select>
+ <select id="selectMainCategoryList" resultType="Category">
+   SELECT CATEGORY_CODE, CATEGORY_TITLE 
+    FROM "CATEGORY"
+ </select>
 
 </mapper>

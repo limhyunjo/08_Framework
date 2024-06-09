@@ -1,6 +1,5 @@
 package com.project.foodpin.store.model.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.project.foodpin.store.model.dto.Store;
-import com.project.foodpin.store.model.mapper.DetailStoreMapper;
+import com.project.foodpin.store.model.dto.StoreCategory;
 import com.project.foodpin.store.model.mapper.SearchStoreMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -20,19 +19,34 @@ import lombok.RequiredArgsConstructor;
 public class SearchStoreServiceImpl implements SearchStoreService{
 
 	private final SearchStoreMapper mapper;
-
-
-
+	
+    // 카테고리에 해당하는 가게 리스트 조회
 	@Override
-	public Store storeSearchDetail(Map<String, Object> map) {
+	public List<Store> searchStoreList(Map<String, Object> map) {
+	
+		return mapper.searchStoreList(map);
+	}
+
+    
+	@Override
+	public List<Store> searchStoreDetail(Map<String, Object> map) {
 		
-		return mapper.storeSearchDetail(map);
+		return mapper.searchStoreDetail(map);
 	}
 
 
+	@Override
+	public List<Store> searchStoreDetail(String storeNo) {
+	
+		return mapper.searchStoreDetail(storeNo);
+	}
 
-
+	//비동기로 화면 바꿀 카테고리 리스트 조회
+	
+	// 비동기로 좋아요 
+	
+	// 비동기로 거리순, 리뷰순 좋아요순 평점순
 	
 
-
+	
 }

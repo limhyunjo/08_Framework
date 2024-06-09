@@ -2,7 +2,6 @@ package com.project.foodpin.myPage.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -11,11 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +27,7 @@ import com.project.foodpin.review.model.dto.ReviewReply;
 import com.project.foodpin.store.model.dto.Menu;
 import com.project.foodpin.store.model.dto.MenuContainer;
 import com.project.foodpin.store.model.dto.Store;
+import com.project.foodpin.store.model.dto.StoreCategory;
 
 import lombok.RequiredArgsConstructor;
 
@@ -51,13 +49,14 @@ public class StoreMyPageController {
 
 		Store store = service.selectstoreInfo(loginMember.getMemberNo()); // 가게 정보
 		
-		
+		List<StoreCategory> allCategory = service.selectCategoryAll(); // 존재하는 모든 카테고리 조회
 		
 		// 불러온 store 정보에서 주소 쪼개기
 		String storeLocation = store.getStoreLocation();
 		String[] arr = storeLocation.split("\\^\\^\\^");
 		
-		model.addAttribute("store", store);
+		model.addAttribute("store", store); // 가게 정보
+		model.addAttribute("category", allCategory); // 모든 카테고리 정보
 		
 		model.addAttribute("postcode", arr[0]);
 		model.addAttribute("address", arr[1]);
@@ -65,6 +64,18 @@ public class StoreMyPageController {
 		
 		return "myPage/store/storeInfo";
 	}
+	
+	/** 가게 카테고리 조회
+	 * @param storeNo
+	 * @return
+	 */
+	@GetMapping("selectCategory")
+	@ResponseBody
+	public List<StoreCategory> selectCategory(@RequestParam("storeNo") String storeNo) {
+		
+		return service.selectCategory(storeNo);
+	}
+	
 	
 	
 	/** 가게 정보 수정
@@ -216,53 +227,62 @@ public class StoreMyPageController {
 		return "myPage/store/reservation";
 	}
 
-	/** 예약 전체 조회 (비동기)
+	/** 예약 조회 (조건값 : reservStatusFl) (비동기)
 	 * @return reservList
 	 */
 	@ResponseBody
 	@GetMapping("selectReserv")
-	public List<Reservation> selectReserv(@RequestParam("statusFl") String statusFl, @SessionAttribute("loginMember") Member loginMember) {
+	public List<Reservation> selectReserv(@RequestParam("storeNo") String storeNo, @RequestParam("reservStatusFl") String reservStatusFl) {
 		
-		int memberNo = loginMember.getMemberNo();
-		
-		if(statusFl == null) {
-			List<Reservation> reservList = service.reservAll(memberNo);
-			
-			return reservList;
-		}
-		
-		return null;
+		return service.selectReserv(storeNo, reservStatusFl);
 	}
 	
 	/** 예약 승인 (비동기)
-	 * @return reservList
+	 * @return result
 	 */
 	@ResponseBody
 	@GetMapping("updateReservStatus")
 	public int updateReservStatus(@RequestParam("reservNo") int reservNo) {
 		
-		
 		return service.updateReservStatus(reservNo);
 	}
 	
+	/** 예약 거절 (비동기)
+	 * @return result
+	 */
+	@ResponseBody
+	@GetMapping("rejectReservStatus")
+	public int rejectReservStatus(@RequestParam("reservNo") int reservNo) {
+		
+		return service.rejectReservStatus(reservNo);
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	/** 확정된 예약 전체 조회 (비동기)
+	/** 캘린더에 맞는 형태로 확정된 예약 전체 조회 (비동기)
 	 * @return reservList
 	 */
 	@ResponseBody
 	@GetMapping("reservConfirm")
-	public List<Reservation> reservConfirm(@SessionAttribute("loginMember") Member loginMember) {
+	public List<Map<String, String>> reservConfirm(@RequestParam("storeNo") String storeNo) {
 		
-		int memberNo = loginMember.getMemberNo();
-		return service.reservConfirm(memberNo);
+		List<Reservation> reservList = service.reservConfirm(storeNo);
+		
+		// 확정된 예약 조회 결과 없는 경우
+		if(reservList.isEmpty()) return null; 
+			
+		List<Map<String, String>> listMap = new ArrayList<>();
+		
+		for (Reservation reserv : reservList) {
+			
+			Map<String, String> map = new HashMap<>();
+			
+			map.put("title", reserv.getReservTime() + ", " + reserv.getReservCount() + "인");
+			map.put("start", reserv.getReservDate());
+			map.put("end", reserv.getReservDate());
+			
+			listMap.add(map);
+		}
+		
+		return listMap;
 	}
 	
 	
@@ -310,11 +330,11 @@ public class StoreMyPageController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping("ceoInfo")
+	@PostMapping("ceoInfoJs")
 	@ResponseBody
-	public Member ceoInfo(@RequestBody int memberNo) {
+	public Member ceoInfoJs(@SessionAttribute("loginMember") Member loginMember) {
 		
-		return service.selectCeoInfo(memberNo);
+		return service.selectCeoInfo(loginMember.getMemberNo());
 	}
 	
 	/** 사장님 정보 변경
@@ -352,7 +372,39 @@ public class StoreMyPageController {
 		return service.ceoInfoUpdate(member);
 	}
 	
+	/** 사장님 비밀번호 변경 (비동기)
+	 * @param member
+	 * @return result
+	 */
+	@PostMapping("ceoPwUpdate")
+	@ResponseBody
+	public int ceoPwUpdate(@SessionAttribute("loginMember") Member loginMember, @RequestBody Map<String, Object> map) {
+
+		return service.ceoPwUpdate(loginMember.getMemberNo(), map);
+	}
 	
+	
+	/** 사장님 미답변 조회
+	 * @param loginMember
+	 * @param model
+	 * @param ra
+	 * @return
+	 */
+	@GetMapping("reviewUnanswered")
+	public String reviewUnanswered(
+			@SessionAttribute("loginMember") Member loginMember,
+			Model model, RedirectAttributes ra
+			) {
+		
+		int memberNo = loginMember.getMemberNo();
+		
+		List<Review> reviewList = service.reviewAllNoReply(memberNo);
+		
+		model.addAttribute("reviewList", reviewList);
+		
+		
+		return "myPage/store/reviewUnanswered";
+	}
 	
 	/** 사장님 댓글 삽입
 	 * @param loginMember
@@ -364,12 +416,9 @@ public class StoreMyPageController {
 	@PostMapping("insertReply")
 	public String insertReply(
 	    @SessionAttribute("loginMember") Member loginMember,
-	    @RequestParam("replyConent") String replyConent,
 	    ReviewReply inputReply,
 	    RedirectAttributes ra) {
 		
-		inputReply.setReplyConent(replyConent);
-	    
 	    int result = service.insertReply(inputReply);
 	    
 	    String message = null;
@@ -386,28 +435,26 @@ public class StoreMyPageController {
 	}
 	
 	
-	// 댓글 미답변 조회
-	@GetMapping("reviewUnanswered")
-	public String reviewUnanswered(
-		@SessionAttribute("loginMember") Member loginMember,
-		Model model, RedirectAttributes ra
-		) {
-			
-		int memberNo = loginMember.getMemberNo();
-		
-		List<Review> reviewList = service.reviewAll(memberNo);
-		
-		model.addAttribute("reviewList", reviewList);
-		
-		
-		return "myPage/store/reviewUnanswered";
+	/** 사장님 댓글 수정
+	 * @param map
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping("updateReply")
+	public int updateReply(@RequestBody Map<String, Object> map) {
+		return service.updateReply(map);
 	}
 	
 	
-	
-	
-	
-	
+	/** 사장님 댓글 삭제
+	 * @param replyNo
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping("deleteReply")
+	public int deleteReply(@RequestBody int replyNo) {
+		return service.deleteReply(replyNo);
+	}
 	
 	
 	

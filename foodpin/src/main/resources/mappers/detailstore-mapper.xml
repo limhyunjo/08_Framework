@@ -142,7 +142,7 @@
 
    
     <select id="selectStoreCategoryList" resultType="StoreCategory">
-        SELECT CATEGORY_TITLE  FROM "CATEGORY"
+        SELECT CATEGORY_TITLE, CATEGORY_CODE  FROM "CATEGORY"
 		JOIN "STORE_CATEGORY" USING (CATEGORY_CODE)
 		WHERE STORE_NO = #{storeNo} 
     </select>
@@ -208,6 +208,13 @@
      WHERE STORE_NO = #{storeNo}
    </select>
    
+	<!-- 신고자 이름 찾기 -->
+	<select id="selectReporterName">
+		SELECT MEMBER_NAME
+		FROM MEMBER
+		WHERE MEMBER_NO = #{reporterNo}
+	</select>
+   
    
    <!-- 리뷰 신고 -->
 	<insert id="reviewReport" useGeneratedKeys="true">
@@ -215,10 +222,11 @@
 		<selectKey order="BEFORE" resultType="_int" keyProperty="reportNo">
 	      SELECT SEQ_REPORT_NO.NEXTVAL FROM DUAL
 	  	</selectKey>
-		   
-		INSERT INTO "REPORT" VALUES(#{reportNo}, #{reportContent}, #{reviewNo}, #{memberNo}, DEFAULT, DEFAULT)
+
+		INSERT INTO "REPORT" VALUES(#{reportNo}, #{reportContent}, 
+							#{reviewNo}, #{memberNo}, DEFAULT, DEFAULT, #{reporterName})
 	</insert>   
-   
+	
    
    <!-- 리뷰 신고 회원번호 조회 -->
    <select id="selectMemberNo">
@@ -243,10 +251,10 @@
         #{storeNo}, 
         #{memberNo},
         CASE 
-            WHEN #{requestCategoryTitle} = 'changeBasicinfo' THEN '1'
+            WHEN #{requestCategoryTitle} = 'changeBasicinfo' THEN '6'
             WHEN #{requestCategoryTitle} = 'changeMenu' THEN '2'
-            WHEN #{requestCategoryTitle} = 'changeStoreTime' THEN '6'
-            WHEN #{requestCategoryTitle} = 'storeClosed' THEN '7'
+            WHEN #{requestCategoryTitle} = 'changeStoreTime' THEN '7'
+            WHEN #{requestCategoryTitle} = 'storeClosed' THEN '1'
             ELSE '0' 
         END,
         DEFAULT,

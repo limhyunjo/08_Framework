@@ -1,5 +1,6 @@
 package com.project.foodpin.store.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,12 +12,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.project.foodpin.member.model.dto.Member;
+import com.project.foodpin.review.model.dto.Review;
 import com.project.foodpin.store.model.dto.Store;
 import com.project.foodpin.store.model.service.SearchStoreService;
 
@@ -29,70 +30,54 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("store")
 public class SearchStoreController {
 
-	private  final SearchStoreService service;
-
-	// 가게 검색 페이지 이동(+ 카테고리 선택된 상태로 검색되어야 함)
-	/*
-	 * @GetMapping("storeSearch") public String searchPage() {
-	 * 
-	 * return "store/storeSearch"; }
-	 */
+	private final SearchStoreService service;
 
 	
-	  @GetMapping("storeSearch/{categoryCode}") 
-	  public String searchStoreList(@PathVariable("categoryCode") int categoryCode,  
-	  Store storeNo,	  
-	  @SessionAttribute(value = "loginMember", required = false) Member loginMember, 
-	  Model model, 
-	  RedirectAttributes ra) {
-	  
+	// 메인의 카테고리 코드를 pathvariable로 가져와 해당하는 가게 리스트 select해서 보내주기
+	@GetMapping("storeSearch/{categoryCode}")
+	public String storeDetail(@PathVariable("categoryCode") int categoryCode, 
+			@SessionAttribute(value="loginMember", required = false) Member loginMember,
+			Model model, RedirectAttributes ra) {
 		
-			
-			
 
-			Map<String, Object> map = new HashMap<>();
-			
-			if(loginMember != null) {
-				int memberNo = loginMember.getMemberNo();
-				map.put("memberNo", memberNo);
-			}
+		Map<String, Object> map = new HashMap<>();
 		
-			map.put("storeNo", storeNo);
-			map.put("categoryCode", categoryCode);
-			
+		if(loginMember != null) {
+			int memberNo = loginMember.getMemberNo();
+			map.put("memberNo", memberNo);
+		}
+	
+		map.put("categoryCode", categoryCode);
+		map.put("closedYn", "N");
+
+		// 카테고리에 해당하는 가게 리스트 조회하기
+		List<Store> searchStoreList = service.searchStoreList(map);
 		
-			Store store = service.storeSearchDetail(map);
-			
-			String storeLocation = store.getStoreLocation();
-			String[] arr = storeLocation.split("\\^\\^\\^");
+		
+		 for (Store store : searchStoreList) {
+		        String storeLocation = store.getStoreLocation();
+		      
+		            String[] arr = storeLocation.split("\\^\\^\\^");
+		          
+		                store.setPostcode(arr[0]);
+		                store.setAddress(arr[1]);
+		                store.setDetailAddress(arr[2]);
+		            }
+		
 
+		String path = null;
+		
+	
+		// 카테고리가 등록된 가게들만 나옴 
+			model.addAttribute("searchStoreList", searchStoreList);
+		
+ 
+			path = "store/storeSearch";
 
+		
+		return path;
+	}
+	
+	
 
-			model.addAttribute("postcode", arr[0]);
-			model.addAttribute("address", arr[1]);
-			model.addAttribute("detailAddress", arr[2]);
-
-			
-
-			String path = null;
-
-			model.addAttribute("store", store);
-			// 위까지 가게 상세 조회
-			
-			
-			// 동기로 메인에서 카테고리로 선택된 가게 리스트
-			// 검색 X key 값이 null인 경우 가게 리스트 조회
-			/*
-			 * model.addAttribute("categoryStoreList",categoryStoreList);
-			 * model.addAttribute("searchCategoryList",searchCategoryList);
-			 */
-			//검색으로 조회된 경우 (key값 있는 경우)
-			
-			//
-
-			path = "/store/storeSearch";
-
-			
-			return path;
-	  }	
-}
+	}

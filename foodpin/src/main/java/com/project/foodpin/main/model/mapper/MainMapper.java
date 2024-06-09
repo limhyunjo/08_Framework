@@ -1,21 +1,18 @@
 package com.project.foodpin.main.model.mapper;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.project.foodpin.store.model.dto.Category;
 import com.project.foodpin.store.model.dto.Store;
+import com.project.foodpin.store.model.dto.StoreCategory;
 
 @Mapper
 public interface MainMapper {
 
 	List<Store> selectStoreList();
-	
-	/** 카테고리 종류 조회
-	 * @return
-	 */
-	List<Map<String, Object>> selectCategoryTypeList();
 
+	List<Category> selectMainCategoryList();
 
 }

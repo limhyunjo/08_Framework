@@ -7,20 +7,23 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.project.foodpin.store.model.dto.Store;
 
+
 @Mapper
 public interface SearchStoreMapper {
 
 
-
-
-
-	/** 가게 상세 페이지로 이동 시 
-	 * 가게 상세 내용과 storeList를 한번에 조회할 것임
+	/** 카테고리에 해당하는 가게 리스트 조회
 	 * @param map
 	 * @return
 	 */
-	Store storeSearchDetail(Map<String, Object> map);
+	List<Store> searchStoreList(Map<String, Object> map);
 
+	/** 동기 / 카테고리로 조회한 가게들 상세 정보
+	 * @param map
+	 * @return
+	 */
+	List<Store> searchStoreDetail(Map<String, Object> map);
 
-	
+	List<Store> searchStoreDetail(String storeNo);
+
 }

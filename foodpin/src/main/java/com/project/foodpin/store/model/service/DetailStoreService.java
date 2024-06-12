@@ -3,6 +3,8 @@ package com.project.foodpin.store.model.service;
 import java.util.List;
 import java.util.Map;
 
+import com.project.foodpin.myPage.model.dto.Off;
+
 import com.project.foodpin.review.model.dto.Review;
 import com.project.foodpin.store.model.dto.Menu;
 import com.project.foodpin.store.model.dto.Store;
@@ -43,6 +45,14 @@ public interface DetailStoreService {
 	 * @return
 	 */
 	int storeReport(Map<String, Object> map);
+
+
+	/** 가게 해시태그 검색
+	 * @param hashNo
+	 * @return
+	 */
+	List<Store> hashSearchStore(String hashNo);
+
 
 
 	

@@ -1,11 +1,14 @@
 package com.project.foodpin.store.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.project.foodpin.review.model.dto.ReviewHash;
+import com.project.foodpin.store.model.dto.Category;
 import com.project.foodpin.store.model.dto.Store;
 import com.project.foodpin.store.model.dto.StoreCategory;
 import com.project.foodpin.store.model.mapper.SearchStoreMapper;
@@ -28,17 +31,49 @@ public class SearchStoreServiceImpl implements SearchStoreService{
 	}
 
     
+
+
 	@Override
-	public List<Store> searchStoreDetail(Map<String, Object> map) {
+	public List<StoreCategory> searchStoreCategoryList(String storeNo) {
 		
-		return mapper.searchStoreDetail(map);
+		return mapper.searchStoreCategoryList(storeNo);
 	}
 
 
+
+
 	@Override
-	public List<Store> searchStoreDetail(String storeNo) {
+	public List<ReviewHash> searchStoreHashList(String storeNo) {
+		
+		return mapper.searchStoreHashList(storeNo);
+	}
+
+
+
+
 	
-		return mapper.searchStoreDetail(storeNo);
+	 // 메인에서 가게 조회
+	  
+	  @Override public List<Store> mainStoreList(Map<String, Object> map) {
+	  
+
+	 List<Store> mainSearchStore = mapper.mainSearchStore(map);
+	  
+	
+	  
+	  return mainSearchStore; 
+	  }
+	 
+
+
+    // 가게 상세에서 쓸 카테고리 리스트 조회
+	@Override
+	public List<Category> selectSearchCategory() {
+		
+		
+		List<Category> searchCategory = mapper.selectSearchCategory();
+		
+		return searchCategory;
 	}
 
 	//비동기로 화면 바꿀 카테고리 리스트 조회

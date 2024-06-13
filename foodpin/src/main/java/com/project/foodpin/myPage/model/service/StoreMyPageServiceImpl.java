@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,6 +57,12 @@ public class StoreMyPageServiceImpl implements StoreMyPageService{
 		return mapper.selectstoreInfo(memberNo);
 	}
 	
+	// 가게 정보 조회
+	@Override
+	public Store selectstoreInfoJs(String storeNo) {
+		return mapper.selectstoreInfoJs(storeNo);
+	}
+	
 	// 모든 카테고리 조회
 	@Override
 	public List<StoreCategory> selectCategoryAll() {
@@ -74,38 +79,66 @@ public class StoreMyPageServiceImpl implements StoreMyPageService{
 	
 	// 가게 정보 수정
 	@Override
-	public int storeInfoUpdate(Store inputStore, MultipartFile image) {
+	public int storeInfoUpdate(Store inputStore) {
 		
 		String updatePath = "";
 		String rename = "";
 		
-		if( !image.isEmpty()) { // input에서 이미지를 업로드 한 경우
-			
-			rename = Utility.fileRename(image.getOriginalFilename());
-			
-			updatePath = storeWebPath + rename;
-			
-			inputStore.setStoreImg(updatePath);
-			
-		} else {
-			
-			// 이미지체크값 == 1 (이전 이전 이미지패스값 얻어와서 그대로 업데이트)
-			// 이미지체크값 == 0 inputStore.setStoreImg();
-			
 
-		}
+		// 변경된 이미지가 있는 경우
+		if( !inputStore.getStoreImgInput().isEmpty()) { 
+			
+			rename = Utility.fileRename(inputStore.getStoreImgInput().getOriginalFilename());
+			updatePath = storeWebPath + rename;
+		} 
+		
+		inputStore.setStoreImg(updatePath);
 		
 		int result = mapper.storeInfoUpdate(inputStore);
 		
-		if(result > 0) { // db등록 성공시 파일 업로드 폴더에 이미지 저장
+		// 변경된 이미지가 있는 경우만 이미지 파일 저장
+		if(result > 0 || inputStore.getImgStatus() == 1) {
+			
+		} 
 			
 			try {
-				image.transferTo(new File(storeFolderPath + rename));
+				inputStore.getStoreImgInput().transferTo(new File(storeFolderPath + rename));
+				
 			} catch (Exception e) {
 				
 				e.printStackTrace();
 			} 
+		
+		
+		
+		
+		
+		// 카테고리 변경
+		String[] inputCategorys = inputStore.getCategorys().split("/");
+		
+		Map<String, Object> categoryMap = new HashMap<>();
+		categoryMap.put("storeNo", inputStore.getStoreNo());
+		
+		result = mapper.categoryDelete(inputStore.getStoreNo()); // 기존 카테고리 삭제
+		
+		if(result > 0) { // 변경된 카테고리 데이터 등록
+	        for (String ctg : inputCategorys) {
+	            int categoryCode = Integer.parseInt(ctg);
+	            categoryMap.put("categoryCode", categoryCode);
+	            categoryMap.put("storeNo", inputStore.getStoreNo());
+	            
+				mapper.categoryUpdate(categoryMap); 
+	        }
 		}
+		
+		
+		
+		
+
+
+
+
+
 		
 		return result;
 	}
@@ -201,11 +234,32 @@ public class StoreMyPageServiceImpl implements StoreMyPageService{
 		return mapper.calendarOffSelect(storeNo);
 	}
 	
+	// 지정 휴무일 중복 검색 
+	@Override
+	public int calendarOffCheck(Off inputOff) {
+		
+		return mapper.calendarOffCheck(inputOff);
+	}
+	
 	// 지정 휴무일 등록
 	@Override
 	public int calendarOffInsert(Off inputOff) {
 		
 		return mapper.calendarOffInsert(inputOff);
+	}
+	
+	// 지정 휴무일 변경 
+	@Override
+	public int calendaroffUpdate(Off inputOff) {
+		
+		return mapper.calendaroffUpdate(inputOff);
+	}
+
+	// 지정 휴무일 삭제 
+	@Override
+	public int calendaroffDelete(int offDayNo) {
+		
+		return mapper.calendaroffDelete(offDayNo);
 	}
 	
 	// ------ 예약 관리 ------
@@ -247,6 +301,13 @@ public class StoreMyPageServiceImpl implements StoreMyPageService{
 	public List<Reservation> reservConfirm(String storeNo) {
 		return mapper.reservConfirm(storeNo);
 	}
+	
+	// 예약 1건 자세히 조회
+	@Override
+	public Reservation reservDetail(int reservNo) {
+		
+		return mapper.reservDetail(reservNo);
+	}
 
 	// ------ 사장님 정보 ------
 
@@ -287,6 +348,13 @@ public class StoreMyPageServiceImpl implements StoreMyPageService{
 		return mapper.reviewAll(memberNo);
 	}
 	
+	// 사장님 답변 조회
+	@Override
+	public List<Review> reviewReply(int memberNo) {
+		return mapper.reviewReply(memberNo);
+	}
+	
+	
 	// 사장님 미답변 조회
 	@Override
 	public List<Review> reviewAllNoReply(int memberNo) {
@@ -314,12 +382,25 @@ public class StoreMyPageServiceImpl implements StoreMyPageService{
 		return mapper.deleteReply(replyNo);
 	}
 
+	// 노쇼 등록
+	@Override
+	public int noshowReserv(Map<String, Object> map) {
+		
+		int memberFlag = mapper.selectFlag(map); // 회원 경고 횟수 조회
+		
+		int result = mapper.noshowReservStatus(map); // 노쇼 상태로 변경
+		
+		if(result > 0) {
+			
+			// 경고 횟수 증가
+			memberFlag++;
+			map.put("memberFlag", memberFlag);
+			result = mapper.updateFlag(map); 
+		}
+		return result;
+	}
 
-
-
-
-
-
+	
 
 
 

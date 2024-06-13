@@ -26,7 +26,9 @@ function execDaumPostcode() {
  }
 
  /* 주소 검색 버튼 클릭시 */
- document.querySelector("#searchAddress").addEventListener("click", execDaumPostcode); // <- 함수 이름만 넣어서 코드 내용을 그대로 들어감
+ if(document.querySelector("#searchAddress" != null)){
+   document.querySelector("#searchAddress").addEventListener("click", execDaumPostcode); // <- 함수 이름만 넣어서 코드 내용을 그대로 들어감
+}
 
 /* -------------------------------------- */
 /* ----------- 휴무일 변경 --------------- */
@@ -40,9 +42,9 @@ function execDaumPostcode() {
 //   calendar.render();
 // });
 
-
 const Unanswered = document.querySelector("#Unanswered");
 
 Unanswered.addEventListener("click", () => {
   location.href = "/myPage/store/reviewUnanswered";
 });
+

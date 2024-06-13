@@ -1,6 +1,7 @@
 package com.project.foodpin.store.model.service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,8 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.project.foodpin.myPage.model.dto.Off;
-
+import com.project.foodpin.review.model.dto.Hash;
 import com.project.foodpin.review.model.dto.Review;
+import com.project.foodpin.review.model.dto.ReviewHash;
 import com.project.foodpin.store.model.dto.Store;
 import com.project.foodpin.store.model.mapper.DetailStoreMapper;
 
@@ -43,6 +45,7 @@ public class DetailStoreServiceImpl implements DetailStoreService{
 		return reviewList;
 	}
 	
+
 	
 
 
@@ -135,15 +138,18 @@ public class DetailStoreServiceImpl implements DetailStoreService{
 		return mapper.hashSearchStore(hashNo);
 	}
 
+	// 가게 해시태그 검색(해시태그 내용)
+	@Override
+	public Hash hashTitle(String hashNo) {
+		return mapper.hashTitle(hashNo);
+	}
 
 
-	/*
-	 * @Override public List<Off> storeOffList(String storeNo) {
-	 * 
-	 * List<Off> offList = mapper.storeOffList(storeNo);
-	 * 
-	 * return offList; }
-	 * 
-	 */
+
+
+
+	
+	
+
 	
 }

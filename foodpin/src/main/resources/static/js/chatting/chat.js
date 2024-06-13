@@ -6,7 +6,7 @@ let selectTargetProfile; // 대상의 프로필
 // -----------------------------------------------------------------------------------------
 
 // 채팅에 사용될 SockJS 객체를 저장할 변수
-let chattingSock; 
+// let chattingSock; 
 
 // 로그인이 되어있을 경우
 if( notificationLoginCheck ){
@@ -41,7 +41,8 @@ const sendMessage = () => {
   const chattingObj = {
     "targetNo" : selectTargetNo,    // 메시지를 받을 대상의 회원 번호(웹소켓)
     "messageContent" : msg,         // 전달할 메시지 내용
-    "chattingNo" : selectChattingNo // 채팅방 번호(DB 저장용도)
+    "chattingNo" : selectChattingNo, // 채팅방 번호(DB 저장용도)
+    "type" : 0
   }
 
   // JSON으로 변환하여 웹소켓 핸들러로 전달
@@ -157,11 +158,12 @@ if(chattingSock != undefined){
               const listProfile = document.createElement("img");
               listProfile.classList.add("list-profile");
   
-              if(room.targetProfile == undefined)	
-                  listProfile.setAttribute("src", userDefaultImage);
-              else								
-                  listProfile.setAttribute("src", room.targetProfile);
-  
+
+                if(room.targetProfile == undefined)	
+                    listProfile.setAttribute("src", userDefaultImage);
+                else								
+                    listProfile.setAttribute("src", room.targetProfile);
+
               itemHeader.append(listProfile);
   
               // item-body 부분
@@ -371,7 +373,7 @@ function chattingEnter(e){
 	console.log(e.target); // 실제 클릭된 요소
 	console.log(e.currentTarget); // 이벤트 리스트가 설정된 요소
 
-	const targetNo = e.currentTarget.getAttribute("data-id");
+	const targetNo = e.currentTarget.getAttribute("target-no");
 
 	fetch("/chatting/enter?targetNo="+targetNo)
 	.then(resp => resp.text())
@@ -386,10 +388,10 @@ function chattingEnter(e){
 			for(let item of itemList) {		
 				if(item.getAttribute("chat-no") == chattingNo){
 					item.focus();
-					item.click();
-					addTargetPopupLayer.classList.toggle("popup-layer-close");
-					targetInput.value = "";
-					resultArea.innerHTML = "";
+					// item.click();
+					// addTargetPopupLayer.classList.toggle("popup-layer-close");
+					// targetInput.value = "";
+					// resultArea.innerHTML = "";
 					return;
 				}
 			}

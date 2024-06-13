@@ -1,34 +1,11 @@
-
-
+  // 채팅 메세지 영역
+  const display = document.getElementsByClassName("display-chatting")[0];
 
 
 // -----------------------------------------------------------------------------------------
-/* 팝업 채팅창 */
-const toChatting = document.getElementById("toChatting");
-
-
- if(toChatting != null){
-    toChatting.addEventListener("click", () => {
-        if(!notificationLoginCheck){
-
-            alert("로그인 후 이용해주세요.")
-
-        }else{
-            showPopup();
-        }
-    })
-
- }
-
-
-/* Get 방식 */
-function showPopup() { 
-  window.open("/chatting/chatPopup/"+storeNo, "chatting", "채팅창", "width=500px, height=600px, left=100, top=50"); 
-}
-
 
 // 채팅에 사용될 SockJS 객체를 저장할 변수
-let chattingSock; 
+// let chattingSock; 
 
 // 로그인이 되어있을 경우
 if( notificationLoginCheck ){
@@ -36,6 +13,11 @@ if( notificationLoginCheck ){
   // "/chattingSock" 주소를 처리하는 WebSocketHandler에 연결
   chattingSock = new SockJS("/chattingSock");
 }
+
+
+/* ----------------------------------------------------------------------------------------- */
+
+  
 
 
 /* 채팅 메시지를 보내는 함수 */ 
@@ -59,7 +41,8 @@ const sendMessage = () => {
   const chattingObj = {
     "targetNo" : targetNo,    // 메시지를 받을 대상의 회원 번호(웹소켓)
     "messageContent" : msg,         // 전달할 메시지 내용
-    "chattingNo" : chattingNo // 채팅방 번호(DB 저장용도)
+    "chattingNo" : chattingNo, // 채팅방 번호(DB 저장용도)
+    "type" : 1
   }
 
   // JSON으로 변환하여 웹소켓 핸들러로 전달
@@ -116,13 +99,13 @@ if(chattingSock != undefined){
       
           // 상대 프로필
           const img = document.createElement("img");
-          img.setAttribute("src", selectTargetProfile);
+          img.setAttribute("src", storeImg);
           
           const div = document.createElement("div");
       
           // 상대 이름
           const b = document.createElement("b");
-          b.innerText = selectTargetName; // 전역변수
+          b.innerText = storeName; // 전역변수
       
           const br = document.createElement("br");
       
@@ -147,9 +130,7 @@ if(chattingSock != undefined){
   
   // -----------------------------------------------------------------------------------------
   
-  
-  // 채팅 메세지 영역
-  const display = document.getElementsByClassName("display-chatting")[0];
+
   
   
   
@@ -196,15 +177,15 @@ if(chattingSock != undefined){
               }else{ // 상대가 작성한 메세지인 경우
                   li.classList.add("target-chat");
   
-                  // 상대 프로필
+                  //상대 프로필
                   const img = document.createElement("img");
-                  img.setAttribute("src", selectTargetProfile);
+                  img.setAttribute("src", storeImg);
                   
                   const div = document.createElement("div");
   
                   // 상대 이름
                   const b = document.createElement("b");
-                  b.innerText = selectTargetName; // 전역변수
+                  b.innerText = storeName; // 전역변수
   
                   const br = document.createElement("br");
   
@@ -228,7 +209,7 @@ if(chattingSock != undefined){
   /* 문서 로딩 완료 후 수행 */
   document.addEventListener("DOMContentLoaded", () => {
   
-    
+    display.scrollTop = display.scrollHeight;
 
     // 보내기 버튼 클릭 시 메시지 보내기
     const send = document.querySelector("#send")

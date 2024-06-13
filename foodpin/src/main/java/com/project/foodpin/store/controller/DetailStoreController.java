@@ -1,5 +1,6 @@
 package com.project.foodpin.store.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,14 +11,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.project.foodpin.member.model.dto.Member;
 import com.project.foodpin.myPage.model.dto.Off;
-
+import com.project.foodpin.review.model.dto.Hash;
 import com.project.foodpin.review.model.dto.Review;
 import com.project.foodpin.store.model.dto.Store;
 import com.project.foodpin.store.model.service.DetailStoreService;
@@ -53,12 +54,7 @@ public class DetailStoreController {
 
 		List<Review> reviewList = service.reviewDetail(storeNo);
 		
-		/* List<Off> offList = service.storeOffList(storeNo); */
 
-		/* Store offday = service.storeOff(storeNo); */
-		// request scope 값 세팅
-		
-		
 
 
 		model.addAttribute("reviewList",reviewList); 
@@ -86,8 +82,9 @@ public class DetailStoreController {
 			model.addAttribute("storeHashList", store.getStoreHashList());
 			model.addAttribute("menuList", store.getMenuList());
 			model.addAttribute("imageList", store.getImageList());
-			model.addAttribute("storeOffDay", store.getImageList());
-
+			/*
+			 * model.addAttribute("offList", store.getOffList());
+			 */
 			path = "/store/storeDetail";
 
 		
@@ -134,7 +131,50 @@ public class DetailStoreController {
 		
 		return service.reviewReport(map);
 	}
+	
+	
+	/** 가게 해시태그 검색
+	 * @param hashNo
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("searchStore/{hashNo}")
+	public String hashSearchStore(
+		@PathVariable("hashNo") String hashNo, Model model) {
+		
+		List<Store> storeList = service.hashSearchStore(hashNo);
+		
+		Hash hashTitle = service.hashTitle(hashNo);
+		
+		for (Store store : storeList) {
+	        String storeLocation = store.getStoreLocation();
+	        String[] arr = storeLocation.split("\\^\\^\\^");
+	        
+	        if (arr.length == 3) {
+	            store.setPostcode(arr[0]);
+	            store.setAddress(arr[1]);
+	            store.setDetailAddress(arr[2]);
+	        } else {
+	            // 주소 정보가 정확히 3부분으로 나뉘지 않을 경우 빈 값으로 설정
+	            store.setPostcode("");
+	            store.setAddress("");
+	            store.setDetailAddress("");
+	        }
+	    }
+		
+		model.addAttribute("storeList", storeList);
+		model.addAttribute("hashTitle", hashTitle);
+			
+		return "store/hashSearch"; 
+	}
+	
+	
 
+	
+	
+	
+	
+	
 	
 	
 	

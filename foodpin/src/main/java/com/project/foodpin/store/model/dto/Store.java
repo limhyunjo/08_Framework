@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.project.foodpin.myPage.model.dto.Off;
 import com.project.foodpin.review.model.dto.ReviewHash;
 import com.project.foodpin.review.model.dto.UploadImage;
 
@@ -42,6 +43,9 @@ public class Store {
 	private MultipartFile storeImgInput;
 	private int imgStatus;
 	
+	//가게 휴무일 목록
+	public List<Off> offList;
+	
 	//가게 이미지 목록
 	public List<UploadImage> imageList;
 
@@ -69,6 +73,8 @@ public class Store {
 	
 	// 해시태그 개수
 	private int hashCount;
+	
+	private int hashNo;
 	
 	// 메뉴
 	private int menuNo;

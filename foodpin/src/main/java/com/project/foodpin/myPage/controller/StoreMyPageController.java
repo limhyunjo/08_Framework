@@ -30,6 +30,10 @@ import com.project.foodpin.store.model.dto.Store;
 import com.project.foodpin.store.model.dto.StoreCategory;
 
 import lombok.RequiredArgsConstructor;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
+import net.nurigo.sdk.message.service.DefaultMessageService;
 
 @Controller
 @RequiredArgsConstructor
@@ -37,6 +41,8 @@ import lombok.RequiredArgsConstructor;
 public class StoreMyPageController {
 
 	private final StoreMyPageService service;
+	
+	private final DefaultMessageService messageService;
 	
 
 	/** 가게 정보 수정 화면 이동 (+ 가게 기본 정보 조회)
@@ -58,11 +64,34 @@ public class StoreMyPageController {
 		model.addAttribute("store", store); // 가게 정보
 		model.addAttribute("category", allCategory); // 모든 카테고리 정보
 		
-		model.addAttribute("postcode", arr[0]);
 		model.addAttribute("address", arr[1]);
 		model.addAttribute("detailAddress", arr[2]);
 		
 		return "myPage/store/storeInfo";
+	}
+	
+	/** 가게 정보 조회
+	 * @param loginMember
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("storeInfoJs")
+	@ResponseBody
+	public Store storeInfoJs(@RequestParam("storeNo") String storeNo) {
+		
+		return service.selectstoreInfoJs(storeNo);
+	}
+
+	
+	/** 카테고리 조회
+	 * @param storeNo
+	 * @return
+	 */
+	@GetMapping("selectCategoryAll")
+	@ResponseBody
+	public List<StoreCategory> selectCategory() {
+		
+		return service.selectCategoryAll();
 	}
 	
 	/** 가게 카테고리 조회
@@ -76,8 +105,6 @@ public class StoreMyPageController {
 		return service.selectCategory(storeNo);
 	}
 	
-	
-	
 	/** 가게 정보 수정
 	 * @param loginMember
 	 * @param storeImg
@@ -88,13 +115,12 @@ public class StoreMyPageController {
 	 */
 	@PostMapping("storeInfoUpdate")
 	public String storeInfoUpdate(@SessionAttribute("loginMember") Member loginMember, 
-			@RequestParam("image") MultipartFile image, 
-			Store inputStore, 
-			Model model, RedirectAttributes ra) {
+			@RequestParam("image") MultipartFile image, Store inputStore, Model model, RedirectAttributes ra) {
 		
 		inputStore.setMemberNo(loginMember.getMemberNo());
+		inputStore.setStoreImgInput(image);
 		
-		int result = service.storeInfoUpdate(inputStore, image);
+		int result = service.storeInfoUpdate(inputStore);
 		
 		String message = "";
 		
@@ -105,6 +131,21 @@ public class StoreMyPageController {
 		ra.addFlashAttribute("message", message);
 		
 		return "redirect:/myPage/store/storeInfo";
+	}
+	
+	/** 가게 정보 수정 비동기 
+	 * @param loginMember
+	 * @param storeImg
+	 * @param inputStore
+	 * @param model
+	 * @param ra
+	 * @return
+	 */
+	@PostMapping("storeInfoUpdateJs")
+	@ResponseBody
+	public int storeInfoUpdateJs(@RequestBody @ModelAttribute Store inputStore) {
+	
+		return service.storeInfoUpdate(inputStore);
 	}
 	
 	// ------ 메뉴 ------
@@ -196,8 +237,16 @@ public class StoreMyPageController {
 		return listMap;
 	}
 	
-	
-
+	/** 팝업창에서 지정 휴무일 등록
+	 * @param inputOff
+	 * @return
+	 */
+	@PostMapping("calendarOffCheck")
+	@ResponseBody
+	public int calendarOffCheck(@RequestBody Off inputOff) {
+		
+		return service.calendarOffCheck(inputOff);
+	}
 
 	/** 팝업창에서 지정 휴무일 등록
 	 * @param inputOff
@@ -209,6 +258,29 @@ public class StoreMyPageController {
 		
 		return service.calendarOffInsert(inputOff);
 	}
+	
+	/** 팝업창에서 지정 휴무일 변경
+	 * @param inputOff
+	 * @return
+	 */
+	@PostMapping("calendaroffUpdate")
+	@ResponseBody
+	public int calendaroffUpdate(@RequestBody Off inputOff) {
+		
+		return service.calendaroffUpdate(inputOff);
+	}
+	
+	/** 팝업창에서 지정 휴무일 삭제 
+	 * @param inputOff
+	 * @return
+	 */
+	@PostMapping("calendaroffDelete")
+	@ResponseBody
+	public int calendaroffDelete(@RequestBody int offDayNo) {
+		
+		return service.calendaroffDelete(offDayNo);
+	}
+	
 	// ------ 예약 관리 ------
 	
 	/** 예약 관리 화면 이동 (+예약 전체 조회)
@@ -257,33 +329,62 @@ public class StoreMyPageController {
 		return service.rejectReservStatus(reservNo);
 	}
 	
+	/** 노쇼 등록 (비동기)
+	 * @return result
+	 */
+	@ResponseBody
+	@GetMapping("noshowReserv")
+	public int noshowReserv(@RequestParam("reservNo") int reservNo, @RequestParam("memberNo") int memberNo) {
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("memberNo", memberNo);
+		map.put("reservNo", reservNo);
+		
+		return service.noshowReserv(map);
+	}
+	
 	/** 캘린더에 맞는 형태로 확정된 예약 전체 조회 (비동기)
 	 * @return reservList
 	 */
 	@ResponseBody
 	@GetMapping("reservConfirm")
-	public List<Map<String, String>> reservConfirm(@RequestParam("storeNo") String storeNo) {
+	public List<Map<String, Object>> reservConfirm(@RequestParam("storeNo") String storeNo) {
 		
 		List<Reservation> reservList = service.reservConfirm(storeNo);
 		
 		// 확정된 예약 조회 결과 없는 경우
 		if(reservList.isEmpty()) return null; 
 			
-		List<Map<String, String>> listMap = new ArrayList<>();
+		List<Map<String, Object>> listMap = new ArrayList<>();
 		
 		for (Reservation reserv : reservList) {
 			
-			Map<String, String> map = new HashMap<>();
+			Map<String, Object> map = new HashMap<>();
 			
-			map.put("title", reserv.getReservTime() + ", " + reserv.getReservCount() + "인");
+			map.put("title", reserv.getReservTime() + "	(" + reserv.getReservCount() + "인)");
 			map.put("start", reserv.getReservDate());
 			map.put("end", reserv.getReservDate());
+			map.put("id", reserv.getReservNo());
 			
 			listMap.add(map);
 		}
 		
 		return listMap;
 	}
+	
+	/** 캘린더에서 예약 자세한 내용 조회 
+	 * @param reservNo
+	 * @return
+	 */
+	@GetMapping("reservDetail")
+	@ResponseBody
+	public Reservation reservDetail(@RequestParam("reservNo") int reservNo) {
+		
+		return service.reservDetail(reservNo);
+	}
+	
+	
+	
 	
 	
 	
@@ -301,7 +402,7 @@ public class StoreMyPageController {
 		model.addAttribute("reviewList", reviewList);
 		
 		
-		return "myPage/store/review";
+		return "myPage/store/review/review";
 	}
 	
 	
@@ -383,6 +484,21 @@ public class StoreMyPageController {
 		return service.ceoPwUpdate(loginMember.getMemberNo(), map);
 	}
 	
+	@GetMapping("reviewAnswered")
+	public String reviewAnsered(
+		@SessionAttribute("loginMember") Member loginMember,
+		Model model, RedirectAttributes ra) {
+		
+		int memberNo = loginMember.getMemberNo();
+		
+		List<Review> reviewList = service.reviewReply(memberNo);
+		
+		model.addAttribute("reviewList", reviewList);
+		
+		return "myPage/store/review/reviewAnswered";
+	}
+	
+	
 	
 	/** 사장님 미답변 조회
 	 * @param loginMember
@@ -403,7 +519,7 @@ public class StoreMyPageController {
 		model.addAttribute("reviewList", reviewList);
 		
 		
-		return "myPage/store/reviewUnanswered";
+		return "myPage/store/review/reviewUnanswered";
 	}
 	
 	/** 사장님 댓글 삽입
@@ -456,6 +572,36 @@ public class StoreMyPageController {
 		return service.deleteReply(replyNo);
 	}
 	
+	// 예약 확정 문자 발송
+	@ResponseBody
+	@PostMapping("sendMessage")
+	public String sendMessage(@RequestBody Reservation reservation) {
+		Message message = new Message();
+		
+		message.setFrom("01026624515");
+		message.setTo(reservation.getMemberTel());
+		message.setText("[FOODPIN]\n" + "["+reservation.getStoreName()+"] " + reservation.getReservDate() + "에 예약이 확정되었습니다.");
+		
+		SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
+		
+		return response.toString();
+		
+	}
+	
+	// 예약 거부 문자 발송
+	@ResponseBody
+	@PostMapping("sendReject")
+	public String sendReject(@RequestBody Reservation reservation) {
+		Message message = new Message();
+		
+		message.setFrom("01026624515");
+		message.setTo(reservation.getMemberTel());
+		message.setText("[FOODPIN]\n" + "["+reservation.getStoreName()+"] " + reservation.getReservDate() + "에 예약이 거절되었습니다.");
+		
+		SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
+		
+		return response.toString();
+	}
 	
 	
 	

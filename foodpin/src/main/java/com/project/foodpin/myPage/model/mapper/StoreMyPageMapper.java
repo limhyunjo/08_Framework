@@ -10,6 +10,7 @@ import com.project.foodpin.myPage.model.dto.Off;
 import com.project.foodpin.reservation.model.dto.Reservation;
 import com.project.foodpin.review.model.dto.Review;
 import com.project.foodpin.review.model.dto.ReviewReply;
+import com.project.foodpin.store.model.dto.Category;
 import com.project.foodpin.store.model.dto.Menu;
 import com.project.foodpin.store.model.dto.Store;
 import com.project.foodpin.store.model.dto.StoreCategory;
@@ -24,6 +25,12 @@ public interface StoreMyPageMapper {
 	 * @return store
 	 */
 	Store selectstoreInfo(int memberNo);
+	
+	/** 가게 정보 조회
+	 * @param storeNo
+	 * @return
+	 */
+	Store selectstoreInfoJs(String storeNo);
 
 	/** 모든 카테고리 조회
 	 * @return
@@ -41,6 +48,24 @@ public interface StoreMyPageMapper {
 	 * @return result
 	 */
 	int storeInfoUpdate(Store inputStore);
+	
+	/** 예약 여부 수정 
+	 * @param storeStautus
+	 * @return
+	 */
+	int storeStautusUpdate(Store inputStore);
+	
+	/** 카테고리 삭제 
+	 * @param string
+	 * @return 
+	 */
+	int categoryDelete(String string);
+
+	/** 카테고리 수정
+	 * @param categoryMap
+	 * @return
+	 */
+	int categoryUpdate(Map<String, Object> categoryMap);
 	
 	// ------ 메뉴 ------
 
@@ -96,6 +121,12 @@ public interface StoreMyPageMapper {
 	 */
 	int deleteOffWeek(String storeNo);
 
+	/** 고정 휴무일 중복 검색 
+	 * @param off
+	 * @return result 
+	 */
+	int calendarOffCheck(Off off);
+
 	/** 고정 휴무일 등록 
 	 * @param off
 	 * @return result 
@@ -119,6 +150,18 @@ public interface StoreMyPageMapper {
 	 * @return result
 	 */
 	int calendarOffInsert(Off inputOff);
+	
+	/** 지정 휴무일 변경 
+	 * @param inputOff
+	 * @return
+	 */
+	int calendaroffUpdate(Off inputOff);
+
+	/** 지정 휴무일 삭제 
+	 * @param storeNo
+	 * @return
+	 */
+	int calendaroffDelete(int offDayNo);
 	
 	// ------ 예약 관리 ------
 	
@@ -145,6 +188,32 @@ public interface StoreMyPageMapper {
 	 * @return result
 	 */
 	int rejectReservStatus(int reservNo);
+	
+	/** 노쇼시 예약 상태 변경 (X)
+	 * @param map
+	 * @return
+	 */
+	int noshowReservStatus(Map<String, Object> map);
+	
+	/** 회원 경고 횟수 조회
+	 * @param map
+	 * @return
+	 */
+	int selectFlag(Map<String, Object> map);
+
+	
+	/** 경고 횟수 증가
+	 * @param map
+	 * @return
+	 */
+	int updateFlag(Map<String, Object> map);
+	
+
+	/** 3번 이상시 회원 탈퇴
+	 * @param map
+	 * @return
+	 */
+	int updateReject(Map<String, Object> map);
 
 
 	/** 확정된 예약 조회
@@ -153,6 +222,13 @@ public interface StoreMyPageMapper {
 	 */
 	List<Reservation> reservConfirm(String storeNo);
 
+	
+	/** 예약 1건 자세히 조회
+	 * @param reservNo
+	 * @return
+	 */
+	Reservation reservDetail(int reservNo);
+	
 	// ------ 사장님 정보 ------
 	
 	/** 사장님 정보 변경 화면으로 전환
@@ -189,6 +265,12 @@ public interface StoreMyPageMapper {
 	 */
 	List<Review> reviewAll(int memberNo);
 
+	/** 사장님 답변 조회
+	 * @param memberNo
+	 * @return
+	 */
+	List<Review> reviewReply(int memberNo);
+
 	/** 사장님 미답변 조회
 	 * @param memberNo
 	 * @return
@@ -214,41 +296,11 @@ public interface StoreMyPageMapper {
 	 */
 	int deleteReply(int replyNo);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	/** 기존 가게 사진 패스 조회
+	 * @param storeNo
+	 * @return
+	 */
+	String selectStoreImg(String storeNo);
 
 
 

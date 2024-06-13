@@ -43,13 +43,33 @@ public class MainController {
 		List<Store> storeList = service.selectMainStore();
 		
 		List<Category> mainCategoryList = service.selectMainCategory();
-
+		
 		if (!storeList.isEmpty()) {
 			model.addAttribute("storeList",storeList);
 		}
+		
 		model.addAttribute("mainCategoryList",mainCategoryList);
 
 		return "common/main";
 	}
+	
+	
+	/*
+	 * // 가게명, 지역, 카테고리로 검색하는 경우
+	 * 
+	 * @GetMapping("/") public String mainSearchRegion(
+	 * 
+	 * ) {
+	 * 
+	 * 
+	 * String path = null;
+	 * 
+	 * path = "store/storeSearch";
+	 * 
+	 * 
+	 * return path;
+	 * 
+	 * }
+	 */
 
 }

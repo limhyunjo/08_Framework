@@ -16,5 +16,11 @@ public class Message {
     private int chattingNo;
     private String sendTime;
     private int senderNo;
-    private int storeMemerNo;
+    private int storeMemberNo;
+    private int type;
+    private String storeName;
+    private String storeImg;
+    private String memberNickname;
+	private String profileImg;
+    
 }

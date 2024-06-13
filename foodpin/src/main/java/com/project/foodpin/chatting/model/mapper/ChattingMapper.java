@@ -26,4 +26,16 @@ public interface ChattingMapper {
 
 	public List<Member> selectTarget(Map<String, Object> map);
 
+	public int checkAskChattingNo(Map<String, Object> map);
+
+	public int createAskChattingRoom(Map<String, Object> map);
+
+	public String selectProfileImg();
+
+	public String selectMemberNickname();
+
+	public int notReadChattingCount(int memberNo);
+
+	public int insertInfoMessage(Map<String, Object> map);
+
 }

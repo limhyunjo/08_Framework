@@ -39,8 +39,8 @@ public class ChattingServiceImpl implements ChattingService {
 
     @Override
     public int insertMessage(Message msg) {
-        msg.setMessageContent(Utility.XSSHandling(msg.getMessageContent()));
-        return mapper.insertMessage(msg);
+    	msg.setMessageContent(Utility.XSSHandling(msg.getMessageContent()));
+    	return mapper.insertMessage(msg);
     }
 
     @Override
@@ -71,8 +71,37 @@ public class ChattingServiceImpl implements ChattingService {
 		
 		
 		return mapper.selectMessageList(chattingNo);
+	}     
+	
+
+	@Override
+	public int checkAskChattingNo(Map<String, Object> map) {
+		return mapper.checkChattingNo(map);
+	}
+	
+	
+	@Override
+	public int createAskChattingRoom(Map<String, Object> map) {
+		mapper.createChattingRoom(map);
+		mapper.insertInfoMessage(map);
+		return Integer.parseInt(String.valueOf(map.get("chattingNo")));
+	}
+	
+	@Override
+	public String selectProfileImg() {
+		return mapper.selectProfileImg();
 	}
 
+	@Override
+	public String selectMemberNickname() {
+		return mapper.selectMemberNickname();
+	}
+	
+	@Override
+	public int notReadChattingCount(int memberNo) {
+		return mapper.notReadChattingCount(memberNo);
+	}
+	
 	
 	
 }

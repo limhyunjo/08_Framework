@@ -24,4 +24,16 @@ public interface ChattingService {
 	List<Member> selectTarget(Map<String, Object> map);
 
 	List<Message> selectMsgList(int chattingNo);
+
+	int checkAskChattingNo(Map<String, Object> map);
+
+	int createAskChattingRoom(Map<String, Object> map);
+
+	String selectProfileImg();
+
+	String selectMemberNickname();
+
+	int notReadChattingCount(int memberNo);
+
+
 }

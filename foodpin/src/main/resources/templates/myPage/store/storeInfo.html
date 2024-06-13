@@ -35,7 +35,7 @@
    
             <!-- 서브타이틀 버튼 -->
             <section class="myPage-sub-title">
-               <button class="sub-title-btn" id="infoBtn">기본 정보</button>
+               <button class="sub-title-btn title-btn-checked" id="infoBtn">기본 정보</button>
                <button class="sub-title-btn" id="menuBtn">메뉴 정보</button>
                <button class="sub-title-btn" id="dayoffBtn">휴무일</button>
             </section>
@@ -47,50 +47,49 @@
             <!-- 프로필 수정 폼 -->
             <form action="/myPage/store/storeInfoUpdate" id="storeEditFrm" th:object="${store}" method="POST" enctype="multipart/form-data">
 
-               <!-- 이미지 -->
-               <div class="storeInfo-img-container">
-
-                  <!-- 이미지가 없는 경우 -->
-                  <th:if="*{storeImg == null}">
+               <!-- 이미지가 없는 경우 -->
+               <th:block th:if="${store.storeImg == null}">
+                  <div class="storeInfo-img-container">
                      <img id="storeImg" class="hidden" alt="">
+                     <i class="fa-solid fa-xmark store-img-del hidden"></i>
+   
+                     <label for="storeImgInput" id="storeImgLabel">
+                        <i class="fa-regular fa-image"></i>
+                        <i class="fa-solid fa-plus"></i>
+                     </label>
+   
+                     <input name="image" id="storeImgInput" type="file" class="hidden" accept="image/* ">
+                  </div>
+               </th:block>
 
-                     <div class="store-img-area hidden">
-                        <label for="storeImgInput" id="storeImgLabel">
-                           <i class="fa-regular fa-image"></i>
-                           <i class="fa-solid fa-plus"></i>
-                        </label>
-
-                        <input name="image" id="storeImgInput" type="file" accept="image/*">
-                     </div>
-                  </th:if>
-
-                  <!-- 이미지가 있는 경우 -->
-                  <th:unless="*{storeImg == null}">
-                     <img id="storeImg" th:src="*{storeImg}">
+               <!-- 이미지가 있는 경우 -->
+               <th:block th:if="${store.storeImg != null}">
+                  <div class="storeInfo-img-container">
+                     <img id="storeImg" th:src="${store.storeImg}" alt="">
                      <i class="fa-solid fa-xmark store-img-del"></i>
-
+   
                      <label for="storeImgInput" id="storeImgLabel" class="hidden">
                         <i class="fa-regular fa-image"></i>
                         <i class="fa-solid fa-plus"></i>
                      </label>
-                     <input class="hidden" name="image" id="storeImgInput" type="file" accept="image/*">
-                     <!-- <input class="" name="image" id="imageInput" type="file" accept="image/*"> -->
-                  </th:if>
-               </div>
+                     <input name="image" id="storeImgInput" type="file" accept="image/*" hidden>
+                  </div>
+               </th:block>
+
 
                <!-- 이미지외 내용 -->
                <div class="storeInfo-container">
                   <div class="non-edit-area-row">
                      <label for="storeName">상호명 : </label>
                      <div>
-                        <input type="text" name="storeName" id="storeName" th:value="*{storeName}" readonly>
+                        <input type="text"id="storeName" th:value="*{storeName}" readonly>
                      </div>
                   </div>
    
                   <div class="non-edit-area-row">
                      <label for="">전화번호 : </label>
                      <div>
-                        <input type="text" name="storeTel" id="storeTel" th:value="*{storeTel}" readonly>
+                        <input type="text"id="storeTel" th:value="*{storeTel}" readonly>
                      </div>
                   </div>
    
@@ -98,42 +97,32 @@
                   <div class="non-edit-area-row">
                      <label for="storeLocation">가게 주소 :</label>
                      <div>     
-                        <input type="text" name="storeLocation" placeholder="도로명/지번 주소" id="address" th:value="${address}" readonly>
-                        <input type="text" name="storeLocation" placeholder="상세 주소" id="detailAddress" th:value="${detailAddress}" readonly>
+                        <input type="text" placeholder="도로명/지번 주소" id="address" th:value="${address}" readonly>
+                        <input type="text"placeholder="상세 주소" id="detailAddress" th:value="${detailAddress}" readonly>
                      </div>
                   </div>
    
                   <!-- 예약 오픈 여부 -->
                   <div class="edit-area-row">
-                     <label>예약 오픈 여부 : </label>
+                     <label>예약 신청 받는 여부 : </label>
                      <div class="input-row">
-   
-                        <!-- 선택시 허용/미허용으로 변경 -->
-   
-                        <!-- 허용 -->
-                        <th:block th:if="*{storeStatus == 'Y'}">
-                           <input type="checkbox" id="storeStatus" name="storeStatus" checked><label for="storeStatus">신청 허용</label>
-                        </th:block>
-   
-                        <!-- 미허용 -->
-                        <th:block th:if="*{storeStatus == 'N'}">
-                           <input type="checkbox" id="storeStatus" name="storeStatus"><label for="storeStatus">신청 미허용</label>
-                        </th:block>
+                           <button class="store-status-btn" value="Y" type="button">받음</button>
+                           <button class="store-status-btn" value="N" type="button">받지 않음</button>
                      </div>
                   </div>              
    
-                  <!-- 예약 정보 -->
+                  <!-- 예약 가능 -->
                   <div class="edit-area-row">
-                     <label for="storeMaxNumber" id="storeMaxLabel">예약 가능 : </label>
+                     <label for="storeMaxNumber" id="labelstoreMax">예약 가능 : </label>
                      <div class="input-row">
-                        <input type="number" name="storeMaxNumber" id="storeMaxNumber" class="s-input" th:value="*{storeMaxNumber}">인</span>
+                        <input type="number" name="storeMaxNumber" id="storeMaxNumber" class="s-input" th:value="*{storeMaxNumber}"><span>인</span>
                         <input type="number" name="storeMaxTable" id="storeMaxTable" class="s-input" th:value="*{storeMaxTable}"><span>테이블</span>
                      </div>
                   </div>
    
                   <!-- 영업시간 -->
                   <div class="edit-area-row">
-                     <label for="openHour">영업시간 : </label>
+                     <label>영업시간 : </label>
                      <div class="input-row">
    
                         <div id="openCloseArea">
@@ -150,7 +139,7 @@
    
                   <!-- 브레이크 타임 -->
                   <div class="edit-area-row">
-                     <label for="breacktimeStart">브레이크 타임 : </label>
+                     <label>브레이크 타임 : </label>
                      <div class="input-row">
    
                         <div id="breaktimeArea">
@@ -180,6 +169,11 @@
 
                <button id="storeInfoEditBtn" class="update-btn">수정</button>
 
+               <input type="text" name="imgStatus" value="-1" hidden>
+               <input type="text" name="storeStatus" hidden>
+               <input type="text" name="categorys" hidden>
+               <input type="text" name="storeNo" th:value="*{storeNo}" hidden>
+
             </form>
 
             <a id="withdraw">서비스 탈퇴</a>
@@ -190,6 +184,7 @@
          <script th:inline="javascript">
             const storeNo = /*[[${store.storeNo}]]*/ "가게 번호";
             const menuDefaultImage = /*[[#{menu.default.image}]]*/ "메뉴 기본 이미지";
+            const storeStatus = /*[[${store.storeStatus}]]*/ "예약 받는 상태";
         </script>
       
       </section>

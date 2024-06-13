@@ -134,8 +134,7 @@ function storelocation() {
                     var lat = resp.coords.latitude, // 위도
                         lon = resp.coords.longitude; // 경도
                     
-                    var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성
-                        message = '<div style="padding:5px;">현재 위치</div>'; // 인포윈도우에 표시될 내용
+                    var locPosition = new kakao.maps.LatLng(lat, lon) // 현재 위치
                     
                     // 마커와 인포윈도우를 표시
                     displayMarker(locPosition, message);
@@ -153,21 +152,15 @@ function storelocation() {
                 message = 'geolocation을 사용할수 없어요..'
             displayMarker(locPosition, message);
         }
-   
-        
+    
 
     };
 
-
     detaillocation();
-
-
 
     // 화면 크기가 변경될 때마다 지도 중심을 유지
     window.addEventListener('resize', function() {
-          
-    
-            
+                 
         detaillocation();
        
     
@@ -185,14 +178,7 @@ function storelocation() {
             map.setCenter(center);
 
 
-
-
-
-
-        });
-
-
-        
+        });  
              // 지도에 마커와 인포윈도우를 표시하는 함수
        function displayMarker(locPosition, message) {
         /* 나중에 현재 위치는 마커 지우고 근처 가게들에 마커 생성 */
@@ -219,11 +205,6 @@ function storelocation() {
         map.setCenter(locPosition);      
     }    
 
-    
-
-
-   
-
 }
 
 
@@ -231,28 +212,13 @@ function storelocation() {
 window.onload = function() {
     // currentlocation 함수 실행
     storelocation();
-    detaillocation();
+   
    
 };
 
 
 /* ************************************* 지도 ******************************************* */
 
-/* 가게 리스트가 클릭되면 해당 위치의 가게의 상세 페이지로 보내기 */
-
-/* document.addEventListener('DOMContentLoaded', function () {
-    const storeList = document.querySelector('.searchstore-storeList');
-
-    storeList.addEventListener("click", function(event) {
-        const storeElement = event.target.closest('[data-store-no]');
-        if (storeElement) {
-            const storeNo = storeElement.getAttribute('data-store-no');
-            location.href = "/store/storeDetail/" + storeNo;
-        }
-    });
-});
-
- */
 /* 가게 주소  */
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -322,6 +288,120 @@ storedetailmapbutton.addEventListener("click", () => {
 
 }); */
 
-/**************** 가게 찜, 좋아요 개수 ******************/
+
+
+// 비동기로 내용 불러올 공간
+const searchstoreStoreList = document.querySelector(".searchstore-storeList");
+
+
+
+
+/* 비동기로 카테고리 검색하기 */
+// 버튼을 다 가져와서 카테고리 코드를 보내줌
+
+const searchCatBtns = document.querySelectorAll(".searchCat-btn");
+
+searchCatBtns.forEach(btn => {
+    const categoryCode = btn.getAttribute("data-category");
+
+    btn.addEventListener("click", () => {
+        searchCatSList(categoryCode);
+    });
+});
+const searchCatSList =(categoryCode)=>{
+
+    console.log(categoryCode);
+
+    fetch("/store/searchCat?categoryCode="+ categoryCode)
+    .then(resp => resp.json())
+
+    .then(result=>{
+
+        console.log(result);
+
+  
+       
+    })
+}
+
+
+
+const searchStoreR = document.getElementById("searchStoreR");
+
+if (searchStoreR) {
+    const mainSearchValue = searchStoreR.value.trim(); // 검색어 가져오기
+
+    
+    if (mainSearchValue !== "") {
+        searchStoreR.value = mainSearchValue;
+    }
+}
+
+/* 비동기로 가게 검색하기 */
+
+const searchButton = document.getElementById("searchButton");
+
+// 검색 버튼 클릭 시 이벤트 리스너 추가
+searchButton.addEventListener("click", () => {
+    const searchR = searchStoreR.value.trim(); // 검색어 가져오기 및 공백 제거
+
+    if (searchR !== "") {
+        searchStores(searchR); 
+    } else {
+        alert("검색어를 입력해주세요.");
+    }
+});
+
+// Enter 키 눌렀을 때 검색 이벤트 처리
+searchStoreR.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+        const searchR = searchStoreR.value.trim(); 
+
+        if (searchR !== "") {
+            searchStores(searchR); // 검색 함수 호출
+        } else {
+            alert("검색어를 입력해주세요.");
+        }
+    }
+});
+
+// 검색 함수 정의
+const searchStores = (searchR) => {
+    // 서버로 검색어를 보내는 비동기 요청
+    fetch(`/store/search?keyword=${encodeURIComponent(searchR)}`)
+        .then(resp => resp.json())
+        .then(result => {
+           
+            console.log(result); 
+
+        
+        })
+        .catch(error => {
+            console.error('검색 요청 중 오류 발생:', error);
+        });
+};
+
+/* 비동기로 거리순 리뷰순 좋아요순 평점순  */
+
+
+
+/* 화면 비동기로 바꾸는 버튼 얻어오기 */
+//-> 버튼 값만 보내서 조회 순서를 바꾸는게 가능한가?
+// 거리순으로 리스트를 조회하는 버튼 (기본)
+const storeSearchBasicBtn = document.querySelector("#storeSearchBasicBtn");
+
+// 리뷰 많은 순으로 조회하는 버튼
+const storeSearchReviewBtn = document.querySelector("#storeSearchReviewBtn");
+
+// 찜 많은 순으로 조회하는 버튼
+const storeSearchLikeBtn = document.querySelector("#storeSearchLikeBtn");
+
+// 평점 높은 순으로 조회하는 버튼
+const storeRatingBtn = document.querySelector("#storeRatingBtn");
+
+
+
+/* ----------------------------------------------------------- */
+
 
 

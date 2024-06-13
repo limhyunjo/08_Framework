@@ -25,6 +25,12 @@ public interface StoreMyPageService {
 	 */
 	Store selectstoreInfo(int memberNo);
 	
+	/** 가게 기본 정보 조회
+	 * @param storeNo
+	 * @return store
+	 */
+	Store selectstoreInfoJs(String storeNo);
+	
 	/** 모든 카테고리 조회
 	 * @return
 	 */
@@ -41,11 +47,11 @@ public interface StoreMyPageService {
 	 * @param storeImg 
 	 * @return
 	 */
-	int storeInfoUpdate(Store inputStore, MultipartFile image);
+	int storeInfoUpdate(Store inputStore);
 	
 	// ------ 메뉴 ------
 	
-	/** 메뉴 조회
+	/** 메뉴 조회 
 	 * @param memberNo
 	 * @return menuList
 	 */
@@ -78,11 +84,30 @@ public interface StoreMyPageService {
 	 */
 	List<Off> calendarOffSelect(int storeNo);
 	
+	/** 지정 휴무일 중복 검색
+	 * @param inputOff
+	 * @return result
+	 */
+	int calendarOffCheck(Off inputOff);
+	
 	/** 지정 휴무일 등록
 	 * @param inputOff
 	 * @return result
 	 */
 	int calendarOffInsert(Off inputOff);
+	
+	/** 팝업창에서 지정 휴무일 변경
+	 * @param inputOff
+	 * @return
+	 */
+	int calendaroffUpdate(Off inputOff);
+
+	/** 팝업창에서 지정 휴무일 삭제 
+	 * @param storeNo
+	 * @return
+	 */
+	int calendaroffDelete(int offDayNo);
+
 	
 	// ------ 예약 관리 ------
 	
@@ -111,11 +136,24 @@ public interface StoreMyPageService {
 	 */
 	int rejectReservStatus(int reservNo);
 	
+	/** 노쇼 등록
+	 * @param map
+	 * @return
+	 */
+	int noshowReserv(Map<String, Object> map);
+
 	/** 확정된 예약 조회
 	 * @param memberNo
 	 * @return
 	 */
 	List<Reservation> reservConfirm(String storeNo);
+	
+
+	/** 예약 1건 자세히 조회
+	 * @param reservNo
+	 * @return 
+	 */
+	Reservation reservDetail(int reservNo);
 	
 	// ------ 사장님 정보 ------
 	
@@ -145,6 +183,12 @@ public interface StoreMyPageService {
 	 */
 	List<Review> reviewAll(int memberNo);
 
+	/** 사장님 답변 조회
+	 * @param memberNo
+	 * @return
+	 */
+	List<Review> reviewReply(int memberNo);
+	
 	/** 사장님 미답변 조회
 	 * @param memberNo
 	 * @return
@@ -168,6 +212,11 @@ public interface StoreMyPageService {
 	 * @return
 	 */
 	int deleteReply(int replyNo);
+
+	
+
+
+
 
 
 

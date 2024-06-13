@@ -26,6 +26,20 @@ quickLoginBtn.forEach((item) =>{
    
 })
 
+const chatBtn = document.querySelector("#chat");
+
+chatBtn.addEventListener("click", ()=>{
+    
+    if(loginMemberCode==3){
+        alert("관리자는 사용할 수 없는 기능입니다.")
+        return;
+    }
+    location.href = "/chatting/askChat";
+
+
+})
+
+
 
 const searchStoreList = document.querySelector("#searchStoreList");
 
@@ -35,12 +49,9 @@ if(searchStoreList != null){
     searchStoreList.addEventListener("submit", e=>{
         const mainSearch =document.querySelector("#mainSearch");
         
-        let str; 
+       
 
-        if(mainSearch.ariaValue.trim().length == 0) str= "검색어가 존재하지 않습니다.";
-
-        alert(str);
-        e.preventDefault();
-        return;
     })
 }
+
+

@@ -79,11 +79,11 @@ public class ChattingWebsocketHandler extends TextWebSocketHandler{
     	msg.setMemberNo(sendMember.getMemberNo());
     	
     	// msg 세팅 값 : chattingNo, messageContent, sendMember, targetNo
-		
-    	// DB 삽입 서비스 호출
-        int result = service.insertMessage(msg);
+
+
+    	int result = service.insertMessage(msg);
         
-        int storeMemberNo = msg.getStoreMemerNo();
+        
         
         if(result == 0) return;
         
@@ -108,15 +108,17 @@ public class ChattingWebsocketHandler extends TextWebSocketHandler{
 			// MSG 객체를 json으로 변경한 값을
 			// 보낸 사람/받는 사람에게 전달
 			
-			if(msg.getTargetNo() == clientMemberNo || msg.getMemberNo() ==  clientMemberNo) {
-				log.info("찾음");
-				TextMessage textMessage 
+				if(msg.getTargetNo() == clientMemberNo || msg.getMemberNo() ==  clientMemberNo) {
+					log.info("찾음");
+					TextMessage textMessage 
 					= new TextMessage( objectMapper.writeValueAsString(msg) ); 
-											//  JSON       <-          DTO
-				
-				 // JSON으로 변환된 데이터를 지정된 클라이언트에게 전달
-				s.sendMessage(textMessage);
-			}
+					//  JSON       <-          DTO
+					
+					// JSON으로 변환된 데이터를 지정된 클라이언트에게 전달
+					s.sendMessage(textMessage);
+				}
+			
+			
 		}
 	
 	}

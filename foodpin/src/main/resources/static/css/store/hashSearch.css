@@ -54,6 +54,10 @@
   margin-top: 13px;
 }
 
+.hashtagList{
+  display: flex;
+}
+
 .storeList-left{
   width: 30%;
   display: flex;
@@ -125,15 +129,20 @@
 }
 
 #totalScoreR{
-  width: 25px;
+  width: 50px;
   position: absolute;
-  left: 110px;
+  left: 115px;
   z-index: 1000;
 }
 
 .store-info > a:first-child{
   font-size: 23px;
   font-weight: bold;
+}
+
+.store-info > a:first-child:hover{
+  color:  rgb(135, 135, 135);
+  transition: 0.2s;
 }
 
 .store-address{
@@ -167,6 +176,7 @@
 .store-reservation:hover{
   background-color: white;
   color: #E14C54;
+  transition: 0.2s;
 }
 
 .store-hashtag-container{
@@ -336,4 +346,12 @@
 
 .review-count{
   margin-top: 10px;
+}
+
+.storeList-container{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }

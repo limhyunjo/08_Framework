@@ -119,7 +119,10 @@ public class StoreMyPageServiceImpl implements StoreMyPageService{
 		Map<String, Object> categoryMap = new HashMap<>();
 		categoryMap.put("storeNo", inputStore.getStoreNo());
 		
-		result = mapper.categoryDelete(inputStore.getStoreNo()); // 기존 카테고리 삭제
+		List<StoreCategory> storeCtg = mapper.selectCategory(inputStore.getStoreNo());		
+		
+		// 기존 등록된 카테고리가 있는 경우 카테고리 삭제
+		if(!storeCtg.isEmpty()) result = mapper.categoryDelete(inputStore.getStoreNo()); 
 		
 		if(result > 0) { // 변경된 카테고리 데이터 등록
 	        for (String ctg : inputCategorys) {
@@ -295,6 +298,31 @@ public class StoreMyPageServiceImpl implements StoreMyPageService{
 		return mapper.rejectReservStatus(reservNo);
 	}
 
+	// 노쇼 등록
+	@Override
+	public int noshowReserv(Map<String, Object> map) {
+		
+		int memberFlag = mapper.selectFlag(map); // 회원 경고 횟수 조회
+		
+		int result = mapper.noshowReservStatus(map); // 노쇼 상태로 변경
+		
+		if(result > 0) {
+			
+			// 경고 횟수 증가
+			memberFlag++;
+			map.put("memberFlag", memberFlag);
+			result = mapper.updateFlag(map); 
+		}
+		return result;
+	}
+
+	// 노쇼 취소
+	@Override
+	public int noshowReserv(int reservNo) {
+
+		return mapper.noshowReserv(reservNo);
+	}
+
 
 	// 확정된 예약 조회
 	@Override
@@ -382,23 +410,6 @@ public class StoreMyPageServiceImpl implements StoreMyPageService{
 		return mapper.deleteReply(replyNo);
 	}
 
-	// 노쇼 등록
-	@Override
-	public int noshowReserv(Map<String, Object> map) {
-		
-		int memberFlag = mapper.selectFlag(map); // 회원 경고 횟수 조회
-		
-		int result = mapper.noshowReservStatus(map); // 노쇼 상태로 변경
-		
-		if(result > 0) {
-			
-			// 경고 횟수 증가
-			memberFlag++;
-			map.put("memberFlag", memberFlag);
-			result = mapper.updateFlag(map); 
-		}
-		return result;
-	}
 
 	
 

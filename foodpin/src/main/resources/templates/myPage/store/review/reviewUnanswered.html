@@ -152,8 +152,13 @@
                                             <img class="review-look" th:src="|${upload.imagePath}${upload.imgRename}|">
                                         </th:block>
                                     </div>
+                                    <th:block>
+                                        <div>
+                                          메뉴 :<span th:each=" menu : *{reviewMenuList}" th:text="| ${menu.menuTitle}. |" class="review-menu"></span>
+                                        </div>
+                                    </th:block>
+                                    
     
-                                    <p>해시태그</p>
                                     <div class="review-hashtag">
         
                                         <th:block th:each=" hash : *{hashList}">
@@ -165,7 +170,7 @@
 
                             <div class="store-reply">
                                 <form action="/myPage/store/insertReply" method="POST" class="reply-form">
-                                    <input type="text" class="reply-content-bubble" name="replyConent">
+                                    <textarea type="text" id="replyConent" class="reply-content-bubble" name="replyConent"></textarea>
                                     <input type="text" name="storeNo" id="storeNo" th:value="*{storeNo}" hidden>
                                     <input type="text" name="reviewNo" id="reviewNo" th:value="*{reviewNo}" hidden>
                                     <button class="reply-btn">답글등록</button>

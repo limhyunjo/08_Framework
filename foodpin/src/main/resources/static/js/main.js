@@ -28,6 +28,9 @@ quickLoginBtn.forEach((item) =>{
 
 const chatBtn = document.querySelector("#chat");
 
+if(chatBtn !=null){
+
+
 chatBtn.addEventListener("click", ()=>{
     
     if(loginMemberCode==3){
@@ -38,7 +41,7 @@ chatBtn.addEventListener("click", ()=>{
 
 
 })
-
+}
 
 
 const searchStoreList = document.querySelector("#searchStoreList");
@@ -54,4 +57,18 @@ if(searchStoreList != null){
     })
 }
 
+/* SWIPER */
+if(document.querySelector(".swiper-container") != null) {
 
+    /* banner swipe */
+    var swiper = new Swiper(".swiper-container", {
+        slidesPerView: 1,
+        direction: 'horizontal',
+        autoplay: {
+            delay: 3000,
+        },
+        loop: true,
+        spaceBetween: 30,
+        centeredSlides: true,
+    });
+}

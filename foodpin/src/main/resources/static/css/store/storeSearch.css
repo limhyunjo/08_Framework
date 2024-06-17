@@ -42,9 +42,6 @@ body{
 
 }
 
-.map_wrap{
-  
-}
 
 #map{
    
@@ -476,6 +473,9 @@ cursor: pointer;
    font-size: 17px;
    font-weight: bold;
    color: rgb(78, 78, 78);
+   -webkit-line-clamp: 1;
+   display: -webkit-box;
+
 }
 
 .searchstore-categoryL{
@@ -508,11 +508,11 @@ font-size: 12px;
    color: rgb(49, 204, 49);
 }
 
-#searchMemberTel{
+.searchMemberTel{
    font-size: 14px;
   
 }
-#searchMemberTel:before{
+.searchMemberTel:before{
    font-family:FontAwesome;
    content:"\f095";
    font-size: 13px;

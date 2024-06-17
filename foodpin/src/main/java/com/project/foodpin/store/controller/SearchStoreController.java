@@ -105,7 +105,6 @@ public class SearchStoreController {
 
 		map.put("mainSearch", mainSearch);
 
-
 		List<Store> storeAllList = service.mainStoreList(map);
 		List<Category> searchCategory = service.selectSearchCategory();
 
@@ -117,16 +116,15 @@ public class SearchStoreController {
 			store.setPostcode(arr[0]);
 			store.setAddress(arr[1]);
 			store.setDetailAddress(arr[2]);
-			
+
 			String storeNo = store.getStoreNo();
 			List<StoreCategory> searchStoreCategoryList = service.searchStoreCategoryList(storeNo);
 			store.setSearchStoreCategoryList(searchStoreCategoryList);
 		}
 
-		
 		model.addAttribute("storeAllList", storeAllList);
 		model.addAttribute("searchCategory", searchCategory);
-		model.addAttribute("mainSearch", mainSearch); 
+		model.addAttribute("mainSearch", mainSearch);
 
 		String path = null;
 
@@ -135,102 +133,90 @@ public class SearchStoreController {
 		return path;
 
 	}
-	
-	
-    /** 비동기로 카테고리에 해당하는 가게 리스트 조회
-     * @param categoryCode
-     * @param loginMember
-     * @param model
-     * @param ra
-     * @return
-     */
-	  @ResponseBody
-	    @GetMapping("searchCat")
-	    public Map<String, Object> selectSearchCat(
-	        @SessionAttribute(value = "loginMember", required = false) Member loginMember,
-	        @RequestParam("categoryCode") int categoryCode
-	    ) {
-	        Map<String, Object> map = new HashMap<>();
 
-	        if (loginMember != null) {
-	            int memberNo = loginMember.getMemberNo();
-	            map.put("memberNo", memberNo);
-	        }
+	/**
+	 * 비동기로 카테고리에 해당하는 가게 리스트 조회
+	 * 
+	 * @param categoryCode
+	 * @param loginMember
+	 * @param model
+	 * @param ra
+	 * @return
+	 */
+	@ResponseBody
+	@GetMapping("searchCat")
+	public Map<String, Object> selectSearchCat(
+			@SessionAttribute(value = "loginMember", required = false) Member loginMember,
+			@RequestParam("categoryCode") int categoryCode) {
+		Map<String, Object> map = new HashMap<>();
 
-	        map.put("categoryCode", categoryCode);
-	        map.put("closedYn", "N");
+		if (loginMember != null) {
+			int memberNo = loginMember.getMemberNo();
+			map.put("memberNo", memberNo);
+		}
 
-	        // 카테고리에 해당하는 가게 리스트 조회하기
-	        List<Store> searchStoreList = service.searchStoreList(map);
+		map.put("categoryCode", categoryCode);
+		map.put("closedYn", "N");
 
-	        for (Store store : searchStoreList) {
-	            String storeLocation = store.getStoreLocation();
-	            String[] arr = storeLocation.split("\\^\\^\\^");
-	            store.setPostcode(arr[0]);
-	            store.setAddress(arr[1]);
-	            store.setDetailAddress(arr[2]);
+		// 카테고리에 해당하는 가게 리스트 조회하기
+		List<Store> searchStoreList = service.searchStoreList(map);
 
-	            String storeNo = store.getStoreNo();
-	            List<StoreCategory> searchStoreCategoryList = service.searchStoreCategoryList(storeNo);
-	            store.setSearchStoreCategoryList(searchStoreCategoryList);
+		for (Store store : searchStoreList) {
+			String storeLocation = store.getStoreLocation();
+			String[] arr = storeLocation.split("\\^\\^\\^");
+			store.setPostcode(arr[0]);
+			store.setAddress(arr[1]);
+			store.setDetailAddress(arr[2]);
 
-
-	        }
-
-	        Map<String, Object> result = new HashMap<>();
-	        result.put("searchStoreList", searchStoreList);
-
-	        return result;
-	    }
-	  
-	  
-	  
-	  // 비동기로 가게 검색
-	  @ResponseBody
-	  @GetMapping("search")
-		public  Map<String, Object> searchStoreList(
-				@SessionAttribute(value = "loginMember", required = false) Member loginMember, Model model,
-				@RequestParam("searchStoreR") String mainSearchR,
-				RedirectAttributes ra) {
-
-			Map<String, Object> map = new HashMap<>();
-
-			if (loginMember != null) {
-				int memberNo = loginMember.getMemberNo();
-				map.put("memberNo", memberNo);
-			}
-
-			map.put("mainSearch", mainSearchR);
-
-
-			List<Store> storeAllList = service.mainStoreList(map);
-			List<Category> searchCategory = service.selectSearchCategory();
-
-			for (Store store : storeAllList) {
-				String storeLocation = store.getStoreLocation();
-
-				String[] arr = storeLocation.split("\\^\\^\\^");
-
-				store.setPostcode(arr[0]);
-				store.setAddress(arr[1]);
-				store.setDetailAddress(arr[2]);
-				
-				String storeNo = store.getStoreNo();
-				List<StoreCategory> searchStoreCategoryList = service.searchStoreCategoryList(storeNo);
-				store.setSearchStoreCategoryList(searchStoreCategoryList);
-			}
-
-
-			
-	        Map<String, Object> result = new HashMap<>();
-	        result.put("storeAllList", storeAllList);
-
-	        return result;
+			String storeNo = store.getStoreNo();
+			List<StoreCategory> searchStoreCategoryList = service.searchStoreCategoryList(storeNo);
+			store.setSearchStoreCategoryList(searchStoreCategoryList);
 
 		}
-	  
-	  
-	  
 
+		Map<String, Object> result = new HashMap<>();
+		result.put("searchStoreList", searchStoreList);
+
+		return result;
+	}
+
+	// 비동기로 가게 검색
+	@ResponseBody
+	@GetMapping("search")
+	public Map<String, Object> searchStoreList(
+			@SessionAttribute(value = "loginMember", required = false) Member loginMember, Model model,
+			@RequestParam("searchStoreR") String searchStoreR, RedirectAttributes ra) {
+
+		Map<String, Object> map = new HashMap<>();
+
+		if (loginMember != null) {
+			int memberNo = loginMember.getMemberNo();
+			map.put("memberNo", memberNo);
+		}
+
+		map.put("searchStoreR", searchStoreR);
+
+		List<Store> storeAllList = service.mainStoreList(map);
+
+		for (Store store : storeAllList) {
+			String storeLocation = store.getStoreLocation();
+
+			String[] arr = storeLocation.split("\\^\\^\\^");
+
+			store.setPostcode(arr[0]);
+			store.setAddress(arr[1]);
+			store.setDetailAddress(arr[2]);
+
+			String storeNo = store.getStoreNo();
+			List<StoreCategory> searchStoreCategoryList = service.searchStoreCategoryList(storeNo);
+			store.setSearchStoreCategoryList(searchStoreCategoryList);
+		}
+
+		Map<String, Object> result = new HashMap<>();
+		result.put("storeAllList", storeAllList);
+
+		return result;
+
+	}
 
 }

@@ -527,7 +527,7 @@ form[name='member-myPageFrm']{
     font-size: 20px;
   
     color: white;
-    background-color: #2B3151;
+    background-color: var(--main-color);
     cursor: pointer;
 }
  
@@ -697,4 +697,9 @@ label[for='agree']{
     display: flex;
     align-items: center;
     justify-content: center; 
+}
+
+.review-menu{
+    color: #696969;
+    font-size: 15px;
 }
